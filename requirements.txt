@@ -4,3 +4,4 @@ pocketsphinx==0.1.15
 SpeechRecognition==3.8.1
 gTTS==2.1.1
 PyAudio==0.2.11
+wikipedia==1.4.0

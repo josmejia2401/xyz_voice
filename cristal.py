@@ -1,14 +1,11 @@
 
-from general import GeneralStatement
-from process import XYZListen, XYZRespond
+from process import XYZListen
 
 class Cristal(object):
 
     def __init__(self):
         super().__init__()
-        self.xyz_respond = XYZRespond()
         self.xyz_listen = XYZListen()
-        self.general_statement = GeneralStatement(self.xyz_respond, self.xyz_listen)
     
     def get_model_path(self) -> str:
         from pocketsphinx import get_model_path
