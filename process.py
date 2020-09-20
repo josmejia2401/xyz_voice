@@ -12,7 +12,7 @@ class XYZRespond(object):
 
     def run(self, audioString):
         print(audioString)
-        self.tts = gTTS(text=audioString, lang='es-us')
+        self.tts = gTTS(text=audioString, lang='es-ES')
         self.tts.save("audio.mp3")
         playsound("audio.mp3")
 
@@ -29,7 +29,7 @@ class XYZListen(object):
                 audio = r.listen(source=source, timeout=5, phrase_time_limit=5)
             data = ""
             if audio:
-                data = r.recognize_google(audio)
+                data = r.recognize_google(audio, language="es-ES")
                 print("listen: " + data)
             else:
                 data = "no se pudo procesar la solicitud. Intenta nuevamente."
