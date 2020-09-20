@@ -1,48 +1,23 @@
 Asistente inteligente.
 
 pasos:
+# 1. Instalación de librerías y dependencias
+> sudo apt-get install libpulse-dev
+> sudo apt-get install libasound2-dev
 > sudo apt install portaudio19-dev
+> sudo apt install swig
 > pip3 install -r requirements.txt
 > pulseaudio --start
+# 2. Descarga de modelo e instalación
+> Descargar el modelo de idioma para Sphinx, para este caso "Español". URL de modelos: https://sourceforge.net/projects/cmusphinx/files/Acoustic%20and%20Language%20Models/
+> Descomprimir el .zip descargado (modelo) y copiar lo que este dentro de la carpeta "models" en el "get_model_path"
+> Para sacar el directorio del modelo ejecutar: 
+- from pocketsphinx import get_model_path
+- model_path = get_model_path()
+> Renombrar la carpeta "581HCDCONT10000SPA" por "acoustic-model"
+> Renombrar "581HCDCONT10000SPA.dic" por "pronounciation-dictionary.dict"
+> Renombrar "581HCDCONT10000SPA.lm.bin" por "language-model.lm.bin"
+# 3. Ejecutar
 > python3 voicex.py
 
 
-
-import speech_recognition as sr
-import time
-
-r = sr.Recognizer()
-
-# Words that sphinx should listen closely for. 0-1 is the sensitivity
-# of the wake word.
-keywords = [("google", 1), ("hey google", 1), ]
-
-source = sr.Microphone()
-
-
-def callback(recognizer, audio):  # this is called from the background thread
-
-    try:
-        speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=keywords)
-        print(speech_as_text)
-
-        # Look for your "Ok Google" keyword in speech_as_text
-        if "google" in speech_as_text or "hey google":
-            recognize_main()
-
-    except sr.UnknownValueError:
-        print("Oops! Didn't catch that")
-
-
-def recognize_main():
-    print("Recognizing Main...")
-    audio_data = r.listen(source)
-    # interpret the user's words however you normally interpret them
-
-
-def start_recognizer():
-    r.listen_in_background(source, callback)
-    time.sleep(1000000)
-
-
-start_recognizer()

@@ -1,5 +1,6 @@
-SpeechRecognition==3.8.1
-gTTS==2.1.1
 playsound==1.2.2
 Scrapy==2.3.0
+pocketsphinx==0.1.15
+SpeechRecognition==3.8.1
+gTTS==2.1.1
 PyAudio==0.2.11
