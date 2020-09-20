@@ -60,12 +60,6 @@ class Alarm(object):
         self.schedthread = threading.Thread(target=self.timer)
         self.schedthread.start()
         #self.schedthread.join()
-        
-
-
-a = Alarm()
-a.build_seconds()
-a.run()
 
 
 

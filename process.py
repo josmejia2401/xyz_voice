@@ -4,7 +4,7 @@ import time
 import os
 from gtts import gTTS
 from playsound import playsound
-from general import GeneralStatement, WikipediaStatement
+from general import GeneralStatement, WikipediaStatement, AlarmStatement
 
 class XYZRespond(object):
 
@@ -47,6 +47,7 @@ class XYZListen(object):
         self.xyz_respond = XYZRespond()
         self.general_statement = GeneralStatement(self.xyz_respond, self)
         self.wikipedia_statement = WikipediaStatement(self.xyz_respond, self)
+        self.alarm_statement = AlarmStatement(self.xyz_respond, self)
 
     def set_microphone(self):
         #for device_index in sr.Microphone.list_working_microphones():
@@ -81,6 +82,8 @@ class XYZListen(object):
             result = self.general_statement.respond(data.lower())
             if result == 0:
                 result = self.wikipedia_statement.respond(data.lower())
+            if result == 0:
+                result = self.alarm_statement.respond(data.lower())
             if result == 0:
                 print("No procesado")
         else:
