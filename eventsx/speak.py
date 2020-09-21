@@ -9,7 +9,7 @@ class Speak(object):
     
     def get_name_output(self) -> str:
         self.OUTPUT_VAL += 1
-        return "AUDIO_{}.mp3".format(self.OUTPUT_VAL)
+        return "output/audio/AUDIO_{}.mp3".format(self.OUTPUT_VAL)
 
     def run(self, audioString):
         print("speaking {}".format(audioString))

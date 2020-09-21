@@ -1,6 +1,6 @@
 import abc
 import datetime
-from category import Category
+from category.category import Category
 
 
 class MeCategory(Category):
@@ -23,22 +23,18 @@ class MeCategory(Category):
         return statement.strip()
 
     def process(self, statement):
-        new_statement = self.strip_accents(statement)
+        new_statement = self.strip_accents(statement.lower())
         new_statement = self.clean(new_statement)
         respondVal = ""
         if "cual es tu nombre" in new_statement:
-            self.xyz_listen.stop()
             respondVal = "mi nombre es cristal"
         elif "tu nombre" in new_statement:
-            self.xyz_listen.stop()
             respondVal = "mi nombre es cristal"
         if "cual es tu genero" in new_statement:
-            self.xyz_listen.stop()
-            respondVal = "mi nombre es cristal"
+            respondVal = "mi género es femenino"
         elif "tu genero" in new_statement:
-            self.xyz_listen.stop()
-            respondVal = "mi nombre es cristal"
+            respondVal = "mi género es femenino"
         return respondVal
 
     def respond(self, statement):
-        return self.process(statement)
+        return self.process(statement["transcription"])

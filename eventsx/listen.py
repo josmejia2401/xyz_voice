@@ -11,18 +11,14 @@ class Listen(ConcreteSubject):
         self.main_r.energy_threshold = 4000
         self.main_r.pause_threshold = 0.5
         self.main_lang = "es-ES"
-
         self.keyword_r = sr.Recognizer()
         self.keyword_r.energy_threshold = 4000
         self.keyword_r.pause_threshold = 0.2
         self.keyword_r.non_speaking_duration = 0.2
         self.keyword_lang = "es"
-
         self.stop_listening_keyword = None
-
         self.run_listen = True
         self.keywords = [("cristal", 1), ("hey cristal", 1), ("ey cristal", 1), ("christal", 1)]
-
         self.set_microphone()
 
     def set_microphone(self):
@@ -68,15 +64,12 @@ class Listen(ConcreteSubject):
             response["error"] = "función o evento no reconocido"
         return response
 
-
     def mic_main(self):
         if not isinstance(self.main_r, sr.Recognizer):
             raise TypeError("`recognizer` must be `Recognizer` instance")
         if not isinstance(self.mic, sr.Microphone):
             raise TypeError("`microphone` must be `Microphone` instance")
         return self.recognize_main()
-
-    
 
     def stop(self):
         self.run_listen = False

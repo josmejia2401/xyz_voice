@@ -1,7 +1,7 @@
 import abc
 import datetime
 import random
-from category import Category
+from category.category import Category
 
 
 class JokeCategory(Category):
@@ -25,25 +25,22 @@ class JokeCategory(Category):
         return statement.strip()
 
     def process(self, statement):
-        new_statement = self.strip_accents(statement)
+        new_statement = self.strip_accents(statement.lower())
         new_statement = self.clean(new_statement)
         respondVal = ""
         if "cuentame un chiste" in new_statement:
-            self.xyz_listen.stop()
+            respondVal =  random.choice(self.joke)
+        if "echame un chiste" in new_statement:
             respondVal =  random.choice(self.joke)
         if "echate un chiste" in new_statement:
-            self.xyz_listen.stop()
             respondVal =  random.choice(self.joke)
         if "cuenta un chiste" in new_statement:
-            self.xyz_listen.stop()
             respondVal =  random.choice(self.joke)
         if "cuentanos un chiste" in new_statement:
-            self.xyz_listen.stop()
             respondVal =  random.choice(self.joke)
         elif "otro chiste" in new_statement:
-            self.xyz_listen.stop()
             respondVal = random.choice(self.joke)
         return respondVal
 
     def respond(self, statement):
-        return self.process(statement)
+        return self.process(statement["transcription"])
