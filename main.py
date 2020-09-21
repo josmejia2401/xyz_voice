@@ -5,6 +5,7 @@ from observerx.observerx import Observer
 from category.mex import MeCategory
 from category.joke import JokeCategory
 from category.alarm import AlarmCategory
+from category.timex import TimeCategory
 
 class Cristal(Observer):
 
@@ -18,6 +19,7 @@ class Cristal(Observer):
         self.me_category = MeCategory()
         self.joke_category = JokeCategory()
         self.alarm_category = AlarmCategory()
+        self.time_category = TimeCategory()
     
     def get_model_path(self) -> str:
         from pocketsphinx import get_model_path
@@ -31,10 +33,13 @@ class Cristal(Observer):
         except KeyboardInterrupt as e:
             self.me_category.stop()
             self.joke_category.stop()
+            self.alarm_category.stop()
+            self.time_category.top()
         except Exception as e:
             self.me_category.stop()
             self.joke_category.stop()
             self.alarm_category.stop()
+            self.time_category.top()
 
     def add_history(self, payload):
         self.HISTORY.append(payload)
@@ -74,6 +79,12 @@ class Cristal(Observer):
             x = self.alarm_category.respond(payload)
             if x:
                 self.CURRENT_CONTEXT = self.alarm_category
+                self.speak_history(payload["transcription"], x)
+                return
+
+            x = self.time_category.respond(payload)
+            if x:
+                self.CURRENT_CONTEXT = self.time_category
                 self.speak_history(payload["transcription"], x)
                 return
             
