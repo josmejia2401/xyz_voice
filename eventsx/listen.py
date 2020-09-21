@@ -8,13 +8,17 @@ class Listen(ConcreteSubject):
     def __init__(self):
         super().__init__()
         self.main_r = sr.Recognizer()
-        self.main_r.energy_threshold = 4000
-        self.main_r.pause_threshold = 0.5
+        # energía de audio mínima a considerar para la grabación
+        self.main_r.energy_threshold = 4500
+        # segundos de audio sin hablar antes de que una frase se considere completa
+        self.main_r.pause_threshold = 0.4
+        self.main_r.dynamic_energy_threshold = False
+         # segundos mínimos de audio hablado antes de que consideremos el audio hablado como una frase; los valores por debajo de esto se ignoran (para filtrar clics y estallidos)
+        self.main_r.phrase_threshold = 0.2
+        # segundos de audio que no habla para mantenerse en ambos lados de la grabación
+        self.main_r.non_speaking_duration = 0.2
         self.main_lang = "es-ES"
-        self.keyword_r = sr.Recognizer()
-        self.keyword_r.energy_threshold = 4000
-        self.keyword_r.pause_threshold = 0.2
-        self.keyword_r.non_speaking_duration = 0.2
+
         self.keyword_lang = "es"
         self.stop_listening_keyword = None
         self.run_listen = True
@@ -25,13 +29,14 @@ class Listen(ConcreteSubject):
         self.mic = sr.Microphone(chunk_size=1024)
 
     def mic_keyword(self):
-        if not isinstance(self.keyword_r, sr.Recognizer):
+        if not isinstance(self.main_r, sr.Recognizer):
             raise TypeError("`recognizer` must be `Recognizer` instance")
         if not isinstance(self.mic, sr.Microphone):
             raise TypeError("`microphone` must be `Microphone` instance") 
-        self.stop_listening_keyword = self.keyword_r.listen_in_background(self.mic, self.callback_keyword)
+        self.stop_listening_keyword = self.main_r.listen_in_background(self.mic, self.callback_keyword)
         while self.run_listen:
             time.sleep(1)
+        print("mic_keyword exiting")
 
     def callback_keyword(self, recognizer, audio):
         try:
@@ -73,7 +78,7 @@ class Listen(ConcreteSubject):
 
     def stop(self):
         self.run_listen = False
-        self.stop_listening_keyword(wait_for_stop=True)
+        self.stop_listening_keyword(wait_for_stop=False)
         print("Deteniendo...")
 
     def add_processed_words(self, data):
@@ -84,8 +89,8 @@ class Listen(ConcreteSubject):
         try:
             print("Iniciando...")
             with self.mic as source:
-                self.keyword_r.adjust_for_ambient_noise(source)
-                self.main_r.adjust_for_ambient_noise(source)
+                #The ``duration`` parameter is the maximum number of seconds that it will dynamically adjust the threshold for before returning. This value should be at least 0.5 in order to get a representative sample of the ambient noise.
+                self.main_r.adjust_for_ambient_noise(source, duration=0.4)
             self.mic_keyword()
         except KeyboardInterrupt as e:
             self.stop()

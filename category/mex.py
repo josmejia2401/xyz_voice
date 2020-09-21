@@ -11,6 +11,9 @@ class MeCategory(Category):
         self.xyz_listen = xyz_listen
         self.build()
     
+    def stop(self):
+        pass
+    
     def build(self):
         import locale
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')

@@ -1,65 +1,80 @@
+#!/usr/bin/env python3
+import datetime
 import time
-import schedule 
+import os
 import threading
-"""
-schedule.every(10).minutes.do(job)
-schedule.every().hour.do(job)
-schedule.every().day.at("10:30").do(job)
-schedule.every(5).to(10).minutes.do(job)
-schedule.every().monday.do(job)
-schedule.every().wednesday.at("13:15").do(job)
-schedule.every().minute.at(":17").do(job)
-"""
-class Alarm(object):
+import asyncio
+from playsound import playsound
+import multiprocessing
+
+import locale
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+
+class Alarm(threading.Thread):
 
     def __init__(self):
-        super().__init__()
-        self.schedstop = threading.Event()
-        self.schedthread = None
-        self.running_thread = True
+        super(Alarm, self).__init__()
+        self.keep_running = True
+        self.ALARMs = []
+        self.DAYS = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO"]
+        self.alarm_ringing = None
 
-    def job(self) -> None:
-        print("Sonando alarma")
+    def add_range_days(self, rangex, timex):
+        x_o = rangex.upper().split("-")
+        start = self.DAYS.index(x_o[0])
+        end = self.DAYS.index(x_o[1])
+        for i in range(start, end):
+            day_name = self.DAYS[i]
+            filtered = [day for day in self.ALARMs if day["DAY"] == day_name and day["TIME"] == timex]
+            if not filtered:
+                self.ALARMs.append({"DAY": day_name, "TIME": timex, "LASTED": None})
 
-    def stop(self):
-        self.running_thread = False
-        schedule.clear()
-        self.schedthread.raise_exception() 
-    
-    """def build_seconds(self) -> None:
-        schedule.every(10).seconds.do(self.job)"""
+    def add_per_days(self, days, timex):
+        x_o = days.upper().split(",")
+        for i in x_o:
+            day = i.strip()
+            index_day = self.DAYS.index(day)
+            day_name = self.DAYS[index_day]
+            filtered = [day for day in self.ALARMs if day["DAY"] == day_name and day["TIME"] == timex]
+            if not filtered:
+                self.ALARMs.append({"DAY": day_name, "TIME": timex, "LASTED": None})
 
-    def build_minutes(self, min) -> None:
-        schedule.every(min).minutes.do(self.job)
+    def stop_sound(self):
+        if self.alarm_ringing:
+            self.alarm_ringing.terminate()
 
-    def build_hours(self, hour) -> None:
-        schedule.every(hour).hours.do(self.job)
+    def start_sound(self):
+        self.stop_sound()
+        self.alarm_ringing = multiprocessing.Process(target=playsound, args=("data/alarma/sound_alarma_1.mp3",))
+        self.alarm_ringing.start()
 
-    def build_day(self, day = "", tx = "07:00") -> None:
-        schedule.every()[day].at(tx).do(self.job)
+    def run(self):
+        try:
+            while self.keep_running:
+                now = datetime.datetime.now()
+                timex = now.strftime("%H:%M").upper()
+                day = now.strftime("%A").upper()
+                day_number = now.strftime("%d").upper()
+                for x in self.ALARMs:
+                    if x["LASTED"]:
+                        lasted = x["LASTED"].strftime("%d").upper()
+                        if x["DAY"] == day and x["TIME"] == timex and lasted != day_number:
+                            x["LASTED"] = now
+                            self.start_sound()
+                    elif x["DAY"] == day and x["TIME"] == timex:
+                        x["LASTED"] = now
+                        self.start_sound()
+                time.sleep(1)
+        except Exception as e:
+            print(e)
 
-    def build_all_day(self, tx = "07:00") -> None:
-        schedule.every().day.at(tx).do(self.job)
-
-    def build_week(self, tx = "07:00") -> None:
-        schedule.every().monday.at(tx).do(self.job)
-        schedule.every().tuesday.at(tx).do(self.job)
-        schedule.every().wednesday.at(tx).do(self.job)
-        schedule.every().thursday.at(tx).do(self.job)
-        schedule.every().friday.at(tx).do(self.job)
-
-    def get_list(self) -> None:
-        pass
-
-    def timer(self):
-        while self.running_thread:
-            schedule.run_pending()
-            time.sleep(5)
-
-    def run(self) -> None:    
-        self.schedthread = threading.Thread(target=self.timer)
-        self.schedthread.start()
-        #self.schedthread.join()
-
+    def just_die(self):
+        self.keep_running = False
 
 
+a = Alarm()
+a.start()
+a.add_per_days("LUNES,MARTES", "14:26")
+#a.add_range_days("LUNES-MARTES", "14:22")
+print("calll")
+#time.sleep(10)

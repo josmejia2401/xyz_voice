@@ -4,6 +4,7 @@ from eventsx.speak import Speak
 from observerx.observerx import Observer
 from category.mex import MeCategory
 from category.joke import JokeCategory
+from category.alarm import AlarmCategory
 
 class Cristal(Observer):
 
@@ -16,6 +17,7 @@ class Cristal(Observer):
         #category
         self.me_category = MeCategory()
         self.joke_category = JokeCategory()
+        self.alarm_category = AlarmCategory()
     
     def get_model_path(self) -> str:
         from pocketsphinx import get_model_path
@@ -23,8 +25,16 @@ class Cristal(Observer):
         return model_path
 
     def run(self):
-        self.listen.attach(self)
-        self.listen.run()
+        try:
+            self.listen.attach(self)
+            self.listen.run()
+        except KeyboardInterrupt as e:
+            self.me_category.stop()
+            self.joke_category.stop()
+        except Exception as e:
+            self.me_category.stop()
+            self.joke_category.stop()
+            self.alarm_category.stop()
 
     def add_history(self, payload):
         self.HISTORY.append(payload)
@@ -34,10 +44,12 @@ class Cristal(Observer):
             "input" : inputx, 
             "output": outputx
         }
+        print(x)
         self.speak.run(outputx)
         self.add_history(x)
 
     def process(self, payload):
+        print(payload)
         if payload["success"] == True:
             x = ""
             if self.CURRENT_CONTEXT:
@@ -58,6 +70,14 @@ class Cristal(Observer):
                 self.CURRENT_CONTEXT = self.joke_category
                 self.speak_history(payload["transcription"], x)
                 return
+
+            x = self.alarm_category.respond(payload)
+            if x:
+                self.CURRENT_CONTEXT = self.alarm_category
+                self.speak_history(payload["transcription"], x)
+                return
+            
+            self.speak_history(payload["transcription"], "evento no reconocido")
         else:
             self.speak.run(payload["error"])
 
