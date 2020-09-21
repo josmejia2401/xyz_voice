@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import speech_recognition as sr
 import time
 import threading
@@ -9,7 +10,10 @@ class Listen(ConcreteSubject):
         super().__init__()
         self.main_r = sr.Recognizer()
         # energía de audio mínima a considerar para la grabación
-        self.main_r.energy_threshold = 4500
+        # para ubuntu
+        # self.main_r.energy_threshold = 4500
+        # para mac
+        self.main_r.energy_threshold = 3000
         # segundos de audio sin hablar antes de que una frase se considere completa
         self.main_r.pause_threshold = 0.4
         self.main_r.dynamic_energy_threshold = False

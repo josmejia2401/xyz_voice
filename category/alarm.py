@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import abc
 import datetime
 from category.category import Category

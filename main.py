@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import threading
 from eventsx.listen import Listen
 from eventsx.speak import Speak

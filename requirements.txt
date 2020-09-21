@@ -6,3 +6,6 @@ gTTS==2.1.1
 PyAudio==0.2.11
 # help
 wikipedia==1.4.0
+#for mac
+#pyobjc==6.2.2
+#AppKit==0.2.8
