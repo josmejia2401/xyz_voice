@@ -11,7 +11,7 @@ class AssistantSkill:
             - TTT Engine: The response is only in text
             - TTS Engine: The response is in voice and text
         """
-        pass
+        print("response", text)
 
     @classmethod
     def user_input(cls):

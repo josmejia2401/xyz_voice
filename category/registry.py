@@ -85,7 +85,6 @@ def get_func_from_skills(text):
             for sk in new_skills:
                 if sk.strip() in text.strip():
                     func = skill["func"]
-                    func()
                     return func
     except Exception as e:
         print(e)

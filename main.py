@@ -34,9 +34,8 @@ class Cristal(Observer):
             print("skill", skill)
             if skill:
                 func = get_func_from_skills(skill)
-                print("func", func)
                 if func:
-                    print("funnccccccccccc", func())
+                    func()
                 else:
                     pass
             else:
