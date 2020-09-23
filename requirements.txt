@@ -7,3 +7,4 @@ PyAudio==0.2.11
 nltk==3.5
 # help
 #wikipedia==1.4.0
+APScheduler==3.6.3

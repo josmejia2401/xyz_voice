@@ -6,14 +6,14 @@ from category.skill import AssistantSkill
 class ActivationSkills(AssistantSkill):
 
     @classmethod
-    def enable_assistant(cls, **kwargs):
+    def enable_assistant(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         Plays activation sound and creates the assistant response according to the day hour.
         """
         pass
 
     @classmethod
-    def disable_assistant(cls, **kwargs):
+    def disable_assistant(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         - Clear console
         - Shutdown the assistant service
@@ -21,7 +21,7 @@ class ActivationSkills(AssistantSkill):
         cls.response('adiós')
 
     @classmethod
-    def assistant_greeting(cls, **kwargs):
+    def assistant_greeting(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         Assistant greeting based on day hour.
         """

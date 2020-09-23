@@ -19,7 +19,7 @@ def set_master_volume(volume):
 class UtilSkills(AssistantSkill):
 
     @classmethod
-    def speech_interruption(cls, **kwargs):
+    def speech_interruption(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         Stop assistant speech.
         """
@@ -27,11 +27,7 @@ class UtilSkills(AssistantSkill):
         pass
 
     @classmethod
-    def clear_console(cls, **kwargs):
-        cls.console("Por supuesto")
-
-    @classmethod
-    def increase_master_volume(cls, **kwargs):
+    def increase_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
@@ -46,7 +42,7 @@ class UtilSkills(AssistantSkill):
             cls.response("Aumenté el volumen de los altavoces")
 
     @classmethod
-    def reduce_master_volume(cls, **kwargs):
+    def reduce_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
@@ -61,7 +57,7 @@ class UtilSkills(AssistantSkill):
             cls.response("Bajé el volumen de los altavoces")
 
     @classmethod
-    def mute_master_volume(cls, **kwargs):
+    def mute_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 0:
@@ -71,7 +67,7 @@ class UtilSkills(AssistantSkill):
             cls.response("Silencio los altavoces maestros")
 
     @classmethod
-    def max_master_volume(cls, **kwargs):
+    def max_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 31:

@@ -20,7 +20,7 @@ hour_mapping = {'0': 'doce',
 class DatetimeSkills(AssistantSkill):
 
     @classmethod
-    def tell_the_time(cls, **kwargs):
+    def tell_the_time(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         Tells ths current time
         """
@@ -30,7 +30,7 @@ class DatetimeSkills(AssistantSkill):
         cls.response('Son las: {0}'.format(converted_time))
 
     @classmethod
-    def tell_the_date(cls, **kwargs):
+    def tell_the_date(cls, param1 = None, param2 = None, param3 = None, **kwargs):
         """
         Tells ths current date
         """

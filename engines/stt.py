@@ -14,9 +14,9 @@ class STTEngine(ConcreteSubject):
     recognizer = sr.Recognizer()
     microphone = sr.Microphone(sample_rate=44100)
     # energía de audio mínima a considerar para la grabación
-    recognizer.energy_threshold = 1500
+    recognizer.energy_threshold = 2000
     # segundos de audio sin hablar antes de que una frase se considere completa
-    recognizer.pause_threshold = 0.5
+    recognizer.pause_threshold = 0.8
     recognizer.dynamic_energy_threshold = True
     # segundos mínimos de audio hablado antes de que consideremos el audio hablado como una frase; los valores por debajo de esto se ignoran (para filtrar clics y estallidos)
     #self.recognizer.phrase_threshold = 0.3

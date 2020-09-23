@@ -1,6 +1,10 @@
 from category.collections.activation import ActivationSkills
 from category.collections.general import UtilSkills
 from category.collections.datetime import DatetimeSkills
+from category.collections.internet import InternetSkills
+from category.collections.redimer import ReminderSkills
+from category.collections.internet import InternetSkills
+
 from utils.mapping import math_tags
 
 # All available assistant skills
@@ -71,6 +75,30 @@ BASIC_SKILLS = [
         "tags": "subir volumen al maximo, volumen al maximo, maximo volumen",
         "description": "maximo volumen"
     },
+
+    {
+        "enable": True,
+        "func": InternetSkills.internet_availability,
+        "tags": "conexión a internet, internet actual, hay internet, conexión internet",
+        "description": "Revisar conexión a internet"
+    },
+
+     {
+        "enable": True,
+        "func": ReminderSkills.create_reminder,
+        "tags": "crear recordatorio, recordatorio en, recordar esto, recordar lo siguiente",
+        "description": "Recordatorio"
+    },
+
+     {
+        "enable": True,
+        "func": ReminderSkills.set_alarm,
+        "tags": "crear alarma, alarma en, agregar alarma",
+        "description": "Alarma"
+    },
+
+    
+    
 ]
 
 
@@ -79,11 +107,11 @@ BASIC_SKILLS = [
 def get_func_from_skills(text):
     try:
         #text = " ".join(text)
-        text = " ".join(e.strip() for e in text)
+        textx = " ".join(str(e).strip() for e in text)
         for skill in BASIC_SKILLS + CONTROL_SKILLS:
             new_skills = skill["tags"].split(",")
             for sk in new_skills:
-                if sk.strip() in text.strip():
+                if sk.strip() in textx.strip():
                     func = skill["func"]
                     return func
     except Exception as e:

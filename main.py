@@ -41,7 +41,11 @@ class Cristal(Observer):
             if skill:
                 func = get_func_from_skills(skill)
                 if func:
-                    func()
+                    try:
+                        param1 = " ".join(str(e).strip() for e in skill)
+                        func(param1)
+                    except Exception as e:
+                        print("eeee", e)
                 else:
                     pass
             else:

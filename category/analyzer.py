@@ -21,7 +21,7 @@ class SkillAnalyzer:
         self.non_words = list(punctuation)
         #we add spanish punctuation
         self.non_words.extend(['¿', '¡'])
-        self.non_words.extend(map(str,range(10)))
+        #self.non_words.extend(map(str,range(10)))
         self.stemmer = SnowballStemmer('spanish')
 
     def extract(self, user_transcript):
