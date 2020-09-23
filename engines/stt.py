@@ -14,9 +14,9 @@ class STTEngine(ConcreteSubject):
     def __init__(self):
         super().__init__() 
         self.recognizer = sr.Recognizer()
-        self.microphone = sr.Microphone()
+        self.microphone = sr.Microphone(sample_rate=44100)
         # energía de audio mínima a considerar para la grabación
-        self.recognizer.energy_threshold = 4000
+        self.recognizer.energy_threshold = 1500
         # segundos de audio sin hablar antes de que una frase se considere completa
         self.recognizer.pause_threshold = 0.5
         self.recognizer.dynamic_energy_threshold = True
@@ -51,6 +51,9 @@ class STTEngine(ConcreteSubject):
             self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
             audio = self.recognizer.listen(source)
         try:
+            with open("microphone-results.wav", "wb") as f:
+                f.write(audio.get_wav_data())
+
             #speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=self.keywords, language=self.keyword_lang)
             response["transcription"] = self.recognizer.recognize_google(audio, language=self.main_lang).lower()
             if already_activated == False and self._activation_name_exist(response):
