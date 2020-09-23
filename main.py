@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from engines.stt import STTEngine
+from engines.tts import TTSEngine
 from observerx.observerx import Observer
 from category.analyzer import SkillAnalyzer
 from category.registry import get_func_from_skills
@@ -11,12 +12,17 @@ class Cristal(Observer):
 
     def __init__(self):
         super().__init__()
-        self.skillAnalyzer = SkillAnalyzer()
+        self.tTSEngine = TTSEngine()
+
+    def loading(self):
+        #self.tTSEngine.play_text("Cargando sistema, por favor espera.")
         self.sTTEngine = STTEngine()
-        self.build()
-    
-    def build(self):
+        self.skillAnalyzer = SkillAnalyzer()
         self.sTTEngine.attach(self)
+    
+    def ready(self):
+        #self.tTSEngine.assistant_response("Estoy escuchando.")
+        self.tTSEngine.play_text("Estoy escuchando.")
 
     def run(self):
         try:
@@ -45,6 +51,8 @@ class Cristal(Observer):
 
 if __name__=='__main__':
     cristal = Cristal()
+    cristal.loading()
+    #cristal.ready()
     cristal.run()
 
 

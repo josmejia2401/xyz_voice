@@ -8,7 +8,7 @@ pasos para Ubuntu:
 > sudo apt install swig
 > pip3 install -r requirements.txt
 > pulseaudio --start
-# 2. Descarga de modelo e instalación
+# 2. Descarga de modelo e instalación (para el uso de sphinx)
 > Descargar el modelo de idioma para Sphinx, para este caso "Español". URL de modelos: https://sourceforge.net/projects/cmusphinx/files/Acoustic%20and%20Language%20Models/
 > Descomprimir el .zip descargado (modelo) y copiar lo que este dentro de la carpeta "models" en el "get_model_path"
 > Para sacar el directorio del modelo ejecutar: 
@@ -18,7 +18,7 @@ pasos para Ubuntu:
 > Renombrar "581HCDCONT10000SPA.dic" por "pronounciation-dictionary.dict"
 > Renombrar "581HCDCONT10000SPA.lm.bin" por "language-model.lm.bin"
 # 3. Ejecutar
-> python3 voicex.py
+> python3 main.py
 
 pasos para Mac:
 # 1. Instalación de librerías y dependencias
@@ -26,6 +26,8 @@ pasos para Mac:
 > brew install pulseaudio
 > brew install portaudio
 > brew install swig
+> sudo apt install libespeak1
+> sudo apt-get install mpg321
 > Para solucionar el error "fatal error: 'al.h' file not found":
     1. git clone --recursive https://github.com/bambocher/pocketsphinx-python
     2. cd pocketsphinx-python

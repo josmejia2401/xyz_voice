@@ -34,8 +34,10 @@ class DatetimeSkills(AssistantSkill):
         """
         Tells ths current date
         """
-        today = date.today()
-        cls.response('Hoy es: {0}'.format(today))
+        currentDate = datetime.now()
+        strTime = currentDate.strftime("%A %d de %B de %Y")
+        cls.response('Hoy es {0}'.format(strTime))
+        #print(cls.user_input())
 
     @classmethod
     def _get_12_hour_period(cls, hour):

@@ -1,3 +1,9 @@
+from engines.tts import TTSEngine
+from engines.stt import STTEngine
+
+import locale
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+
 class AssistantSkill:
     """
     This class is the parent of all skill classes.
@@ -11,12 +17,12 @@ class AssistantSkill:
             - TTT Engine: The response is only in text
             - TTS Engine: The response is in voice and text
         """
-        print("response", text)
+        TTSEngine.play_text(text)
 
     @classmethod
     def user_input(cls):
-        #recognize_input(already_activated=True)
-        return user_input
+        response = STTEngine._recognize_speech_from_mic(already_activated=True)
+        return response
 
     @classmethod
     def extract_tags(cls, voice_transcript, tags):

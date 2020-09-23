@@ -1,12 +1,9 @@
-playsound==1.2.2
 Scrapy==2.3.0
 pocketsphinx==0.1.15
 SpeechRecognition==3.8.1
 gTTS==2.1.1
+playsound==1.2.2
 PyAudio==0.2.11
+nltk==3.5
 # help
 #wikipedia==1.4.0
-#for mac
-#pyobjc==6.2.2
-#AppKit==0.2.8
-nltk==3.5
