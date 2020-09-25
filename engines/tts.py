@@ -2,8 +2,12 @@
 import threading
 import queue
 from gtts import gTTS
-from playsound import playsound
+#from playsound import playsound
 import time
+#from utils.play_sound import PlayAudio
+from playsound import playsound
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 class TTSEngine(object):
@@ -13,13 +17,19 @@ class TTSEngine(object):
         self.message_queue = queue.Queue(maxsize=9)
         self.stop_speaking = False
         self.playing = False
+        #self.play_audio = PlayAudio()
 
     @classmethod
     def play_text(cls, message):
         if message:
-            myobj = gTTS(text=message, lang="es", slow=False)
-            myobj.save("somethingToSay.mp3")
-            playsound('somethingToSay.mp3')
+            try:
+                myobj = gTTS(text=message, lang="es", slow=False)
+                #filename = os.path.join(dir_path, "speek.mp3")
+                myobj.save("speek.mp3")
+                #PlayAudio.play("speek.mp3")
+                playsound("speek.mp3", True)
+            except Exception as e:
+                print("play_text", e)
 
     def assistant_response(self, message):
         """

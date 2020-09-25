@@ -1,13 +1,20 @@
 
 math_symbols_mapping = {
-    'equal': '=',
-    'plus': '+',
-    'minus': '-',
-    'asterisk': '*',
+    'igual': '=',
+    'mas': '+',
+    'suma': '+',
+    'sumar': '+',
+    'menos': '-',
+    'resta': '-',
+    'restar': '-',
+    'asterisco': '*',
     'divide': '/',
+    'division': '/',
+    'dividir': '/',
     'modulo': 'mod',
-    'power': '**',
-    'square root': '**(1/2)'
+    'potencia': '**',
+    'elevado': '**',
+    'raiz cuadrada': '**(1/2)'
 }
 
 math_tags = ','.join(list(math_symbols_mapping.keys()))

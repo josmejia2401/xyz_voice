@@ -27,7 +27,8 @@ class DatetimeSkills(AssistantSkill):
         now = datetime.now()
         hour, minute = now.hour, now.minute
         converted_time = cls._time_in_text(hour, minute)
-        cls.response('Son las: {0}'.format(converted_time))
+        horaText = 'Son las: {}'.format(converted_time)
+        cls.response(horaText)
 
     @classmethod
     def tell_the_date(cls, param1 = None, param2 = None, param3 = None, **kwargs):
@@ -36,7 +37,8 @@ class DatetimeSkills(AssistantSkill):
         """
         currentDate = datetime.now()
         strTime = currentDate.strftime("%A %d de %B de %Y")
-        cls.response('Hoy es {0}'.format(strTime))
+        fechaText = "Hoy es {}".format(strTime)
+        cls.response(fechaText)
         #print(cls.user_input())
 
     @classmethod

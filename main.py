@@ -15,7 +15,7 @@ class Cristal(Observer):
         self.tTSEngine = TTSEngine()
 
     def loading(self):
-        #self.tTSEngine.play_text("Cargando sistema, por favor espera.")
+        self.tTSEngine.play_text("Cargando sistema, por favor espera.")
         self.sTTEngine = STTEngine()
         self.skillAnalyzer = SkillAnalyzer()
         self.sTTEngine.attach(self)

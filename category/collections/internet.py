@@ -1,5 +1,3 @@
-import requests
-import logging
 from category.skill import AssistantSkill
 import urllib.request as urllib2
 

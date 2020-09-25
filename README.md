@@ -6,6 +6,7 @@ pasos para Ubuntu:
 > sudo apt-get install libasound2-dev
 > sudo apt install portaudio19-dev
 > sudo apt install swig
+> sudo apt-get install ffmpeg
 > pip3 install -r requirements.txt
 > pulseaudio --start
 # 2. Descarga de modelo e instalación (para el uso de sphinx)

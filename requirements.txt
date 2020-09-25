@@ -4,7 +4,10 @@ SpeechRecognition==3.8.1
 gTTS==2.1.1
 playsound==1.2.2
 PyAudio==0.2.11
+#Wave==0.0.2
 nltk==3.5
 # help
 #wikipedia==1.4.0
 APScheduler==3.6.3
+spa2num==0.0.5
+requests==2.24.0
