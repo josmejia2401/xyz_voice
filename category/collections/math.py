@@ -20,14 +20,18 @@ class MathSkills(AssistantSkill):
         * Only basic operators are supported
         * In the text need spaces to understand the input e.g 3+4 it's not working, but 3 + 4 works!
         """
+        print(param1)
         transcript_with_numbers = cls._replace_words_with_numbers(param1)
+        print("transcript_with_numbers", transcript_with_numbers)
         transcript_with_numbers = cls._replace_words_with_math_symbols(transcript_with_numbers)
+        print("transcript_with_numbers", transcript_with_numbers)
         math_equation = cls._clear_transcript(transcript_with_numbers)
+        print("math_equation", math_equation)
         try:
             result = str(eval(math_equation))
             cls.response(result)
         except Exception as e:
-            cls.console_manager.console_output('Failed to eval the equation --> {0} with error message {1}'.format(math_equation, e))
+            cls.response('Falló al realizar la operación {0} con el mensaje de error {1}'.format(math_equation, e))
 
     @classmethod
     def _replace_words_with_math_symbols(cls, transcript):
@@ -46,6 +50,7 @@ class MathSkills(AssistantSkill):
         transcript_with_numbers = ''
         for word in transcript.split():
             try:
+                print("_replace_words_with_numbers", word)
                 number = to_number(word)
                 transcript_with_numbers += ' ' + str(number)
             except ValueError as e:

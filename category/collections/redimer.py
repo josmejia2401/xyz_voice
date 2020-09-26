@@ -1,6 +1,7 @@
 import re
 import time
 import datetime
+from spa2num.converter import to_number
 
 from threading import Thread
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -29,22 +30,19 @@ time_intervals = {
 class ReminderSkills(AssistantSkill):
 
     alarm_pending = []
+    STOP = False
+    
+    @classmethod
+    def stop_alarm(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+        cls.STOP = True
+        cls.response("Apagando todas las alarma. El proceso se hará en unos segundos.")
 
     @classmethod
-    def _get_reminder_duration_and_time_interval(cls, voice_transcript):
-        """
-        Extracts the duration and the time interval from the voice transcript.
-        NOTE: If there are multiple time intervals, it will extract the first one.
-        """
-        for time_interval in time_intervals.values():
-            for variation in time_interval['variations']:
-                if variation in voice_transcript:
-                    # Change '[0-9]'to '([0-9])' and now the skill is working
-                    #reg_ex = re.search('([0-9])', voice_transcript)
-                    #duration = reg_ex.group(1)
-                    #print(x)
-                    duration = re.findall('[0-9]+', voice_transcript)
-                    return duration[0], time_interval['scheduler_interval'], variation
+    def list_from_alarms(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+        for alarm in cls.alarm_pending:
+            cls.response("Alarma en {} horas {} minutos".format(alarm[0], alarm[1]))
+        else:
+            cls.response("No hay alarmas disponibles")
 
     @classmethod
     def create_reminder(cls, param1 = None, param2 = None, param3 = None, **kwargs):
@@ -53,13 +51,13 @@ class ReminderSkills(AssistantSkill):
         :param voice_transcript: string (e.g 'Make a reminder in 10 minutes')
         """
         voice_transcript = param1
+        voice_transcript = cls._replace_words_with_numbers(voice_transcript)
         reminder_duration, scheduler_interval, variation = cls._get_reminder_duration_and_time_interval(voice_transcript)
         def reminder():
             cls.response("Hola, te recuerdo que el recordatorio {0} {1} ha pasado!".format(reminder_duration, variation))
             job.remove()
         try:
             if reminder_duration:
-                print("reminder_duration", reminder_duration)
                 scheduler = BackgroundScheduler()
                 interval = {scheduler_interval: int(reminder_duration)}
                 job = scheduler.add_job(reminder, 'interval', **interval)
@@ -80,33 +78,77 @@ class ReminderSkills(AssistantSkill):
         voice_transcript = param1
         cls.response("Estableciendo alarma... espera.")
         try:
-            timex = [int(s) for s in str.split() if s.isdigit()]
+            s = cls._replace_words_with_numbers(voice_transcript)
+            timex = [int(s) for s in s.split(" ") if s.isdigit()]
             if timex and len(timex) > 1:
                 alarm_hour = timex[0] #values_range=[0, 24]
                 alarm_minutes = timex[1] #values_range=[0, 59])
-                cls.alarm_pending.append([alarm_hour, alarm_minutes])
                 thread = Thread(target=cls._alarm_countdown, args=(alarm_hour, alarm_minutes))
                 thread.start()
+                #cls.response("Alarma establecida en {} horas {} minutos".format(alarm_hour, alarm_minutes))
+            elif timex and len(timex) > 0:
+                reminder_duration, scheduler_interval, variation = cls._get_reminder_duration_and_time_interval(s)
+                if reminder_duration and scheduler_interval and variation:
+                    alarm_hour = 0
+                    alarm_minutes = 1
+                    if "hours" in scheduler_interval:
+                        alarm_hour = int(reminder_duration)
+                    elif "minutes" in scheduler_interval:
+                        alarm_minutes = int(reminder_duration)
+                    thread = Thread(target=cls._alarm_countdown, args=(alarm_hour, alarm_minutes))
+                    thread.start()
+                    #cls.response("Alarma establecida en {} horas {} minutos".format(alarm_hour, alarm_minutes))
+                else:
+                    cls.response("No se pudo establecer la alarma a las " + " ".join(timex))
             else:
                 cls.response("No se pudo establecer la alarma a las " + " ".join(timex))
         except Exception as e:
+            print(e)
             cls.response("No se pudo establecer la alarma.")
 
     @classmethod
-    def _alarm_countdown(cls, alarm_hour, alarm_minutes):
+    def _alarm_countdown(cls, alarm_hour: int, alarm_minutes: int):
+        cls.alarm_pending.append([alarm_hour, alarm_minutes])
+        cls.STOP == False
         now = datetime.datetime.now()
-        alarm_time = datetime.datetime.combine(now.date(), datetime.time(alarm_hour, alarm_minutes, 0))
-        waiting_period = alarm_time - now
-        if waiting_period < datetime.timedelta(0):
-            # Choose 8PM today as the time the alarm fires.
-            # This won't work well if it's after 8PM, though.
-            cls.response('This time has past for today')
-        else:
-            cls.alarm_pending.remove([alarm_hour, alarm_minutes])
-            # Successful setup message
-            cls.response("alarma establecida a las {} y {}".format(alarm_hour, alarm_minutes))
-            # Alarm countdown starts
-            time.sleep((alarm_time - now).total_seconds())
-            cls.response("Hora {0}".format(datetime.datetime.now().strftime('%H:%M')))
-            cls.response("sonando alarma. levantante")
+        alarm_time = now + datetime.timedelta(hours=alarm_hour, minutes=alarm_minutes, seconds=0, days=0)
+        strTime = alarm_time.strftime("%A %d de %B de %Y a las %H y %M")
+        fechaText = "La alarma sonará el {}".format(strTime)
+        cls.response(fechaText)
+        while alarm_time > now:
+            if cls.STOP == True:
+                cls.alarm_pending.remove([alarm_hour, alarm_minutes])
+                return
+            now = datetime.datetime.now()
+            time.sleep(1)
+        cls.STOP = False
+        cls.alarm_pending.remove([alarm_hour, alarm_minutes])
+        cls.response("sonando alarma!!!")
+
+    @classmethod
+    def _replace_words_with_numbers(cls, transcript):
+        transcript_with_numbers = ''
+        for word in transcript.split():
+            try:
+                number = to_number(word)
+                transcript_with_numbers += ' ' + str(number)
+            except ValueError as e:
+                # If word is not a number words it has 'ValueError'
+                # In this case we add the word as it is
+                transcript_with_numbers += ' ' + word
+        return transcript_with_numbers
             
+
+    @classmethod
+    def _get_reminder_duration_and_time_interval(cls, voice_transcript):
+        """
+        Extracts the duration and the time interval from the voice transcript.
+        NOTE: If there are multiple time intervals, it will extract the first one.
+        """
+        for time_interval in time_intervals.values():
+            for variation in time_interval['variations']:
+                if variation in voice_transcript:
+                    duration = re.findall('[0-9]+', voice_transcript)
+                    return duration[0], time_interval['scheduler_interval'], variation
+        
+        return None, None, None

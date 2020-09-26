@@ -21,6 +21,7 @@ class TTSEngine(object):
 
     @classmethod
     def play_text(cls, message):
+        print(message)
         if message:
             try:
                 myobj = gTTS(text=message, lang="es", slow=False)

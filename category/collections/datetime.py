@@ -57,20 +57,5 @@ class DatetimeSkills(AssistantSkill):
 
     @classmethod
     def _time_in_text(cls, hour, minute):
-        if minute == 0:
-            time = cls._create_hour_period(hour) + " en punto"
-        elif minute == 15:
-            time = cls._create_hour_period(hour) + " y cuarto"
-        elif minute == 30:
-            time = cls._create_hour_period(hour) + " y media"
-        elif minute == 45:
-            hour_12h_format = cls._convert_12_hour_format(hour + 1)
-            period = cls._get_12_hour_period(hour)
-            time = "un cuarto menos de las " + hour_mapping[str(hour_12h_format)] + ' ' + '(' + period + ')'
-        elif 0 < minute < 30:
-            time = str(minute) + " minutos más " + cls._create_hour_period(hour)
-        else:
-            hour_12h_format = cls._convert_12_hour_format(hour + 1)
-            period = cls._get_12_hour_period(hour)
-            time = str(60 - minute) + " minutos para " + hour_mapping[str(hour_12h_format)] + ' ' + '(' + period + ')'
-        return time
+        timex = "{} y {} minutos".format(cls._create_hour_period(hour), minute)
+        return timex

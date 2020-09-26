@@ -51,7 +51,7 @@ BASIC_SKILLS = [
     {
         "enable": True,
         "func": UtilSkills.increase_master_volume,
-        "tags": "subir volumen,incrementar volumen,subir volumen otra vez,subir volumen nuevamente",
+        "tags": "subir volumen,incrementar volumen,subir volumen otra vez,subir volumen nuevamente,aumentar volumen",
         "description": "Sube el volumen"
     },
 
@@ -78,8 +78,15 @@ BASIC_SKILLS = [
 
     {
         "enable": True,
+        "func": UtilSkills.current_master_volume,
+        "tags": "volumen actual,volumen en este momento,actual volumen,porcentaje volumen,porcentaje de volumen",
+        "description": "Actual volumen"
+    },
+
+    {
+        "enable": True,
         "func": InternetSkills.internet_availability,
-        "tags": "conexión a internet,internet actual,hay internet,conexión internet,revisar internet",
+        "tags": "conexion a internet,internet actual,hay internet,conexion internet,revisar internet",
         "description": "Revisar conexión a internet"
     },
     {
@@ -94,6 +101,21 @@ BASIC_SKILLS = [
         "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
         "description": "Alarma"
     },
+
+    {
+        "enable": True,
+        "func": ReminderSkills.stop_alarm,
+        "tags": "deteneter alarma,apagar alarma,deten la alarma,detener todas las alarmas,apagar todas las alarmas,parar alarma,deten la alarma,parar todas las alarmas,de tener todas las alarmas,de tener alarmas",
+        "description": "Detener Alarma"
+    },
+
+    {
+        "enable": True,
+        "func": ReminderSkills.list_from_alarms,
+        "tags": "lista alarmas,listado de alarmas,listado de alarma,lista de alarmas,lista alarmas,lista alarma,cuales son las alarmas,alarmas actuales",
+        "description": "Lista Alarma"
+    },
+
     {
         "enable": True,
         "func": MathSkills.do_calculations,
@@ -107,9 +129,6 @@ BASIC_SKILLS = [
         "tags": "clima actual,datos del clima,informacion del clima,temperatura actual,temperatura de,estadisticas del clima",
         "description": "Calculos"
     },
-
-
-    
 ]
 
 

@@ -3,11 +3,13 @@ import urllib.request as urllib2
 
 class InternetSkills(AssistantSkill):
 
-    def check_internet_connection(cls):
+    @classmethod
+    def _check_internet_connection(cls,**kwargs):
         try:
             urllib2.urlopen('http://www.google.com', timeout=1)
             return True
         except urllib2.URLError as err: 
+            print(err)
             return False
 
     @classmethod
@@ -15,7 +17,7 @@ class InternetSkills(AssistantSkill):
         """
         Tells to the user is the internet is available or not.
         """
-        if cls.check_internet_connection():
+        if cls._check_internet_connection():
             cls.response("Hay conexión a internet")
             return True
         else:

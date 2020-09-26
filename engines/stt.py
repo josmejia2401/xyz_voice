@@ -14,18 +14,18 @@ class STTEngine(ConcreteSubject):
     recognizer = sr.Recognizer()
     microphone = sr.Microphone(sample_rate=44100)
     # energía de audio mínima a considerar para la grabación
-    recognizer.energy_threshold = 3000
+    recognizer.energy_threshold = 4000
     # segundos de audio sin hablar antes de que una frase se considere completa
     recognizer.pause_threshold = 0.8
     recognizer.dynamic_energy_threshold = True
     # segundos mínimos de audio hablado antes de que consideremos el audio hablado como una frase; los valores por debajo de esto se ignoran (para filtrar clics y estallidos)
-    #self.recognizer.phrase_threshold = 0.3
+    #recognizer.phrase_threshold = 0.5
     # segundos de audio que no habla para mantenerse en ambos lados de la grabación
-    #self.recognizer.non_speaking_duration = 0.2
+    #recognizer.non_speaking_duration = 0.2
 
     main_lang = "es-ES"
     keyword_lang = "es"
-    keywords = [("cristal", 1), ("hey cristal", 1), ("ey cristal", 1), ("christal", 1)]
+    keywords = []#[("cristal", 1), ("hey cristal", 1), ("ey cristal", 1), ("christal", 1)]
 
     def __init__(self):
         super().__init__() 
@@ -43,6 +43,7 @@ class STTEngine(ConcreteSubject):
     def recognize_input(self, already_activated=False):
         response = STTEngine._recognize_speech_from_mic(already_activated)
         self.stop()
+        print(response)
         self.some_business_logic(response)
 
     @classmethod
@@ -50,7 +51,7 @@ class STTEngine(ConcreteSubject):
         print("escuchando")
         response = { "success": True, "error": None, "transcription": None }
         with cls.microphone as source:
-            cls.recognizer.adjust_for_ambient_noise(source, duration=0.5)
+            cls.recognizer.adjust_for_ambient_noise(source, duration=1)
             audio = cls.recognizer.listen(source)
         try:
             with open("microphone-results.wav", "wb") as f:
@@ -58,7 +59,7 @@ class STTEngine(ConcreteSubject):
 
             #speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=self.keywords, language=self.keyword_lang)
             response["transcription"] = cls.recognizer.recognize_google(audio, language=cls.main_lang).lower()
-            if already_activated == False and cls._activation_name_exist(response):
+            if already_activated == False: #and cls._activation_name_exist(response):
                 response = cls._remove_activation_word(response)
             elif already_activated == True:
                 pass
