@@ -1,0 +1,55 @@
+{
+    "category": "date",
+    "values": [
+        {
+            "pattern": ".*dia es hoy.*",
+            "category": "date",
+            "templates": [
+                "hoy es {}",
+                "la fecha actual es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*dia.*hoy.*",
+            "category": "date",
+            "templates": [
+                "hoy es {}",
+                "la fecha actual es <{}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*fecha actual.*",
+            "category": "date",
+            "templates": [
+                "hoy es {}",
+                "la fecha actual es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*actual dia.*",
+            "category": "date",
+            "templates": [
+                "hoy es {}",
+                "la fecha actual es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*actual fecha.*",
+            "category": "date",
+            "templates": [
+                "hoy es {}",
+                "la fecha actual es {}",
+                "{}"
+            ],
+            "that": ""
+        }
+    ]
+}

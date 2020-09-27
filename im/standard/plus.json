@@ -1,0 +1,50 @@
+{
+    "category": "plus",
+    "values": [
+        {
+            "pattern": "(.*)+(.*)",
+            "category": "plus",
+            "templates": [
+                "la suma es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*cuanto es (.*)+(.*)",
+            "category": "plus",
+            "templates": [
+                "la suma es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*cuanto es (.*)mas(.*)",
+            "category": "plus",
+            "templates": [
+                "la suma es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": "(.*)mas(.*)",
+            "category": "plus",
+            "templates": [
+                "la suma es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*sumar(.*)+(.*)",
+            "category": "plus",
+            "templates": [
+                "la suma es {}",
+                "{}"
+            ],
+            "that": ""
+        }
+    ]
+}

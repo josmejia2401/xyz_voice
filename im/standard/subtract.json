@@ -1,0 +1,50 @@
+{
+    "category": "subtract",
+    "values": [
+        {
+            "pattern": "(.*)-(.*)",
+            "category": "subtract",
+            "templates": [
+                "la resta es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*cuanto es (.*)-(.*)",
+            "category": "subtract",
+            "templates": [
+                "la resta es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*cuanto es (.*)menos(.*)",
+            "category": "subtract",
+            "templates": [
+                "la resta es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": "(.*)menos(.*)",
+            "category": "subtract",
+            "templates": [
+                "la resta es {}",
+                "{}"
+            ],
+            "that": ""
+        },
+        {
+            "pattern": ".*restar(.*)menos(.*)",
+            "category": "subtract",
+            "templates": [
+                "la resta es {}",
+                "{}"
+            ],
+            "that": ""
+        }
+    ]
+}
