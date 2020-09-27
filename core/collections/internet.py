@@ -1,4 +1,4 @@
-from category.skill import AssistantSkill
+from core.skill import AssistantSkill
 import urllib.request as urllib2
 
 class InternetSkills(AssistantSkill):
@@ -13,13 +13,11 @@ class InternetSkills(AssistantSkill):
             return False
 
     @classmethod
-    def internet_availability(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def internet_availability(cls, ext = None, template = None, values = None):
         """
         Tells to the user is the internet is available or not.
         """
         if cls._check_internet_connection():
-            cls.response("Hay conexión a internet")
-            return True
+            return template.format("Hay conexión a internet")
         else:
-            cls.response("En este momento no hay conexión a internet")
-            return False
+            return template.format("En este momento no hay conexión a internet")

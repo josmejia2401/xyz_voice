@@ -6,7 +6,7 @@ from spa2num.converter import to_number
 from threading import Thread
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from category.skill import AssistantSkill
+from core.skill import AssistantSkill
 
 time_intervals = {
     'segundos': {'variations': ['segundos', 'segundo'],
@@ -33,19 +33,19 @@ class ReminderSkills(AssistantSkill):
     STOP = False
     
     @classmethod
-    def stop_alarm(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def stop_alarm(cls, ext = None, template = None, values = None):
         cls.STOP = True
-        cls.response("Apagando todas las alarma. El proceso se hará en unos segundos.")
+        return template.format("Apagando todas las alarma. El proceso se hará en unos segundos.")
 
     @classmethod
-    def list_from_alarms(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def list_from_alarms(cls, ext = None, template = None, values = None):
         for alarm in cls.alarm_pending:
-            cls.response("Alarma en {} horas {} minutos".format(alarm[0], alarm[1]))
+            return template.format("Alarma en {} horas {} minutos".format(alarm[0], alarm[1]))
         else:
-            cls.response("No hay alarmas disponibles")
+            return template.format("No hay alarmas disponibles")
 
     @classmethod
-    def create_reminder(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def create_reminder(cls, ext = None, template = None, values = None):
         """
         Creates a simple reminder for the given time interval (seconds or minutes or hours..)
         :param voice_transcript: string (e.g 'Make a reminder in 10 minutes')
@@ -54,29 +54,22 @@ class ReminderSkills(AssistantSkill):
         voice_transcript = cls._replace_words_with_numbers(voice_transcript)
         reminder_duration, scheduler_interval, variation = cls._get_reminder_duration_and_time_interval(voice_transcript)
         def reminder():
-            cls.response("Hola, te recuerdo que el recordatorio {0} {1} ha pasado!".format(reminder_duration, variation))
+            return template.format("Hola, te recuerdo que el recordatorio {0} {1} ha pasado!".format(reminder_duration, variation))
             job.remove()
         try:
             if reminder_duration:
                 scheduler = BackgroundScheduler()
                 interval = {scheduler_interval: int(reminder_duration)}
                 job = scheduler.add_job(reminder, 'interval', **interval)
-                cls.response("He creado un recordatorio en {0} {1}".format(reminder_duration, variation))
+                return template.format("He creado un recordatorio en {0} {1}".format(reminder_duration, variation))
                 scheduler.start()
         except Exception as e:
-            cls.response("No pude crear el recordatorio")
+            return template.format("No pude crear el recordatorio")
 
     @classmethod
-    def set_alarm(cls, param1 = None, param2 = None, param3 = None, **kwargs):
-        # ------------------------------------------------
-        # Current Limitations
-        # ------------------------------------------------
-        # - User can set alarm only for the same day
-        # - Works only for specific format hh:mm
-        # - Alarm sounds for 12 secs and stops, user can't stop interrupt it.
-        #   -- Future improvement is to ring until user stop it.
+    def set_alarm(cls, ext = None, template = None, values = None):
         voice_transcript = param1
-        cls.response("Estableciendo alarma... espera.")
+        return template.format("Estableciendo alarma... espera.")
         try:
             s = cls._replace_words_with_numbers(voice_transcript)
             timex = [int(s) for s in s.split(" ") if s.isdigit()]
@@ -85,7 +78,6 @@ class ReminderSkills(AssistantSkill):
                 alarm_minutes = timex[1] #values_range=[0, 59])
                 thread = Thread(target=cls._alarm_countdown, args=(alarm_hour, alarm_minutes))
                 thread.start()
-                #cls.response("Alarma establecida en {} horas {} minutos".format(alarm_hour, alarm_minutes))
             elif timex and len(timex) > 0:
                 reminder_duration, scheduler_interval, variation = cls._get_reminder_duration_and_time_interval(s)
                 if reminder_duration and scheduler_interval and variation:
@@ -97,14 +89,13 @@ class ReminderSkills(AssistantSkill):
                         alarm_minutes = int(reminder_duration)
                     thread = Thread(target=cls._alarm_countdown, args=(alarm_hour, alarm_minutes))
                     thread.start()
-                    #cls.response("Alarma establecida en {} horas {} minutos".format(alarm_hour, alarm_minutes))
                 else:
-                    cls.response("No se pudo establecer la alarma a las " + " ".join(timex))
+                    return template.format("No se pudo establecer la alarma a las " + " ".join(timex))
             else:
-                cls.response("No se pudo establecer la alarma a las " + " ".join(timex))
+                return template.format("No se pudo establecer la alarma a las " + " ".join(timex))
         except Exception as e:
             print(e)
-            cls.response("No se pudo establecer la alarma.")
+            return template.format("No se pudo establecer la alarma.")
 
     @classmethod
     def _alarm_countdown(cls, alarm_hour: int, alarm_minutes: int):
@@ -114,7 +105,7 @@ class ReminderSkills(AssistantSkill):
         alarm_time = now + datetime.timedelta(hours=alarm_hour, minutes=alarm_minutes, seconds=0, days=0)
         strTime = alarm_time.strftime("%A %d de %B de %Y a las %H y %M")
         fechaText = "La alarma sonará el {}".format(strTime)
-        cls.response(fechaText)
+        return template.format(fechaText)
         while alarm_time > now:
             if cls.STOP == True:
                 cls.alarm_pending.remove([alarm_hour, alarm_minutes])
@@ -123,7 +114,7 @@ class ReminderSkills(AssistantSkill):
             time.sleep(1)
         cls.STOP = False
         cls.alarm_pending.remove([alarm_hour, alarm_minutes])
-        cls.response("sonando alarma!!!")
+        return template.format("sonando alarma!!!")
 
     @classmethod
     def _replace_words_with_numbers(cls, transcript):

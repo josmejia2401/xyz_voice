@@ -1,5 +1,5 @@
 import subprocess
-from category.skill import AssistantSkill
+from core.skill import AssistantSkill
 
 
 def get_master_volume():
@@ -22,7 +22,7 @@ def set_master_volume(volume):
 class UtilSkills(AssistantSkill):
 
     @classmethod
-    def speech_interruption(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def speech_interruption(cls, ext = None, template = None, values = None):
         """
         Stop assistant speech.
         """
@@ -30,61 +30,60 @@ class UtilSkills(AssistantSkill):
         pass
     
     @classmethod
-    def current_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def current_master_volume(cls, ext = None, template = None, values = None):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume:
-            cls.response("El volumen esta en {} porciento".format(volume))
+            return template.format(volume)
         else:
-            cls.response("No se pudo encontrar el volumen")
+            return template.format("No se pudo encontrar el volumen")
 
     @classmethod
-    def increase_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def increase_master_volume(cls, ext = None, template = None, values = None):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
         if volume >= 100:
-            cls.response("El volumen de los altavoces ya es máximo")
-            return
+            return template.format("El volumen de los altavoces ya es máximo")
 
         increased_volume = volume + step
         if increased_volume > 100:
             set_master_volume(100)
         else:
             set_master_volume(increased_volume)
-            cls.response("Aumenté el volumen de los altavoces")
+            return template.format("Aumenté el volumen de los altavoces")
 
     @classmethod
-    def reduce_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def reduce_master_volume(cls, ext = None, template = None, values = None):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
         if volume < 0:
-            cls.response("El volumen de los altavoces ya está silenciado")
+            return template.format("El volumen de los altavoces ya está silenciado")
 
         reduced_volume = volume - step
         if reduced_volume < 0:
             set_master_volume(0)
         else:
             set_master_volume(reduced_volume)
-            cls.response("Bajé el volumen de los altavoces")
+            return template.format("Bajé el volumen de los altavoces")
 
     @classmethod
-    def mute_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def mute_master_volume(cls, ext = None, template = None, values = None):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 0:
-            cls.response("El volumen de los altavoces ya está silenciado")
+            return template.format("El volumen de los altavoces ya está silenciado")
         else:
             set_master_volume(0)
-            cls.response("He Silenciado los altavoces maestros")
+            return template.format("He Silenciado los altavoces maestros")
 
     @classmethod
-    def max_master_volume(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def max_master_volume(cls, ext = None, template = None, values = None):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 100:
-            cls.response("El volumen de los altavoces ya es máximo")
+            return template.format("El volumen de los altavoces ya es máximo")
         else:
             set_master_volume(100)
-            cls.response("Se establece al máximo en los altavoces maestros")
+            return template.format("Se establece al máximo en los altavoces maestros")

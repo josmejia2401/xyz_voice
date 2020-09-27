@@ -58,3 +58,8 @@ pasos para Mac:
 > Renombrar "581HCDCONT10000SPA.lm.bin" por "language-model.lm.bin"
 # 3. Ejecutar
 > python3 voicex.py
+
+# Otros
+> d504c812d3974c7628d4475c4eb74ff500000000000000000
+> 00000000000000000
+> r

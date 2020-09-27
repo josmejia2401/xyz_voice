@@ -2,8 +2,7 @@
 from engines.stt import STTEngine
 from engines.tts import TTSEngine
 from observerx.observerx import Observer
-from category.analyzer import SkillAnalyzer
-from category.registry import get_func_from_skills
+from core.kernel import Kernel
 """
 Espera unos segundos
 Cristal listo!!! estoy escuhando.
@@ -17,7 +16,7 @@ class Cristal(Observer):
     def loading(self):
         self.tTSEngine.play_text("Cargando sistema, por favor espera.")
         self.sTTEngine = STTEngine()
-        self.skillAnalyzer = SkillAnalyzer()
+        self.kernel = Kernel()
         self.sTTEngine.attach(self)
     
     def ready(self):
@@ -36,21 +35,7 @@ class Cristal(Observer):
 
     def update(self, subject, payload) -> None:
         if subject._state < 11 and payload["success"] == True:
-            skill = self.skillAnalyzer.extract(payload["transcription"])
-            print("skill", skill)
-            if skill:
-                func = get_func_from_skills(skill)
-                if func:
-                    try:
-                        param1 = " ".join(str(e).strip() for e in skill)
-                        func(param1)
-                    except Exception as e:
-                        print("eeee", e)
-                else:
-                    pass
-            else:
-                pass
-
+            self.kernel.respond(payload["transcription"])
         self.run()
 
 if __name__=='__main__':

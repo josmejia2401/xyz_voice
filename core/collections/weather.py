@@ -1,12 +1,12 @@
 import requests
 from utils.settings import WEATHER_API
-from category.skill import AssistantSkill
+from core.skill import AssistantSkill
 
 
 class WeatherSkills(AssistantSkill):
     
     @classmethod
-    def tell_the_weather(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def tell_the_weather(cls, ext = None, template = None, values = None):
         """
         Tells the weather of a place
         :param tag: string (e.g 'weather')
@@ -20,15 +20,15 @@ class WeatherSkills(AssistantSkill):
                 if city:
                     temperature, temperature_min, temperature_max = cls._get_weather_status_and_temperature(city)
                     if temperature and temperature_min and temperature_max:
-                        cls.response("La temperatura actual para bogotá es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (temperature, temperature_min, temperature_max))
+                        return template.format("La temperatura actual para bogotá es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (temperature, temperature_min, temperature_max))
                     else:
-                        cls.response("Lo siento, en este momento no hay datos del tiempo.")
+                        return template.format("Lo siento, en este momento no hay datos del tiempo.")
                 else:
-                    cls.response("Lo siento, en este momento no hay datos de tu localización.")
+                    return template.format("Lo siento, en este momento no hay datos de tu localización.")
             else:
-                cls.response("Por favor define la llave de open weather map.")
+                return template.format("Por favor define la llave de open weather map.")
         except Exception as e:
-            cls.response("En este momento no pude obtener datos del tiempo.")
+            return template.format("En este momento no pude obtener datos del tiempo.")
     """
     {
         "coord":{

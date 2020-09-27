@@ -28,6 +28,8 @@ class SkillAnalyzer:
         user_transcript_with_replaced_math_symbols = self._replace_math_symbols_with_words(user_transcript)
         return self.tokenize(user_transcript_with_replaced_math_symbols)
 
+    
+
     def _replace_math_symbols_with_words(self, transcript):
         replaced_transcript = ''
         for word in transcript.split():
@@ -84,3 +86,25 @@ class SkillAnalyzer:
         text = text.encode('ascii', 'ignore')
         text = text.decode("utf-8")
         return str(text)
+
+    def sentences(self, s):
+    """Split the string s into a list of sentences."""
+        try: 
+            s + ""
+        except: 
+            raise TypeError("s must be a string")
+        pos = 0
+        sentenceList = []
+        l = len(s)
+        while pos < l:
+            try: p = s.index('.', pos)
+            except: p = l+1
+            try: q = s.index('?', pos)
+            except: q = l+1
+            try: e = s.index('!', pos)
+            except: e = l+1
+            end = min(p,q,e)
+            sentenceList.append( s[pos:end].strip() )
+            pos = end+1
+        if len(sentenceList) == 0: sentenceList.append(s)
+        return sentenceList

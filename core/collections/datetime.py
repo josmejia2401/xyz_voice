@@ -1,5 +1,5 @@
 from datetime import datetime, date
-from category.skill import AssistantSkill
+from core.skill import AssistantSkill
 
 hour_mapping = {'0': 'doce',
                 '1': 'uno',
@@ -20,26 +20,26 @@ hour_mapping = {'0': 'doce',
 class DatetimeSkills(AssistantSkill):
 
     @classmethod
-    def tell_the_time(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def tell_the_time(cls, ext = None, template = None, values = None):
         """
         Tells ths current time
         """
         now = datetime.now()
         hour, minute = now.hour, now.minute
         converted_time = cls._time_in_text(hour, minute)
-        horaText = 'Son las: {}'.format(converted_time)
-        cls.response(horaText)
+        horaText = template.format(converted_time)
+        return horaText
 
     @classmethod
-    def tell_the_date(cls, param1 = None, param2 = None, param3 = None, **kwargs):
+    def tell_the_date(cls, ext = None, template = None, values = None):
         """
         Tells ths current date
         """
         currentDate = datetime.now()
         strTime = currentDate.strftime("%A %d de %B de %Y")
-        fechaText = "Hoy es {}".format(strTime)
-        cls.response(fechaText)
-        #print(cls.user_input())
+        fechaText = template.format(strTime)
+        #cls.response(fechaText)
+        return fechaText
 
     @classmethod
     def _get_12_hour_period(cls, hour):
