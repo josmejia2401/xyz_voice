@@ -12,7 +12,7 @@ class STTEngine(ConcreteSubject):
     """
 
     recognizer = sr.Recognizer()
-    microphone = sr.Microphone(sample_rate=44100)
+    microphone = sr.Microphone(sample_rate=32000)
     # energía de audio mínima a considerar para la grabación
     recognizer.energy_threshold = 4000
     # segundos de audio sin hablar antes de que una frase se considere completa
@@ -22,7 +22,6 @@ class STTEngine(ConcreteSubject):
     #recognizer.phrase_threshold = 0.5
     # segundos de audio que no habla para mantenerse en ambos lados de la grabación
     #recognizer.non_speaking_duration = 0.2
-
     main_lang = "es-ES"
     keyword_lang = "es"
     keywords = []#[("cristal", 1), ("hey cristal", 1), ("ey cristal", 1), ("christal", 1)]

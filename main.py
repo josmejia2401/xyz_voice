@@ -35,6 +35,7 @@ class Cristal(Observer):
 
     def update(self, subject, payload) -> None:
         if subject._state < 11 and payload["success"] == True:
+            print("transcription", payload["transcription"])
             self.kernel.respond(payload["transcription"])
         self.run()
 

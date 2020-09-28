@@ -27,8 +27,7 @@ class DatetimeSkills(AssistantSkill):
         now = datetime.now()
         hour, minute = now.hour, now.minute
         converted_time = cls._time_in_text(hour, minute)
-        horaText = template.format(converted_time)
-        return horaText
+        return template.format(converted_time)
 
     @classmethod
     def tell_the_date(cls, ext = None, template = None, values = None):
@@ -37,9 +36,7 @@ class DatetimeSkills(AssistantSkill):
         """
         currentDate = datetime.now()
         strTime = currentDate.strftime("%A %d de %B de %Y")
-        fechaText = template.format(strTime)
-        #cls.response(fechaText)
-        return fechaText
+        return template.format(strTime)
 
     @classmethod
     def _get_12_hour_period(cls, hour):

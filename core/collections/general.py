@@ -34,7 +34,7 @@ class UtilSkills(AssistantSkill):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume:
-            return template.format(volume)
+            return template.format(str(volume) + " porciento de volumen")
         else:
             return template.format("No se pudo encontrar el volumen")
 
@@ -59,7 +59,7 @@ class UtilSkills(AssistantSkill):
         step = 2
         volume = get_master_volume()
         if volume < 0:
-            return template.format("El volumen de los altavoces ya está silenciado")
+            return template.format("El volumen de los altavoces está silenciado")
 
         reduced_volume = volume - step
         if reduced_volume < 0:

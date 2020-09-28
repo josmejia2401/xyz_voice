@@ -19,8 +19,7 @@ class MathSkills(AssistantSkill):
     """
     @classmethod
     def do_calculations(cls, ext = None, template = None, values = None):
-        print(param1)
-        transcript_with_numbers = cls._replace_words_with_numbers(param1)
+        transcript_with_numbers = cls._replace_words_with_numbers(ext)
         transcript_with_numbers = cls._replace_words_with_math_symbols(transcript_with_numbers)
         math_equation = cls._clear_transcript(transcript_with_numbers)
         try:

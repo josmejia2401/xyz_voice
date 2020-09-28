@@ -2,9 +2,11 @@ import nltk
 nltk.download('stopwords')
 nltk.download('punkt')
 from nltk.corpus import stopwords
-from nltk import word_tokenize
 from nltk.data import load
 from nltk.stem import SnowballStemmer
+from nltk import ne_chunk, pos_tag, word_tokenize
+from nltk.tree import Tree
+
 from string import punctuation
 import re
 from utils.mapping import math_symbols_mapping
@@ -49,6 +51,7 @@ class SkillAnalyzer:
         return stemmed
 
     def tokenize(self, text):
+        # remove accents
         text = self.strip_accents(text)
         # remove links from tweets
         text = re.sub(r"http\S+", "https", text)
@@ -58,6 +61,14 @@ class SkillAnalyzer:
         text = re.sub(r'(.)\1+', r'\1\1', text)
         # tokenize
         tokens = word_tokenize(text)
+        # clean tokens
+        clean_tokens = [w for w in tokens if not w in self.spanish_stopwords]        
+        #WP	WH-pronoun
+        #NNP	Proper noun, singular
+        #NN	noun, singular
+        #.	Punctuation marks
+        #tagged = pos_tag(clean_tokens)
+        #tokens = self.get_continuous_chunks(text)
         # stem
         """try:
             stems = self.stem_tokens(tokens, self.stemmer)
@@ -67,6 +78,31 @@ class SkillAnalyzer:
             stems = ['']
         return stems"""
         return tokens
+    def get_continuous_chunks(self, text):
+        chunked = ne_chunk(pos_tag(word_tokenize(text)))
+        # clean tokens
+        chunked = [w for w in chunked if not w in spanish_stopwords]    
+        prev = None
+        continuous_chunk = []
+        current_chunk = []
+
+        for i in chunked:
+            if type(i) == Tree:
+                current_chunk.append(" ".join([token for token, pos in i.leaves()]))
+            elif current_chunk:
+                named_entity = " ".join(current_chunk)
+                if named_entity not in continuous_chunk:
+                    continuous_chunk.append(named_entity)
+                    current_chunk = []
+            else:
+                continue
+
+        if continuous_chunk:
+            named_entity = " ".join(current_chunk)
+            if named_entity not in continuous_chunk:
+                continuous_chunk.append(named_entity)
+
+        return continuous_chunk
 
     def strip_accents(self, text):
         """
@@ -88,7 +124,7 @@ class SkillAnalyzer:
         return str(text)
 
     def sentences(self, s):
-    """Split the string s into a list of sentences."""
+        """Split the string s into a list of sentences."""
         try: 
             s + ""
         except: 

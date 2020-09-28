@@ -13,37 +13,49 @@ class Kernel:
 
     def respond(self, inputx):
         """Private version of respond(), does the real work."""
-        sentences = self.analyzer.sentences(inputx)
-        response = ""
-        for s in sentences:
-            response += self._respond(s).strip()
-        return response
+        try:
+            sentences = self.analyzer.sentences(inputx)
+            response = ""
+            for s in sentences:
+                response += self._respond(s).strip()
+            
+            print("**************", response)
+            return response
+        except Exception as e:
+            print("respond", e)
 
     def _respond(self, inputx):
         """Private version of respond(), does the real work."""
-        if len(inputx) == 0:
+        try:
+            if len(inputx) == 0:
+                return ""
+            ext = self.analyzer.extract(inputx)
+            return self._processElement(ext).strip()
+        except Exception as e:
+            print("_respond", e)
             return ""
-        ext = self.analyzer.extract(inputx)
-        return self._processElement(ext).strip()
 
     def _processElement(self, ext):
         ext = " ".join(str(e).strip() for e in ext)
         response = ""
         skills = get_skills()
         for skill in skills:
-            try:
-                pattern = skill["pattern"]
-                pattern = pattern.replace("+", "\+")
-                pattern = pattern.replace("-", "\-")
-                values = re.findall(r''+pattern, ext)
-                if values:
-                    func = skill["func"]
-                    templates = skill["templates"]
-                    if templates:
-                        template = random.choice(templates)
-                        return func(ext, template, values)
-            except Exception as e:
-                print("_processElement", e)
+            for pat in skill["pattern"]:
+                try:
+                    pattern = pat
+                    pattern = pattern.replace("+", "\+")
+                    pattern = pattern.replace("-", "\-")
+                    values = re.findall(r''+pattern, ext)
+                    if values:
+                        func = skill["func"]
+                        templates = skill["templates"]
+                        if templates:
+                            template = random.choice(templates)
+                            return func(ext, template, values)
+                except Exception as e:
+                    print("_processElement", e)
+            else:
+                continue
         return response
 
 # test

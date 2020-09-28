@@ -14,15 +14,19 @@ CONTROL_SKILLS = [
         "pattern": [".*buenos dias.*", ".*buenas tardes.*", ".*buenas noches.*"],
         "templates": ["{}"],
         "tags": "iniciar,hola,buenas tardes,buenos dias,buenas noches",
-        "description": "Comandos para activar el sistema"
+        "description": "Comandos para activar el sistema",
+        "context": "",
+        "next": []
     },
 
     {
         "func": ActivationSkills.disable_assistant,
-        "pattern": [],
+        "pattern": [".*deshabilitar asistente.*", ".*deshabilitar sistema.*", ".*pausar asistente.*", ".*pausar sistema.*", ".*dejar de escuchar.*", ".*dormir asistente.*"],
         "templates": ["{}"],
         "tags": "deshabilitar asistente,deshabilitar sistema,pausar asistente,pausar sistema,dejar de escuchar,dormir asistente",
-        "description": "Poner el sistema en pausa"
+        "description": "Poner el sistema en pausa",
+        "context": "",
+        "next": []
     }
 ]
 
@@ -33,7 +37,9 @@ BASIC_SKILLS = [
         "templates": ["{}", "la hora actual es {}"],
         "func": DatetimeSkills.tell_the_time,
         "tags": "que hora es,que hora,hora es,hora actual",
-        "description": "Dice la hora actual"
+        "description": "Dice la hora actual",
+        "context": "",
+        "next": []
     },
 
     {
@@ -42,7 +48,9 @@ BASIC_SKILLS = [
         "templates": ["{}", "hoy es {}"],
         "func": DatetimeSkills.tell_the_date,
         "tags": "fecha actual,que dia es hoy,dia es hoy",
-        "description": "Dice la fecha actual"
+        "description": "Dice la fecha actual",
+        "context": "",
+        "next": []
     },
     {
         "enable": True,
@@ -50,115 +58,145 @@ BASIC_SKILLS = [
         "templates": ["se detiene la reproduccion actual", "se detiene el sonido"],
         "func": UtilSkills.speech_interruption,
         "tags": "detener ahora,detener reproduccion,detener cancion,detener audio,detener asistente",
-        "description": "detiene la reproducción actual"
+        "description": "detiene la reproducción actual",
+        "context": "",
+        "next": []
     },
     {
         "enable": True,
-        "pattern": [".*subir volumen.*", ".*incrementar volumen.*", ".*aumentar volumen.*"],
-        "templates": ["He subido el volumen"],
+        "pattern": [".*subir volumen.*", ".*incrementar volumen.*", ".*aumentar volumen.*", ".*subir volumen otra vez.*", ".*elevar volumen.*"],
+        "templates": ["{}"],
         "func": UtilSkills.increase_master_volume,
         "tags": "subir volumen,incrementar volumen,subir volumen otra vez,subir volumen nuevamente,aumentar volumen",
-        "description": "Sube el volumen"
+        "description": "Sube el volumen",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
         "pattern": [".*reducir volumen.*", ".*bajar volumen.*", ".*disminuir volumen.*"],
-        "templates": ["He bajado el volumen"],
+        "templates": ["{}"],
         "func": UtilSkills.reduce_master_volume,
         "tags": "bajar volumen,disminuir volumen,bajar volumen otra vez,bajar volumen nuevamente",
-        "description": "Decrementa el volumen"
+        "description": "Decrementa el volumen",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
         "pattern": [".*silenciar volumen.*", ".*bajar todo el volumen.*", ".*silencinar el volumen.*", ".*bajar todo volumen.*"],
-        "templates": ["He silenciado el volumen"],
+        "templates": ["{}"],
         "func": UtilSkills.mute_master_volume,
         "tags": "silenciar volumen,bajar todo el volumen,silenciar el volumen",
-        "description": "Silencia el volumen"
+        "description": "Silencia el volumen",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
         "pattern": [".*volumen al maximo.*", ".*volumen total.*", ".*volumen al 100.*", ".*volumen maximo.*"],
-        "templates": ["He puesto el volumen al maximo"],
+        "templates": ["{}"],
         "func": UtilSkills.max_master_volume,
         "tags": "volumen al maximo,volumen total,volumen al 100,volumen al cien,maximo volumen,volumen maximo",
-        "description": "maximo volumen"
+        "description": "maximo volumen",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
         "pattern": [".*volumen actual.*", ".*volumen en este momento.*", ".*porcentaje de volumen.*", ".*porcentaje volumen.*"],
-        "templates": ["He subido el volumen"],
+        "templates": ["{}"],
         "func": UtilSkills.current_master_volume,
         "tags": "volumen actual,volumen en este momento,actual volumen,porcentaje volumen,porcentaje de volumen",
-        "description": "Actual volumen"
+        "description": "Actual volumen",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
-        "pattern": [".*conexion a internet.*",".*internet actual.*",".*hay internet.*",".*conexion internet.*",".*revisar internet.*"],
+        "pattern": [".*conexion a internet.*", ".*internet actual.*", ".*hay internet.*", ".*conexion internet.*", ".*revisar internet.*"],
         "templates": ["{}"],
         "func": InternetSkills.internet_availability,
         "tags": "conexion a internet,internet actual,hay internet,conexion internet,revisar internet",
-        "description": "Revisar conexión a internet"
+        "description": "Revisar conexión a internet",
+        "context": "",
+        "next": []
     },
     {
         "enable": True,
-        "pattern": [".*crear recordatorio.*",".*recordatorio en.*",".*recordar esto.*",".*recordar lo siguiente.*"],
-        "templates": ["He creado el recordatorio en {}"],
+        "pattern": [".*crear recordatorio.*", ".*recordatorio en.*", ".*recordar esto.*", ".*recordar lo siguiente.*"],
+        "templates": ["{}"],
         "func": ReminderSkills.create_reminder,
         "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
-        "description": "Recordatorio"
+        "description": "Recordatorio",
+        "context": "",
+        "next": []
     },
     {
         "enable": True,
-        "pattern": [".*crear alarma.*",".*alarma en.*",".*agregar alarma.*",".*establecer alarma.*"],
+        "pattern": [".*crear alarma.*", ".*alarma en.*", ".*agregar alarma.*", ".*establecer alarma.*"],
         "templates": ["He creado la alarma en {}"],
         "func": ReminderSkills.set_alarm,
         "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
-        "description": "Alarma"
+        "description": "Alarma",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
-        "pattern": [".*deteneter alarma.*",".*apagar alarma.*",".*deten la alarma.*",".*detener todas las alarmas.*",".*apagar todas las alarmas.*",".*parar alarma.*"],
+        "pattern": [".*deteneter alarma.*", ".*apagar alarma.*", ".*deten la alarma.*", ".*detener todas las alarmas.*", ".*apagar todas las alarmas.*", ".*parar alarma.*"],
         "templates": ["He apagado las alarmas"],
         "func": ReminderSkills.stop_alarm,
         "tags": "deteneter alarma,apagar alarma,deten la alarma,detener todas las alarmas,apagar todas las alarmas,parar alarma,deten la alarma,parar todas las alarmas,de tener todas las alarmas,de tener alarmas",
-        "description": "Detener Alarma"
+        "description": "Detener Alarma",
+        "context": "",
+        "next": []
     },
 
     {
         "enable": True,
-        "pattern": [".*lista alarmas.*",".*listado de alarmas.*",".*listado de alarma.*",".*lista de alarmas.*",".*lista alarmas.*",".*lista alarma.*",".*cuales son las alarmas.*",".*alarmas actuales.*"],
-        "templates": ["Alarma {}"],
+        "pattern": [".*lista alarmas.*", ".*listado de alarmas.*", ".*listado de alarma.*", ".*lista de alarmas.*", ".*lista alarmas.*", ".*lista alarma.*", ".*cuales son las alarmas.*", ".*alarmas actuales.*"],
+        "templates": ["{}"],
         "func": ReminderSkills.list_from_alarms,
         "tags": "lista alarmas,listado de alarmas,listado de alarma,lista de alarmas,lista alarmas,lista alarma,cuales son las alarmas,alarmas actuales",
-        "description": "Lista Alarma"
+        "description": "Lista Alarma",
+        "context": "",
+        "next": []
     },
+
 
     {
         "enable": True,
-        "pattern": [""],
-        "templates": ["Alarma {}"],
-        "func": MathSkills.do_calculations,
-        "tags": math_tags,
-        "description": "Calculos"
-    },
-
-    {
-        "enable": True,
-        "pattern": [".*clima actual.*",".*datos del clima.*",".*informacion del clima.*",".*temperatura actual.*",".*temperatura de.*",".*estadisticas del clima.*"],
+        "pattern": [".*clima actual.*", ".*datos del clima.*", ".*informacion del clima.*", ".*temperatura actual.*", ".*temperatura de.*", ".*estadisticas del clima.*"],
         "templates": ["{}"],
         "func": WeatherSkills.tell_the_weather,
         "tags": "clima actual,datos del clima,informacion del clima,temperatura actual,temperatura de,estadisticas del clima",
-        "description": "Calculos"
+        "description": "Calculos",
+        "context": "",
+        "next": []
     },
+
+
+
 ]
 
- 
+"""{
+        "enable": True,
+        "pattern": [""],
+        "templates": ["{}"],
+        "func": MathSkills.do_calculations,
+        "tags": math_tags,
+        "description": "Calculos",
+        "context": "",
+        "next": []
+    },"""
+
+
 def get_skills():
     return BASIC_SKILLS + CONTROL_SKILLS
