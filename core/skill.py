@@ -25,6 +25,13 @@ class AssistantSkill:
         return response
 
     @classmethod
+    def new_history(cls, inputx, outputx):
+        out = {
+            "intput" : inputx,
+            "output": outputx
+        }
+        return new_history
+    @classmethod
     def extract_tags(cls, voice_transcript, tags):
         """
         This method identifies the tags from the user transcript for a specific skill.

@@ -13,7 +13,7 @@ class InternetSkills(AssistantSkill):
             return False
 
     @classmethod
-    def internet_availability(cls, ext = None, template = None, values = None):
+    def internet_availability(cls, ext = None, template = None, values = None, history = []):
         """
         Tells to the user is the internet is available or not.
         """

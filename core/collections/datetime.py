@@ -1,7 +1,8 @@
 from datetime import datetime, date
 from core.skill import AssistantSkill
 
-hour_mapping = {'0': 'doce',
+hour_mapping = {
+                '0': 'cero',
                 '1': 'uno',
                 '2': 'dos',
                 '3': 'tres',
@@ -20,17 +21,27 @@ hour_mapping = {'0': 'doce',
 class DatetimeSkills(AssistantSkill):
 
     @classmethod
-    def tell_the_time(cls, ext = None, template = None, values = None):
-        """
-        Tells ths current time
-        """
-        now = datetime.now()
-        hour, minute = now.hour, now.minute
-        converted_time = cls._time_in_text(hour, minute)
-        return template.format(converted_time)
+    def tell_the_time(cls, ext = None, template = None, values = None, history = []):
+        try:
+            now = datetime.now()
+            hour, minute = now.hour, now.minute
+            converted_time = cls._time_in_text(hour, minute)
+            response = template.format(converted_time)
+            history_elem = cls.new_history(ext ,response)
+            history.append(history_elem)
+            cls.response(response)
+            return response
+
+        except Exception as e:
+            print("ActivationSkills.assistant_greeting", e)
+            response = template.format("No se pudo procesar el comando")
+            history_elem = cls.new_history(ext ,response)
+            history.append(history_elem)
+            cls.response(response)
+            return response
 
     @classmethod
-    def tell_the_date(cls, ext = None, template = None, values = None):
+    def tell_the_date(cls, ext = None, template = None, values = None, history = []):
         """
         Tells ths current date
         """

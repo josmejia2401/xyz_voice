@@ -19,9 +19,9 @@ class STTEngine(ConcreteSubject):
     recognizer.pause_threshold = 0.8
     recognizer.dynamic_energy_threshold = True
     # segundos mínimos de audio hablado antes de que consideremos el audio hablado como una frase; los valores por debajo de esto se ignoran (para filtrar clics y estallidos)
-    #recognizer.phrase_threshold = 0.5
+    recognizer.phrase_threshold = 0.8
     # segundos de audio que no habla para mantenerse en ambos lados de la grabación
-    #recognizer.non_speaking_duration = 0.2
+    recognizer.non_speaking_duration = 0.2
     main_lang = "es-ES"
     keyword_lang = "es"
     keywords = []#[("cristal", 1), ("hey cristal", 1), ("ey cristal", 1), ("christal", 1)]

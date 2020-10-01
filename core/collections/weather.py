@@ -6,7 +6,7 @@ from core.skill import AssistantSkill
 class WeatherSkills(AssistantSkill):
     
     @classmethod
-    def tell_the_weather(cls, ext = None, template = None, values = None):
+    def tell_the_weather(cls, ext = None, template = None, values = None, history = []):
         """
         Tells the weather of a place
         :param tag: string (e.g 'weather')

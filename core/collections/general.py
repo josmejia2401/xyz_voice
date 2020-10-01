@@ -22,7 +22,7 @@ def set_master_volume(volume):
 class UtilSkills(AssistantSkill):
 
     @classmethod
-    def speech_interruption(cls, ext = None, template = None, values = None):
+    def speech_interruption(cls, ext = None, template = None, values = None, history = []):
         """
         Stop assistant speech.
         """
@@ -30,7 +30,7 @@ class UtilSkills(AssistantSkill):
         pass
     
     @classmethod
-    def current_master_volume(cls, ext = None, template = None, values = None):
+    def current_master_volume(cls, ext = None, template = None, values = None, history = []):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume:
@@ -39,7 +39,7 @@ class UtilSkills(AssistantSkill):
             return template.format("No se pudo encontrar el volumen")
 
     @classmethod
-    def increase_master_volume(cls, ext = None, template = None, values = None):
+    def increase_master_volume(cls, ext = None, template = None, values = None, history = []):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
@@ -54,7 +54,7 @@ class UtilSkills(AssistantSkill):
             return template.format("Aumenté el volumen de los altavoces")
 
     @classmethod
-    def reduce_master_volume(cls, ext = None, template = None, values = None):
+    def reduce_master_volume(cls, ext = None, template = None, values = None, history = []):
         # Limits: Playback 0 - 31
         step = 2
         volume = get_master_volume()
@@ -69,7 +69,7 @@ class UtilSkills(AssistantSkill):
             return template.format("Bajé el volumen de los altavoces")
 
     @classmethod
-    def mute_master_volume(cls, ext = None, template = None, values = None):
+    def mute_master_volume(cls, ext = None, template = None, values = None, history = []):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 0:
@@ -79,7 +79,7 @@ class UtilSkills(AssistantSkill):
             return template.format("He Silenciado los altavoces maestros")
 
     @classmethod
-    def max_master_volume(cls, ext = None, template = None, values = None):
+    def max_master_volume(cls, ext = None, template = None, values = None, history = []):
         # Limits: Playback 0 - 31
         volume = get_master_volume()
         if volume == 100:

@@ -137,11 +137,15 @@ BASIC_SKILLS = [
         "context": "",
         "next": []
     },
+
     {
         "enable": True,
-        "pattern": [".*crear alarma.*", ".*alarma en.*", ".*agregar alarma.*", ".*establecer alarma.*"],
+        "pattern": [
+            ".*crear alarma de (.*) a (.*) a las (.*)", ".*alarma de (.*) a (.*) a las (.*)", ".*agregar alarma de (.*) a (.*) a las (.*)", ".*establecer alarma de (.*) a (.*) a las (.*)",
+            ".*crear alarma (.*) a (.*) a las (.*)", ".*alarma (.*) a (.*) a las (.*)", ".*agregar alarma (.*) a (.*) a las (.*)", ".*establecer alarma (.*) a (.*) a las (.*)"
+        ],
         "templates": ["He creado la alarma en {}"],
-        "func": ReminderSkills.set_alarm,
+        "func": ReminderSkills.set_alarm_interval,
         "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
         "description": "Alarma",
         "context": "",
@@ -150,9 +154,21 @@ BASIC_SKILLS = [
 
     {
         "enable": True,
+        "pattern": [".*crear alarma el (.*) a las (\d*):(\d*).*", ".*alarma el (*) a las (\d*):(\d*).*", ".*agregar alarma el(d*) a las (\d*):(\d*).*", ".*establecer alarma el(.*) a las (\d*):(\d*).*"],
+        "templates": ["He creado la alarma en {}"],
+        "func": ReminderSkills.set_alarm,
+        "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
+        "description": "Alarma",
+        "context": "",
+        "next": []
+    },
+
+
+    {
+        "enable": True,
         "pattern": [".*deteneter alarma.*", ".*apagar alarma.*", ".*deten la alarma.*", ".*detener todas las alarmas.*", ".*apagar todas las alarmas.*", ".*parar alarma.*"],
         "templates": ["He apagado las alarmas"],
-        "func": ReminderSkills.stop_alarm,
+        "func": ReminderSkills.stop_all_alarm,
         "tags": "deteneter alarma,apagar alarma,deten la alarma,detener todas las alarmas,apagar todas las alarmas,parar alarma,deten la alarma,parar todas las alarmas,de tener todas las alarmas,de tener alarmas",
         "description": "Detener Alarma",
         "context": "",

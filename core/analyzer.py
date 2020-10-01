@@ -56,13 +56,16 @@ class SkillAnalyzer:
         # remove links from tweets
         text = re.sub(r"http\S+", "https", text)
         # remove punctuation
-        text = ''.join([c for c in text if c not in self.non_words])
+        #text = ''.join([c for c in text if c not in self.non_words])
+        #print("4", text)
         # remove repeated characters
         text = re.sub(r'(.)\1+', r'\1\1', text)
         # tokenize
         tokens = word_tokenize(text)
         # clean tokens
-        clean_tokens = [w for w in tokens if not w in self.spanish_stopwords]        
+        #6 ['crear', 'alarma', 'el', 'lunes', 'a', 'las', '8:15']
+        #7 ['crear', 'alarma', 'lunes', '8:15']
+        # tokens = [w for w in tokens if not w in self.spanish_stopwords]
         #WP	WH-pronoun
         #NNP	Proper noun, singular
         #NN	noun, singular

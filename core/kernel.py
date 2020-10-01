@@ -10,6 +10,7 @@ locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 class Kernel:
     def __init__(self):
         self.analyzer = SkillAnalyzer()
+        self.HISTORY = []
 
     def respond(self, inputx):
         """Private version of respond(), does the real work."""
@@ -42,16 +43,25 @@ class Kernel:
         for skill in skills:
             for pat in skill["pattern"]:
                 try:
+                    
                     pattern = pat
                     pattern = pattern.replace("+", "\+")
                     pattern = pattern.replace("-", "\-")
+                    #pattern = pattern.replace("d*", "\d*")
+                    #ext = ext.replace(":", " y ")
                     values = re.findall(r''+pattern, ext)
+                    
+                    
                     if values:
                         func = skill["func"]
                         templates = skill["templates"]
                         if templates:
                             template = random.choice(templates)
-                            return func(ext, template, values)
+                            print(ext)
+                            print(pat)
+                            print(values)
+                            print("template", template)
+                            return func(ext, template, values, self.HISTORY)
                 except Exception as e:
                     print("_processElement", e)
             else:
