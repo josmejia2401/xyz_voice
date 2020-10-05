@@ -14,10 +14,9 @@ class InternetSkills(AssistantSkill):
 
     @classmethod
     def internet_availability(cls, ext = None, template = None, values = None, history = []):
-        """
-        Tells to the user is the internet is available or not.
-        """
         if cls._check_internet_connection():
-            return template.format("Hay conexión a internet")
+            r = template.format("Hay conexión a internet")
+            cls.response(r)
         else:
-            return template.format("En este momento no hay conexión a internet")
+            r = template.format("En este momento no hay conexión a internet")
+            cls.response(r)

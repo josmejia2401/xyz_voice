@@ -27,27 +27,23 @@ class DatetimeSkills(AssistantSkill):
             hour, minute = now.hour, now.minute
             converted_time = cls._time_in_text(hour, minute)
             response = template.format(converted_time)
-            history_elem = cls.new_history(ext ,response)
-            history.append(history_elem)
             cls.response(response)
-            return response
-
         except Exception as e:
-            print("ActivationSkills.assistant_greeting", e)
+            print("tell_the_time", e)
             response = template.format("No se pudo procesar el comando")
-            history_elem = cls.new_history(ext ,response)
-            history.append(history_elem)
             cls.response(response)
-            return response
 
     @classmethod
     def tell_the_date(cls, ext = None, template = None, values = None, history = []):
-        """
-        Tells ths current date
-        """
-        currentDate = datetime.now()
-        strTime = currentDate.strftime("%A %d de %B de %Y")
-        return template.format(strTime)
+        try:
+            currentDate = datetime.now()
+            strTime = currentDate.strftime("%A %d de %B de %Y")
+            response = template.format(strTime)
+            cls.response(response)
+        except Exception as e:
+            print("tell_the_date", e)
+            response = template.format("No se pudo procesar el comando")
+            cls.response(response)
 
     @classmethod
     def _get_12_hour_period(cls, hour):

@@ -4,29 +4,19 @@ from utils.mapping import math_symbols_mapping
 
 
 class MathSkills(AssistantSkill):
-    """
-    try:
-        sumx = 0
-        for v in values:
-            for x in range(len(v)):
-                if sumx == 0:
-                    sumx = int(v[x].strip())
-                else:
-                    sumx -= int(v[x].strip())
-        return template.format(sumx)
-    except Exception as e:
-        return ""
-    """
+
     @classmethod
     def do_calculations(cls, ext = None, template = None, values = None, history = []):
-        transcript_with_numbers = cls._replace_words_with_numbers(ext)
-        transcript_with_numbers = cls._replace_words_with_math_symbols(transcript_with_numbers)
-        math_equation = cls._clear_transcript(transcript_with_numbers)
         try:
+            transcript_with_numbers = cls._replace_words_with_numbers(ext)
+            transcript_with_numbers = cls._replace_words_with_math_symbols(transcript_with_numbers)
+            math_equation = cls._clear_transcript(transcript_with_numbers)
             result = str(eval(math_equation))
-            return template.format(result)
+            r = template.format(result)
+            cls.response(r)
         except Exception as e:
-            return template.format('Falló al realizar la operación {0} con el mensaje de error {1}'.format(math_equation, e))
+            r = template.format('Falló al realizar la operación {0} con el mensaje de error {1}'.format(math_equation, e))
+            cls.response(r)
 
     @classmethod
     def _replace_words_with_math_symbols(cls, transcript):

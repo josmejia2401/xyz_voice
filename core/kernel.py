@@ -7,31 +7,29 @@ from core.analyzer import SkillAnalyzer
 import locale
 locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
+
 class Kernel:
+    
     def __init__(self):
         self.analyzer = SkillAnalyzer()
         self.HISTORY = []
 
     def respond(self, inputx):
-        """Private version of respond(), does the real work."""
         try:
             sentences = self.analyzer.sentences(inputx)
             response = ""
             for s in sentences:
-                response += self._respond(s).strip()
-            
-            print("**************", response)
+                self._respond(s)
             return response
         except Exception as e:
             print("respond", e)
 
     def _respond(self, inputx):
-        """Private version of respond(), does the real work."""
         try:
             if len(inputx) == 0:
                 return ""
             ext = self.analyzer.extract(inputx)
-            return self._processElement(ext).strip()
+            self._processElement(ext)
         except Exception as e:
             print("_respond", e)
             return ""
@@ -43,15 +41,10 @@ class Kernel:
         for skill in skills:
             for pat in skill["pattern"]:
                 try:
-                    
                     pattern = pat
                     pattern = pattern.replace("+", "\+")
                     pattern = pattern.replace("-", "\-")
-                    #pattern = pattern.replace("d*", "\d*")
-                    #ext = ext.replace(":", " y ")
                     values = re.findall(r''+pattern, ext)
-                    
-                    
                     if values:
                         func = skill["func"]
                         templates = skill["templates"]
@@ -61,12 +54,13 @@ class Kernel:
                             print(pat)
                             print(values)
                             print("template", template)
-                            return func(ext, template, values, self.HISTORY)
+                            func(ext, template, values, self.HISTORY)
+                            return
                 except Exception as e:
                     print("_processElement", e)
             else:
                 continue
-        return response
+
 
 # test
 if __name__ == "__main__":

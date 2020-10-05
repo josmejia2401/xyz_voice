@@ -14,7 +14,7 @@ class ActivationSkills(AssistantSkill):
         pass
 
     @classmethod
-    def assistant_greeting(cls, ext = None, template = None, values = None, history = []):
+    def assistant_greeting(cls, ext = None, template = None, values = None, history = []) -> None:
         try:
             response = ''
             now = datetime.now()
@@ -25,14 +25,8 @@ class ActivationSkills(AssistantSkill):
                 response = template.format("Buenas tardes mi señor")
             else:
                 response = template.format('Buenas noches mi señor')
-            history_elem = cls.new_history(ext ,response)
-            history.append(history_elem)
             cls.response(response)
-            return response
         except Exception as e:
             print("ActivationSkills.assistant_greeting", e)
             response = template.format("No se pudo procesar el comando")
-            history_elem = cls.new_history(ext ,response)
-            history.append(history_elem)
             cls.response(response)
-            return response

@@ -35,7 +35,7 @@ BASIC_SKILLS = [
         "enable": True,
         "pattern": [".*que hora es.*", ".*que hora.*", ".*hora actual.*"],
         "templates": ["{}", "la hora actual es {}"],
-        "func": DatetimeSkills.tell_the_time,
+        "func": DatetimeSkills.tell_the_time, 
         "tags": "que hora es,que hora,hora es,hora actual",
         "description": "Dice la hora actual",
         "context": "",
