@@ -13,7 +13,7 @@ CONTROL_SKILLS = [
         "func": ActivationSkills.assistant_greeting,
         "pattern": [".*buenos dias.*", ".*buenas tardes.*", ".*buenas noches.*"],
         "templates": ["{}"],
-        "tags": "iniciar,hola,buenas tardes,buenos dias,buenas noches",
+        "tags": "saludos iniciales",
         "description": "Comandos para activar el sistema",
         "context": "",
         "next": []
@@ -21,9 +21,21 @@ CONTROL_SKILLS = [
 
     {
         "func": ActivationSkills.disable_assistant,
-        "pattern": [".*deshabilitar asistente.*", ".*deshabilitar sistema.*", ".*pausar asistente.*", ".*pausar sistema.*", ".*dejar de escuchar.*", ".*dormir asistente.*"],
+        "pattern": [".*deshabilitar asistente.*", ".*pausar asistente.*", ".*dejar de escuchar.*", ".*deja de escuchar.*", ".*dormir asistente.*", ".*dormir el asistente.*",
+                    ".*desactivar asistente.*",  ".*desactivar el asistente.*"],
         "templates": ["{}"],
-        "tags": "deshabilitar asistente,deshabilitar sistema,pausar asistente,pausar sistema,dejar de escuchar,dormir asistente",
+        "tags": "deshabilita el asistente",
+        "description": "Poner el sistema en pausa",
+        "context": "",
+        "next": []
+    },
+
+    {
+        "func": ActivationSkills.enable_assistant,
+        "pattern": [".*habilitar asistente.*", ".*habilitar el asistente.*", ".*habilita el asistente.*", ".*reanudar asistente.*", ".*comenzar a escuchar.*", ".*despertar asistente.*",
+                    ".*activar asistente.*", ".*activar el asistente.*"],
+        "templates": ["{}"],
+        "tags": "habilitar el asistente",
         "description": "Poner el sistema en pausa",
         "context": "",
         "next": []
@@ -34,9 +46,9 @@ BASIC_SKILLS = [
     {
         "enable": True,
         "pattern": [".*que hora es.*", ".*que hora.*", ".*hora actual.*"],
-        "templates": ["{}", "la hora actual es {}"],
-        "func": DatetimeSkills.tell_the_time, 
-        "tags": "que hora es,que hora,hora es,hora actual",
+        "templates": ["{}", "la hora actual es {}", "son las {}"],
+        "func": DatetimeSkills.tell_the_time,
+        "tags": "hora actual",
         "description": "Dice la hora actual",
         "context": "",
         "next": []
@@ -45,9 +57,9 @@ BASIC_SKILLS = [
     {
         "enable": True,
         "pattern": [".*fecha actual.*", ".*dia es hoy.*"],
-        "templates": ["{}", "hoy es {}"],
+        "templates": ["{}", "hoy es {}", "la fecha actual es {}"],
         "func": DatetimeSkills.tell_the_date,
-        "tags": "fecha actual,que dia es hoy,dia es hoy",
+        "tags": "fecha actual",
         "description": "Dice la fecha actual",
         "context": "",
         "next": []
@@ -55,7 +67,7 @@ BASIC_SKILLS = [
     {
         "enable": True,
         "pattern": [".*detener ahora.*", ".*detener cancion.*", ".*detener audio.*", ".*detener sonido.*", ".*de tener ahora.*", ".*de tener cancion.*", ".*de tener audio.*", ".*de tener sonido.*", ".*parar ahora.*", ".*parar cancion.*", ".*parar audio.*", ".*parar sonido.*"],
-        "templates": ["se detiene la reproduccion actual", "se detiene el sonido"],
+        "templates": ["se detiene la reproduccion actual {}", "se detiene el sonido {}"],
         "func": UtilSkills.speech_interruption,
         "tags": "detener ahora,detener reproduccion,detener cancion,detener audio,detener asistente",
         "description": "detiene la reproducción actual",

@@ -8,7 +8,24 @@ class AssistantSkill:
     """
     This class is the parent of all skill classes.
     """
-    first_activation = True
+    activation = True
+
+    @classmethod
+    def set_activation(cls, activation = True):
+        cls.activation = activation
+
+    @classmethod
+    def get_activation(cls):
+        return cls.activation
+
+    @classmethod
+    def set_stop_speaking(cls, stop_speaking = True):
+        TTSEngine.stop_speaking = stop_speaking
+
+    @classmethod
+    def get_stop_speaking(cls):
+        return TTSEngine.stop_speaking
+
 
     @classmethod
     def response(cls, text):

@@ -49,19 +49,25 @@ class STTEngine(ConcreteSubject):
     def _recognize_speech_from_mic(cls, already_activated=False):
         print("escuchando")
         response = { "success": True, "error": None, "transcription": None }
-        with cls.microphone as source:
-            cls.recognizer.adjust_for_ambient_noise(source, duration=1)
-            audio = cls.recognizer.listen(source)
+        audio = None
         try:
-            with open("microphone-results.wav", "wb") as f:
-                f.write(audio.get_wav_data())
-
-            #speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=self.keywords, language=self.keyword_lang)
-            response["transcription"] = cls.recognizer.recognize_google(audio, language=cls.main_lang).lower()
-            if already_activated == False: #and cls._activation_name_exist(response):
-                response = cls._remove_activation_word(response)
-            elif already_activated == True:
-                pass
+            with cls.microphone as source:
+                cls.recognizer.adjust_for_ambient_noise(source, duration=1)
+                audio = cls.recognizer.listen(source, timeout=4)
+        except sr.WaitTimeoutError:
+            pass
+        try:
+            if audio:
+                with open("microphone-results.wav", "wb") as f:
+                    f.write(audio.get_wav_data())
+                #speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=self.keywords, language=self.keyword_lang)
+                response["transcription"] = cls.recognizer.recognize_google(audio, language=cls.main_lang).lower()
+                if already_activated == False: #and cls._activation_name_exist(response):
+                    response = cls._remove_activation_word(response)
+                elif already_activated == True:
+                    pass
+                else:
+                    response["success"] = False
             else:
                 response["success"] = False
         except sr.UnknownValueError:

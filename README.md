@@ -7,6 +7,10 @@ pasos para Ubuntu:
 > sudo apt install portaudio19-dev
 > sudo apt install swig
 > sudo apt-get install ffmpeg
+#for pygame
+#> sudo apt-get install -y libfreetype6-dev
+#> sudo apt-get install -y libjpeg-dev libportmidi-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev libx11-dev libavformat-dev #libswscale-dev
+> sudo apt-get install ffmpeg libavcodec-extra
 > pip3 install -r requirements.txt
 > pulseaudio --start
 # 2. Descarga de modelo e instalación (para el uso de sphinx)

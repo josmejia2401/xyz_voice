@@ -23,8 +23,8 @@ class UtilSkills(AssistantSkill):
 
     @classmethod
     def speech_interruption(cls, ext = None, template = None, values = None, history = []):
-        #stop_speaking = True
-        pass
+        cls.set_stop_speaking(True)
+        
     
     @classmethod
     def current_master_volume(cls, ext = None, template = None, values = None, history = []):
