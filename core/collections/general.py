@@ -23,12 +23,16 @@ class UtilSkills(AssistantSkill):
 
     @classmethod
     def speech_interruption(cls, ext = None, template = None, values = None, history = []):
+        if not cls.get_activation():
+            return
         cls.set_stop_speaking(True)
         
     
     @classmethod
     def current_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
+            if not cls.get_activation():
+                return
             volume = get_master_volume()
             if volume:
                 response = template.format(str(volume) + " porciento de volumen")
@@ -43,7 +47,9 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def increase_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            step = 2
+            if not cls.get_activation():
+                return
+            step = 5
             volume = get_master_volume()
             if volume >= 100:
                 r = template.format("El volumen de los altavoces ya es máximo")
@@ -69,7 +75,9 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def reduce_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            step = 2
+            if not cls.get_activation():
+                return
+            step = 5
             volume = get_master_volume()
             if volume < 0:
                 r = template.format("El volumen de los altavoces está silenciado")
@@ -94,6 +102,8 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def mute_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
+            if not cls.get_activation():
+                return
             volume = get_master_volume()
             if volume == 0:
                 r = template.format("El volumen de los altavoces ya está silenciado")
@@ -112,6 +122,8 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def max_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
+            if not cls.get_activation():
+                return
             volume = get_master_volume()
             if volume == 100:
                 r = template.format("El volumen de los altavoces ya es máximo")

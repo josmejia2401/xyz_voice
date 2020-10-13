@@ -51,8 +51,9 @@ time_intervals = {
 }
 
 
-class ReminderSkills(AssistantSkill):
+class AlarmSkills(AssistantSkill):
     scheduler = BackgroundScheduler()
+    #sched = BlockingScheduler()
     alarm_pending = []
 
     @classmethod
@@ -159,155 +160,132 @@ class ReminderSkills(AssistantSkill):
             r = template.format("No se pudo crear el recordatorio")
             cls.response(r)
 
-
     @classmethod
-    def reminder_hours(cls, idx, action , duration):
-        cls.scheduler.remove_job(job_id=idx)
-        for p in cls.alarm_pending:
-            if p["id"] == idx:
-                cls.alarm_pending.remove(p)
-                break
-        cls.response("RECORDATORIO: Te recuerdo {}".format(action))
-
-
-    @classmethod
-    def create_reminder_action_time_hours(cls, ext=None, template=None, values=None, history=[]):
+    def create_reminder(cls, ext=None, template=None, values=None, history=[]):
+        if not cls.get_activation():
+            return
         try:
-            if not cls.get_activation():
-                return
+            voice_transcript = ext
+            voice_transcript = cls._replace_words_with_numbers(voice_transcript)
+            reminder_duration, scheduler_interval, variation = cls._get_reminder_duration_and_time_interval(voice_transcript)
 
-            values_x = values[0]
-            action = values_x[0]
-            duration = values_x[1]
-            duration = cls._replace_words_with_numbers(duration)
-            
-            if duration:
-                
-                scheduler_interval = 'hours'
-                idx = "reminder_" + str(duration)
-                interval = {scheduler_interval: int(duration)}
-                job = cls.scheduler.add_job(cls.reminder_hours, 'interval', **interval, id=idx, args=[idx, action, duration])
-
+            if reminder_duration:
+                idx = "reminder_" + str(reminder_duration)
+                interval = {scheduler_interval: int(reminder_duration)}
+                job = cls.scheduler.add_job(cls.reminder, 'interval', **interval, id=idx, args=[idx])
                 cls.alarm_pending.append({"id": idx, "job": job})
                 if not cls.scheduler.running:
                     cls.scheduler.start()
-
-                r = template.format("He creado un recordatorio en {0} horas".format(duration))
-                cls.response(r)
+                response = template.format("He creado un recordatorio en {0} {1}".format(reminder_duration, variation))
+                cls.response(response)
         except Exception as e:
             print(e)
-            r = template.format("No se pudo crear el recordatorio")
-            cls.response(r)
+            response = template.format("No se pudo crear el recordatorio")
+            cls.response(response)
 
     @classmethod
-    def create_reminder_time_action_hours(cls, ext=None, template=None, values=None, history=[]):
+    def set_alarm_interval(cls, ext=None, template=None, values=None, history=[]):
+        if not cls.get_activation():
+            return
+
+        def scheduled_task(idx):
+            for p in cls.alarm_pending:
+                if p["id"] == idx:
+                    cls.alarm_pending.remove(p)
+                    break
+            cls.scheduler.remove_job(job_id=idx)
         try:
-            if not cls.get_activation():
-                return
-
-            values_x = values[0]
-            duration = values_x[0]
-            action = values_x[1]
-            duration = cls._replace_words_with_numbers(duration)
-            
-            if duration:
-                
-                scheduler_interval = 'hours'
-                idx = "reminder_" + str(duration)
-                interval = {scheduler_interval: int(duration)}
-                job = cls.scheduler.add_job(cls.reminder_hours, 'interval', **interval, id=idx, args=[idx, action, duration])
-
-                cls.alarm_pending.append({"id": idx, "job": job})
-                if not cls.scheduler.running:
-                    cls.scheduler.start()
-
-                r = template.format("He creado un recordatorio en {0} horas".format(duration))
-                cls.response(r)
+            start_ = values[0]
+            end_ = values[1]
+            hour_ = values[2]
+            minute_ = ""
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in start_:
+                        start_ = time_interval['scheduler_interval']
+                        break
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in end_:
+                        end_ = time_interval['scheduler_interval']
+                        break
+            hour_ = cls._replace_words_with_numbers(hour_)
+            if "y" in hour_:
+                x = hour_.split("y")
+                duration = re.findall('[0-9]+', x[0].strip())
+                hour_ = str(duration)
+                duration = re.findall('[0-9]+', x[1].strip())
+                minute_ = str(duration)
+            elif ":" in hour_:
+                x = hour_.split(":")
+                duration = re.findall('[0-9]+', x[0].strip())
+                hour_ = str(duration)
+                duration = re.findall('[0-9]+', x[1].strip())
+                minute_ = str(duration)
+            day_of_week = start_ + "-" + end_
+            cron1 = CronTrigger(day_of_week=day_of_week, hour=hour_, minute=minute_, timezone='America/Bogota')
+            trigger = OrTrigger([cron1])
+            idx = "alarm_" + day_of_week + "_" + hour_ + "_" + minute_
+            job = cls.scheduler.add_job(scheduled_task, trigger, id=idx, args=[idx])
+            cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": day_of_week, "hour": hour_, "minute": minute_})
+            if not cls.scheduler.running:
+                cls.scheduler.start()
+            response = template.format("He creado la alarma {0} {1} {2}".format(day_of_week, hour_, minute_))
+            cls.response(response)
         except Exception as e:
             print(e)
-            r = template.format("No se pudo crear el recordatorio")
-            cls.response(r)
+            response = template.format("No se pudo crear la alarma")
+            cls.response(response)
 
     @classmethod
-    def reminder_pm(cls, idx, action, out_time_h, out_time_m):
-        cls.scheduler.remove_job(job_id=idx)
-        for p in cls.alarm_pending:
-            if p["id"] == idx:
-                cls.alarm_pending.remove(p)
-                break
-        cls.response("RECORDATORIO: Te recuerdo {}".format(action))
+    def set_alarm(cls, ext=None, template=None, values=None, history=[]):
+        if not cls.get_activation():
+            return
 
-
-    @classmethod
-    def create_reminder_action_time_pm(cls, ext=None, template=None, values=None, history=[]):
+        def scheduled_task(idx):
+            print("Sonando alarma...")
+            for p in cls.alarm_pending:
+                if p["id"] == idx:
+                    cls.alarm_pending.remove(p)
+                    break
+            cls.scheduler.remove_job(job_id=idx)
         try:
-            if not cls.get_activation():
-                return
-
-            values_x = values[0]
-            action = values_x[0]
-            duration = values_x[1]
-            duration = cls._replace_words_with_numbers(duration)
-            
-            if duration:
-                
-                scheduler_interval = 'minutes'
-                idx = "reminder_" + str(duration)
-                interval = {scheduler_interval: int(duration)}
-                job = cls.scheduler.add_job(cls.reminder_minutes, 'interval', **interval, id=idx, args=[idx, action, duration])
-
-                cls.alarm_pending.append({"id": idx, "job": job})
-                if not cls.scheduler.running:
-                    cls.scheduler.start()
-
-                r = template.format("He creado un recordatorio en {0} minutos".format(duration))
-                cls.response(r)
+            values = values[0]
+            start_ = values[0]
+            hour_ = values[1]
+            minute_ = values[2]
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in start_:
+                        start_ = time_interval['scheduler_interval']
+                        break
+            hour_ = cls._replace_words_with_numbers(hour_)
+            if "y" in hour_:
+                x = hour_.split("y")
+                duration = re.findall('[0-9]+', x[0].strip())
+                hour_ = str(duration)
+                duration = re.findall('[0-9]+', x[1].strip())
+                minute_ = str(duration)
+            elif ":" in hour_:
+                x = hour_.split(":")
+                duration = re.findall('[0-9]+', x[0].strip())
+                hour_ = str(duration)
+                duration = re.findall('[0-9]+', x[1].strip())
+                minute_ = str(duration)
+            day_of_week = start_
+            cron1 = CronTrigger(day_of_week=day_of_week, hour=hour_, minute=minute_, timezone='America/Bogota')
+            trigger = OrTrigger([cron1])
+            idx = "alarm_" + day_of_week + "_" + hour_ + "_" + minute_
+            job = cls.scheduler.add_job(scheduled_task, trigger, id=idx, args=[idx])
+            cls.alarm_pending.append({"id": idx, "job": job})
+            if not cls.scheduler.running:
+                cls.scheduler.start()
+            response = template.format("He creado la alarma {0} {1} {2}".format(day_of_week, hour_, minute_))
+            cls.response(response)
         except Exception as e:
             print(e)
-            r = template.format("No se pudo crear el recordatorio")
-            cls.response(r)
-
-    @classmethod
-    def create_reminder_time_action_pm(cls, ext=None, template=None, values=None, history=[]):
-        try:
-            if not cls.get_activation():
-                return
-
-            values_x = values[0]
-            duration_h = values_x[0]
-            duration_m = values_x[1]
-            action = values_x[2]
-
-            duration_h = int(cls._replace_words_with_numbers(duration_h))
-            duration_m = int(cls._replace_words_with_numbers(duration_m))
-            
-            if duration_h and duration_m:
-
-                m2 = str(duration_h) + ":" + str(duration_m) + " PM"
-                print("m2", m2)
-                in_time = datetime.datetime.strptime(m2, "%I:%M %p")
-                print("in_time", in_time)
-                out_time_h = datetime.datetime.strftime(in_time, "%H")
-                print("out_time_h", out_time_h)
-                out_time_m = datetime.datetime.strftime(in_time, "%M")
-                print("out_time_m", out_time_m)
-
-                cron1 = CronTrigger(hour=out_time_h, minute=out_time_m, timezone='America/Bogota')
-                trigger = OrTrigger([cron1])
-                idx = "redimer_" + out_time_h + "_" + out_time_m
-
-                job = cls.scheduler.add_job(cls.reminder_pm, trigger, id=idx, args=[idx, action, out_time_h, out_time_m])
-                cls.alarm_pending.append({"id": idx, "job": job})
-
-                if not cls.scheduler.running:
-                    cls.scheduler.start()
-
-                r = template.format("He creado un recordatorio en {0}:{} pm".format(duration_h, duration_m))
-                cls.response(r)
-        except Exception as e:
-            print(e)
-            r = template.format("No se pudo crear el recordatorio")
-            cls.response(r)
+            response = template.format("No se pudo crear la alarma")
+            cls.response(response)
 
     @classmethod
     def _replace_words_with_numbers(cls, transcript):
@@ -319,3 +297,12 @@ class ReminderSkills(AssistantSkill):
             except ValueError as e:
                 transcript_with_numbers += ' ' + word
         return transcript_with_numbers
+
+    @classmethod
+    def _get_reminder_duration_and_time_interval(cls, voice_transcript):
+        for time_interval in time_intervals.values():
+            for variation in time_interval['variations']:
+                if variation in voice_transcript:
+                    duration = re.findall('[0-9]+', voice_transcript)
+                    return duration[0], time_interval['scheduler_interval'], variation
+        return None, None, None

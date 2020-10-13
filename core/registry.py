@@ -6,6 +6,7 @@ from core.collections.redimer import ReminderSkills
 from core.collections.internet import InternetSkills
 from core.collections.math import MathSkills
 from core.collections.weather import WeatherSkills
+from core.collections.alarm import AlarmSkills
 from utils.mapping import math_tags
 
 CONTROL_SKILLS = [
@@ -69,17 +70,17 @@ BASIC_SKILLS = [
         "pattern": [".*detener ahora.*", ".*detener cancion.*", ".*detener audio.*", ".*detener sonido.*", ".*de tener ahora.*", ".*de tener cancion.*", ".*de tener audio.*", ".*de tener sonido.*", ".*parar ahora.*", ".*parar cancion.*", ".*parar audio.*", ".*parar sonido.*"],
         "templates": ["se detiene la reproduccion actual {}", "se detiene el sonido {}"],
         "func": UtilSkills.speech_interruption,
-        "tags": "detener ahora,detener reproduccion,detener cancion,detener audio,detener asistente",
+        "tags": "detener ahora",
         "description": "detiene la reproducción actual",
         "context": "",
         "next": []
     },
     {
         "enable": True,
-        "pattern": [".*subir volumen.*", ".*incrementar volumen.*", ".*aumentar volumen.*", ".*subir volumen otra vez.*", ".*elevar volumen.*"],
+        "pattern": [".*subir volumen.*",".*subir el volumen.*", ".*incrementar volumen.*", ".*incrementar el volumen.*", ".*aumentar volumen.*", ".*aumentar el volumen.*", ".*elevar volumen.*", ".*elevar el volumen.*"],
         "templates": ["{}"],
         "func": UtilSkills.increase_master_volume,
-        "tags": "subir volumen,incrementar volumen,subir volumen otra vez,subir volumen nuevamente,aumentar volumen",
+        "tags": "subir volumen",
         "description": "Sube el volumen",
         "context": "",
         "next": []
@@ -87,10 +88,10 @@ BASIC_SKILLS = [
 
     {
         "enable": True,
-        "pattern": [".*reducir volumen.*", ".*bajar volumen.*", ".*disminuir volumen.*"],
+        "pattern": [".*reducir volumen.*", ".*bajar volumen.*", ".*disminuir volumen.*", ".*decrementar volumen.*", ".*reducir el volumen.*", ".*bajar el volumen.*", ".*disminuir el volumen.*", ".*decrementar el volumen.*"],
         "templates": ["{}"],
         "func": UtilSkills.reduce_master_volume,
-        "tags": "bajar volumen,disminuir volumen,bajar volumen otra vez,bajar volumen nuevamente",
+        "tags": "bajar volumen",
         "description": "Decrementa el volumen",
         "context": "",
         "next": []
@@ -101,7 +102,7 @@ BASIC_SKILLS = [
         "pattern": [".*silenciar volumen.*", ".*bajar todo el volumen.*", ".*silencinar el volumen.*", ".*bajar todo volumen.*"],
         "templates": ["{}"],
         "func": UtilSkills.mute_master_volume,
-        "tags": "silenciar volumen,bajar todo el volumen,silenciar el volumen",
+        "tags": "silenciar volumen",
         "description": "Silencia el volumen",
         "context": "",
         "next": []
@@ -112,7 +113,7 @@ BASIC_SKILLS = [
         "pattern": [".*volumen al maximo.*", ".*volumen total.*", ".*volumen al 100.*", ".*volumen maximo.*"],
         "templates": ["{}"],
         "func": UtilSkills.max_master_volume,
-        "tags": "volumen al maximo,volumen total,volumen al 100,volumen al cien,maximo volumen,volumen maximo",
+        "tags": "volumen al maximo",
         "description": "maximo volumen",
         "context": "",
         "next": []
@@ -123,7 +124,7 @@ BASIC_SKILLS = [
         "pattern": [".*volumen actual.*", ".*volumen en este momento.*", ".*porcentaje de volumen.*", ".*porcentaje volumen.*"],
         "templates": ["{}"],
         "func": UtilSkills.current_master_volume,
-        "tags": "volumen actual,volumen en este momento,actual volumen,porcentaje volumen,porcentaje de volumen",
+        "tags": "volumen actual",
         "description": "Actual volumen",
         "context": "",
         "next": []
@@ -134,16 +135,82 @@ BASIC_SKILLS = [
         "pattern": [".*conexion a internet.*", ".*internet actual.*", ".*hay internet.*", ".*conexion internet.*", ".*revisar internet.*"],
         "templates": ["{}"],
         "func": InternetSkills.internet_availability,
-        "tags": "conexion a internet,internet actual,hay internet,conexion internet,revisar internet",
+        "tags": "conexion a internet",
         "description": "Revisar conexión a internet",
         "context": "",
         "next": []
     },
+
     {
         "enable": True,
-        "pattern": [".*crear recordatorio.*", ".*recordatorio en.*", ".*recordar esto.*", ".*recordar lo siguiente.*"],
+        "pattern": [".*recuerdame (.*) en (.*) minutos", ".*recuerda me (.*) en (.*) mimutos", ".*recordarme (.*) en (.*) minutos", ".*recordar me (.*) en (.*) minutos",
+                    ".*recuerdame (.*) en (.*) minuto", ".*recuerda me (.*) en (.*) mimuto", ".*recordarme (.*) en (.*) minuto", ".*recordar me (.*) en (.*) minuto"],
         "templates": ["{}"],
-        "func": ReminderSkills.create_reminder,
+        "func": ReminderSkills.create_reminder_action_time_minutes,
+        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "description": "Recordatorio",
+        "context": "",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*recuerdame en (.*) minutos (.*)", ".*recuerda me en (.*) minutos (.*)", ".*recordarme en (.*) minutos (.*)", ".*recordar me en (.*) minutos (.*)",
+                    ".*recuerdame en (.*) minuto (.*)", ".*recuerda me en (.*) minuto (.*)", ".*recordarme en (.*) minuto (.*)", ".*recordar me en (.*) minuto (.*)"],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_time_action_minutes,
+        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "description": "Recordatorio",
+        "context": "",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*recuerdame a las (.*):(.*) pm (.*)", ".*recuerda me a las (.*):(.*) pm (.*)", ".*recordarme a las (.*):(.*) pm (.*)", ".*recordar me a las (.*):(.*) pm (.*)",
+                    ".*recuerdame a las (.*):(.*)pm(.*)", ".*recuerda me a las (.*):(.*)pm(.*)", ".*recordarme a las (.*):(.*)pm(.*)", ".*recordar me a las (.*):(.*)pm(.*)",
+                    ".*recuerdame a las (.*) y (.*) pm (.*)", ".*recuerda me a las (.*) y (.*) pm (.*)", ".*recordarme a las (.*) y (.*)pm (.*)", ".*recordar me a las (.*) y (.*)pm (.*)",
+                    ".*recuerdame a las (.*)y(.*)pm(.*)", ".*recuerda me a las (.*)y(.*)pm(.*)", ".*recordarme a las (.*)y(.*)pm(.*)", ".*recordar me a las (.*)y(.*)pm(.*)",
+                    
+                    ".*recuerdame a las (.*):(.*) p.m. (.*)", ".*recuerda me a las (.*):(.*) p.m. (.*)", ".*recordarme a las (.*):(.*) p.m. (.*)", ".*recordar me a las (.*):(.*) p.m. (.*)",
+                    ".*recuerdame a las (.*):(.*)p.m.(.*)", ".*recuerda me a las (.*):(.*)p.m.(.*)", ".*recordarme a las (.*):(.*)p.m.(.*)", ".*recordar me a las (.*):(.*)p.m.(.*)",
+                    ".*recuerdame a las (.*) y (.*) p.m. (.*)", ".*recuerda me a las (.*) y (.*)p.m. (.*)", ".*recordarme a las (.*) y (.*)p.m. (.*)", ".*recordar me a las (.*) y (.*)p.m. (.*)",
+                    ".*recuerdame a las (.*)y(.*)p.m.(.*)", ".*recuerda me a las (.*)y(.*)p.m.(.*)", ".*recordarme a las (.*)y(.*)p.m.(.*)", ".*recordar me a las (.*)y(.*)p.m.(.*)",
+
+                    ".*recuerdame a las (.*):(.*) p\.m\. (.*)", ".*recuerda me a las (.*):(.*) p\.m\. (.*)", ".*recordarme a las (.*):(.*) p\.m\. (.*)", ".*recordar me a las (.*):(.*) p\.m\. (.*)",
+                    ".*recuerdame a las (.*):(.*)p\.m\.(.*)", ".*recuerda me a las (.*):(.*)p\.m\.(.*)", ".*recordarme a las (.*):(.*)p\.m\.(.*)", ".*recordar me a las (.*):(.*)p\.m\.(.*)",
+                    ".*recuerdame a las (.*) y (.*) p\.m\. (.*)", ".*recuerda me a las (.*) y (.*)p\.m\. (.*)", ".*recordarme a las (.*) y (.*)p\.m\. (.*)", ".*recordar me a las (.*) y (.*)p\.m\. (.*)",
+                    ".*recuerdame a las (.*)y(.*)p\.m\.(.*)", ".*recuerda me a las (.*)y(.*)p\.m\.(.*)", ".*recordarme a las (.*)y(.*)p\.m\.(.*)", ".*recordar me a las (.*)y(.*)p\.m\.(.*)"
+                    ],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_time_action_pm,
+        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "description": "Recordatorio",
+        "context": "",
+        "next": []
+    },
+
+
+
+
+    {
+        "enable": True,
+        "pattern": [".*recuerdame (.*) en (.*) horas", ".*recuerda me (.*) en (.*) mimutos", ".*recordarme (.*) en (.*) horas", ".*recordar me (.*) en (.*) horas",
+                    ".*recuerdame (.*) en (.*) hora", ".*recuerda me (.*) en (.*) mimuto", ".*recordarme (.*) en (.*) hora", ".*recordar me (.*) en (.*) hora"],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_action_time_hours,
+        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "description": "Recordatorio",
+        "context": "",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*recuerdame en (.*) horas (.*)", ".*recuerda me en (.*) horas (.*)", ".*recordarme en (.*) horas (.*)", ".*recordar me en (.*) horas (.*)",
+                    ".*recuerdame en (.*) hora (.*)", ".*recuerda me en (.*) hora (.*)", ".*recordarme en (.*) hora (.*)", ".*recordar me en (.*) hora (.*)"],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_time_action_hours,
         "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
         "description": "Recordatorio",
         "context": "",
@@ -157,7 +224,7 @@ BASIC_SKILLS = [
             ".*crear alarma (.*) a (.*) a las (.*)", ".*alarma (.*) a (.*) a las (.*)", ".*agregar alarma (.*) a (.*) a las (.*)", ".*establecer alarma (.*) a (.*) a las (.*)"
         ],
         "templates": ["He creado la alarma en {}"],
-        "func": ReminderSkills.set_alarm_interval,
+        "func": AlarmSkills.set_alarm_interval,
         "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
         "description": "Alarma",
         "context": "",
@@ -168,7 +235,7 @@ BASIC_SKILLS = [
         "enable": True,
         "pattern": [".*crear alarma el (.*) a las (\d*):(\d*).*", ".*alarma el (*) a las (\d*):(\d*).*", ".*agregar alarma el(d*) a las (\d*):(\d*).*", ".*establecer alarma el(.*) a las (\d*):(\d*).*"],
         "templates": ["He creado la alarma en {}"],
-        "func": ReminderSkills.set_alarm,
+        "func": AlarmSkills.set_alarm,
         "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
         "description": "Alarma",
         "context": "",
@@ -180,7 +247,7 @@ BASIC_SKILLS = [
         "enable": True,
         "pattern": [".*deteneter alarma.*", ".*apagar alarma.*", ".*deten la alarma.*", ".*detener todas las alarmas.*", ".*apagar todas las alarmas.*", ".*parar alarma.*"],
         "templates": ["He apagado las alarmas"],
-        "func": ReminderSkills.stop_all_alarm,
+        "func": AlarmSkills.stop_all_alarm,
         "tags": "deteneter alarma,apagar alarma,deten la alarma,detener todas las alarmas,apagar todas las alarmas,parar alarma,deten la alarma,parar todas las alarmas,de tener todas las alarmas,de tener alarmas",
         "description": "Detener Alarma",
         "context": "",
@@ -191,7 +258,7 @@ BASIC_SKILLS = [
         "enable": True,
         "pattern": [".*lista alarmas.*", ".*listado de alarmas.*", ".*listado de alarma.*", ".*lista de alarmas.*", ".*lista alarmas.*", ".*lista alarma.*", ".*cuales son las alarmas.*", ".*alarmas actuales.*"],
         "templates": ["{}"],
-        "func": ReminderSkills.list_from_alarms,
+        "func": AlarmSkills.list_from_alarms,
         "tags": "lista alarmas,listado de alarmas,listado de alarma,lista de alarmas,lista alarmas,lista alarma,cuales son las alarmas,alarmas actuales",
         "description": "Lista Alarma",
         "context": "",

@@ -3,6 +3,7 @@ from engines.stt import STTEngine
 from engines.tts import TTSEngine
 from observerx.observerx import Observer
 from core.kernel import Kernel
+import time
 """
 Espera unos segundos
 Cristal listo!!! estoy escuhando.
@@ -13,6 +14,7 @@ class Cristal(Observer):
     def __init__(self):
         super().__init__()
         self.tTSEngine = TTSEngine()
+        self.LISTEN = True
 
     def loading(self):
         self.tTSEngine.play_text("Cargando sistema, por favor espera.", asyncx=True)
@@ -25,7 +27,13 @@ class Cristal(Observer):
 
     def run(self):
         try:
-            self.sTTEngine.run(already_activated=False)
+            while True:
+                if self.LISTEN == True:
+                    self.LISTEN = False
+                    self.sTTEngine.run(already_activated=False)
+                else:
+                    time.sleep(0.5)
+                    print(self.LISTEN)
         except KeyboardInterrupt as e:
             print(e)
             self.sTTEngine.stop()
@@ -37,7 +45,8 @@ class Cristal(Observer):
         if subject._state < 11 and payload["success"] == True:
             print("transcription", payload["transcription"])
             self.kernel.respond(payload["transcription"])
-        self.run()
+        self.LISTEN = True
+            
 
 if __name__=='__main__':
     cristal = Cristal()

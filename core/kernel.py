@@ -36,6 +36,7 @@ class Kernel:
 
     def _processElement(self, ext):
         ext = " ".join(str(e).strip() for e in ext)
+        print("ooooooooo",ext)
         response = ""
         skills = get_skills()
         for skill in skills:
