@@ -58,8 +58,8 @@ class STTEngine(ConcreteSubject):
             pass
         try:
             if audio:
-                with open("microphone-results.wav", "wb") as f:
-                    f.write(audio.get_wav_data())
+                #with open("microphone-results.wav", "wb") as f:
+                #    f.write(audio.get_wav_data())
                 #speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=self.keywords, language=self.keyword_lang)
                 response["transcription"] = cls.recognizer.recognize_google(audio, language=cls.main_lang).lower()
                 if already_activated == False: #and cls._activation_name_exist(response):

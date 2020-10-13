@@ -6,6 +6,7 @@ from core.kernel import Kernel
 """
 Espera unos segundos
 Cristal listo!!! estoy escuhando.
+
 """
 class Cristal(Observer):
 
@@ -14,14 +15,13 @@ class Cristal(Observer):
         self.tTSEngine = TTSEngine()
 
     def loading(self):
-        self.tTSEngine.play_text("Cargando sistema, por favor espera.")
+        self.tTSEngine.play_text("Cargando sistema, por favor espera.", asyncx=True)
         self.sTTEngine = STTEngine()
         self.kernel = Kernel()
         self.sTTEngine.attach(self)
     
     def ready(self):
-        #self.tTSEngine.assistant_response("Estoy escuchando.")
-        self.tTSEngine.play_text("Estoy escuchando.")
+        self.tTSEngine.play_text("Estoy escuchando.", asyncx=True)
 
     def run(self):
         try:
@@ -42,7 +42,7 @@ class Cristal(Observer):
 if __name__=='__main__':
     cristal = Cristal()
     cristal.loading()
-    #cristal.ready()
+    cristal.ready()
     cristal.run()
 
 
