@@ -11,5 +11,5 @@ nltk==3.5
 # help
 #wikipedia==1.4.0
 APScheduler==3.6.3
-spa2num==0.0.5
+#spa2num==0.0.5
 requests==2.24.0

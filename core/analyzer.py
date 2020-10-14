@@ -59,9 +59,12 @@ class SkillAnalyzer:
         #text = ''.join([c for c in text if c not in self.non_words])
         #print("4", text)
         # remove repeated characters
+        print(text)
         text = re.sub(r'(.)\1+', r'\1\1', text)
         # tokenize
+        print(text)
         tokens = word_tokenize(text)
+        print(tokens)
         # clean tokens
         #6 ['crear', 'alarma', 'el', 'lunes', 'a', 'las', '8:15']
         #7 ['crear', 'alarma', 'lunes', '8:15']

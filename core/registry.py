@@ -51,7 +51,7 @@ BASIC_SKILLS = [
         "func": DatetimeSkills.tell_the_time,
         "tags": "hora actual",
         "description": "Dice la hora actual",
-        "context": "",
+        "context": "datetime",
         "next": []
     },
 
@@ -62,9 +62,10 @@ BASIC_SKILLS = [
         "func": DatetimeSkills.tell_the_date,
         "tags": "fecha actual",
         "description": "Dice la fecha actual",
-        "context": "",
+        "context": "datetime",
         "next": []
     },
+    #volumen
     {
         "enable": True,
         "pattern": [".*detener ahora.*", ".*detener cancion.*", ".*detener audio.*", ".*detener sonido.*", ".*de tener ahora.*", ".*de tener cancion.*", ".*de tener audio.*", ".*de tener sonido.*", ".*parar ahora.*", ".*parar cancion.*", ".*parar audio.*", ".*parar sonido.*"],
@@ -72,17 +73,17 @@ BASIC_SKILLS = [
         "func": UtilSkills.speech_interruption,
         "tags": "detener ahora",
         "description": "detiene la reproducción actual",
-        "context": "",
+        "context": "volume",
         "next": []
     },
     {
         "enable": True,
-        "pattern": [".*subir volumen.*",".*subir el volumen.*", ".*incrementar volumen.*", ".*incrementar el volumen.*", ".*aumentar volumen.*", ".*aumentar el volumen.*", ".*elevar volumen.*", ".*elevar el volumen.*"],
+        "pattern": [".*subir volumen.*", ".*subir el volumen.*", ".*incrementar volumen.*", ".*incrementar el volumen.*", ".*aumentar volumen.*", ".*aumentar el volumen.*", ".*elevar volumen.*", ".*elevar el volumen.*"],
         "templates": ["{}"],
         "func": UtilSkills.increase_master_volume,
         "tags": "subir volumen",
         "description": "Sube el volumen",
-        "context": "",
+        "context": "volume",
         "next": []
     },
 
@@ -93,7 +94,7 @@ BASIC_SKILLS = [
         "func": UtilSkills.reduce_master_volume,
         "tags": "bajar volumen",
         "description": "Decrementa el volumen",
-        "context": "",
+        "context": "volume",
         "next": []
     },
 
@@ -104,7 +105,7 @@ BASIC_SKILLS = [
         "func": UtilSkills.mute_master_volume,
         "tags": "silenciar volumen",
         "description": "Silencia el volumen",
-        "context": "",
+        "context": "volume",
         "next": []
     },
 
@@ -115,7 +116,7 @@ BASIC_SKILLS = [
         "func": UtilSkills.max_master_volume,
         "tags": "volumen al maximo",
         "description": "maximo volumen",
-        "context": "",
+        "context": "volume",
         "next": []
     },
 
@@ -126,10 +127,10 @@ BASIC_SKILLS = [
         "func": UtilSkills.current_master_volume,
         "tags": "volumen actual",
         "description": "Actual volumen",
-        "context": "",
+        "context": "volume",
         "next": []
     },
-
+    #internet
     {
         "enable": True,
         "pattern": [".*conexion a internet.*", ".*internet actual.*", ".*hay internet.*", ".*conexion internet.*", ".*revisar internet.*"],
@@ -137,7 +138,39 @@ BASIC_SKILLS = [
         "func": InternetSkills.internet_availability,
         "tags": "conexion a internet",
         "description": "Revisar conexión a internet",
-        "context": "",
+        "context": "internet",
+        "next": []
+    },
+    #reminder
+
+    {
+        "enable": True,
+        "pattern": [".*lista de recordatorios.*", ".*listas de recordatorios.*", ".*lista de recordatorio.*", ".*listas de recordatorio.*",
+                    ".*listado de recordatorios.*", ".*listado de recordatorio.*",
+                    ".*lista do de recordatorios.*", ".*lista do de recordatorio.*",
+                    ".*listar los recordatorios.*", ".*listar los recordatorio.*",
+                    ".*listame los recordatorios.*", ".*listame los recordatorio.*",
+                    ".*lista me los recordatorios.*", ".*lista me los recordatorio.*",
+                    ".*listarme los recordatorios.*", ".*listarme los recordatorio.*",
+                    ".*listar me los recordatorios.*", ".*listar me los recordatorio.*"],
+        "templates": ["{}"],
+        "func": ReminderSkills.list_all,
+        "tags": "listado de recordatorios",
+        "description": "Recordatorio",
+        "context": "reminder",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*detener los recordatorios.*", ".*detener todos (.*) recordatorios.*",
+                    ".*parar los recordatorios.*", ".*parar todos (.*) recordatorios.*",
+                    ".*eliminar los recordatorios.*", ".*eliminar todos (.*) recordatorios.*"],
+        "templates": ["{}"],
+        "func": ReminderSkills.stop_all,
+        "tags": "detenet o eliminar recordatorios",
+        "description": "Recordatorio",
+        "context": "reminder",
         "next": []
     },
 
@@ -147,9 +180,9 @@ BASIC_SKILLS = [
                     ".*recuerdame (.*) en (.*) minuto", ".*recuerda me (.*) en (.*) mimuto", ".*recordarme (.*) en (.*) minuto", ".*recordar me (.*) en (.*) minuto"],
         "templates": ["{}"],
         "func": ReminderSkills.create_reminder_action_time_minutes,
-        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "tags": "recordatorio por accion y tiempo",
         "description": "Recordatorio",
-        "context": "",
+        "context": "reminder",
         "next": []
     },
 
@@ -159,39 +192,187 @@ BASIC_SKILLS = [
                     ".*recuerdame en (.*) minuto (.*)", ".*recuerda me en (.*) minuto (.*)", ".*recordarme en (.*) minuto (.*)", ".*recordar me en (.*) minuto (.*)"],
         "templates": ["{}"],
         "func": ReminderSkills.create_reminder_time_action_minutes,
-        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "tags": "recordatorio por tiempo y accion",
         "description": "Recordatorio",
-        "context": "",
+        "context": "reminder",
         "next": []
     },
 
     {
         "enable": True,
-        "pattern": [".*recuerdame a las (.*):(.*) pm (.*)", ".*recuerda me a las (.*):(.*) pm (.*)", ".*recordarme a las (.*):(.*) pm (.*)", ".*recordar me a las (.*):(.*) pm (.*)",
-                    ".*recuerdame a las (.*):(.*)pm(.*)", ".*recuerda me a las (.*):(.*)pm(.*)", ".*recordarme a las (.*):(.*)pm(.*)", ".*recordar me a las (.*):(.*)pm(.*)",
-                    ".*recuerdame a las (.*) y (.*) pm (.*)", ".*recuerda me a las (.*) y (.*) pm (.*)", ".*recordarme a las (.*) y (.*)pm (.*)", ".*recordar me a las (.*) y (.*)pm (.*)",
-                    ".*recuerdame a las (.*)y(.*)pm(.*)", ".*recuerda me a las (.*)y(.*)pm(.*)", ".*recordarme a las (.*)y(.*)pm(.*)", ".*recordar me a las (.*)y(.*)pm(.*)",
-                    
+        "pattern": [
+
+                    ".*recuerdame a las (.*):(.*) p\.m\. (.*)", ".*recuerda me a las (.*):(.*) p\.m\. (.*)", ".*recordarme a las (.*):(.*) p\.m\. (.*)", ".*recordar me a las (.*):(.*) p\.m\. (.*)",
+                    ".*recuerdame a las (.*):(.*)p\.m\.(.*)", ".*recuerda me a las (.*):(.*)p\.m\.(.*)", ".*recordarme a las (.*):(.*)p\.m\.(.*)", ".*recordar me a las (.*):(.*)p\.m\.(.*)",
+                    ".*recuerdame a las (.*) y (.*) p\.m\. (.*)", ".*recuerda me a las (.*) y (.*)p\.m\. (.*)", ".*recordarme a las (.*) y (.*)p\.m\. (.*)", ".*recordar me a las (.*) y (.*)p\.m\. (.*)",
+                    ".*recuerdame a las (.*)y(.*)p\.m\.(.*)", ".*recuerda me a las (.*)y(.*)p\.m\.(.*)", ".*recordarme a las (.*)y(.*)p\.m\.(.*)", ".*recordar me a las (.*)y(.*)p\.m\.(.*)",
+
                     ".*recuerdame a las (.*):(.*) p.m. (.*)", ".*recuerda me a las (.*):(.*) p.m. (.*)", ".*recordarme a las (.*):(.*) p.m. (.*)", ".*recordar me a las (.*):(.*) p.m. (.*)",
                     ".*recuerdame a las (.*):(.*)p.m.(.*)", ".*recuerda me a las (.*):(.*)p.m.(.*)", ".*recordarme a las (.*):(.*)p.m.(.*)", ".*recordar me a las (.*):(.*)p.m.(.*)",
                     ".*recuerdame a las (.*) y (.*) p.m. (.*)", ".*recuerda me a las (.*) y (.*)p.m. (.*)", ".*recordarme a las (.*) y (.*)p.m. (.*)", ".*recordar me a las (.*) y (.*)p.m. (.*)",
                     ".*recuerdame a las (.*)y(.*)p.m.(.*)", ".*recuerda me a las (.*)y(.*)p.m.(.*)", ".*recordarme a las (.*)y(.*)p.m.(.*)", ".*recordar me a las (.*)y(.*)p.m.(.*)",
 
-                    ".*recuerdame a las (.*):(.*) p\.m\. (.*)", ".*recuerda me a las (.*):(.*) p\.m\. (.*)", ".*recordarme a las (.*):(.*) p\.m\. (.*)", ".*recordar me a las (.*):(.*) p\.m\. (.*)",
-                    ".*recuerdame a las (.*):(.*)p\.m\.(.*)", ".*recuerda me a las (.*):(.*)p\.m\.(.*)", ".*recordarme a las (.*):(.*)p\.m\.(.*)", ".*recordar me a las (.*):(.*)p\.m\.(.*)",
-                    ".*recuerdame a las (.*) y (.*) p\.m\. (.*)", ".*recuerda me a las (.*) y (.*)p\.m\. (.*)", ".*recordarme a las (.*) y (.*)p\.m\. (.*)", ".*recordar me a las (.*) y (.*)p\.m\. (.*)",
-                    ".*recuerdame a las (.*)y(.*)p\.m\.(.*)", ".*recuerda me a las (.*)y(.*)p\.m\.(.*)", ".*recordarme a las (.*)y(.*)p\.m\.(.*)", ".*recordar me a las (.*)y(.*)p\.m\.(.*)"
+                    ".*recuerdame a las (.*):(.*) pm (.*)", ".*recuerda me a las (.*):(.*) pm (.*)", ".*recordarme a las (.*):(.*) pm (.*)", ".*recordar me a las (.*):(.*) pm (.*)",
+                    ".*recuerdame a las (.*):(.*)pm(.*)", ".*recuerda me a las (.*):(.*)pm(.*)", ".*recordarme a las (.*):(.*)pm(.*)", ".*recordar me a las (.*):(.*)pm(.*)",
+                    ".*recuerdame a las (.*) y (.*) pm (.*)", ".*recuerda me a las (.*) y (.*) pm (.*)", ".*recordarme a las (.*) y (.*) pm (.*)", ".*recordar me a las (.*) y (.*) pm (.*)",
+                    ".*recuerdame a las (.*)y(.*)pm(.*)", ".*recuerda me a las (.*)y(.*)pm(.*)", ".*recordarme a las (.*)y(.*)pm(.*)", ".*recordar me a las (.*)y(.*)pm(.*)",
+
+
+
+                    ".*recuerdame a la (.*):(.*) p\.m\. (.*)", ".*recuerda me a la (.*):(.*) p\.m\. (.*)", ".*recordarme a la (.*):(.*) p\.m\. (.*)", ".*recordar me a la (.*):(.*) p\.m\. (.*)",
+                    ".*recuerdame a la (.*):(.*)p\.m\.(.*)", ".*recuerda me a la (.*):(.*)p\.m\.(.*)", ".*recordarme a la (.*):(.*)p\.m\.(.*)", ".*recordar me a la (.*):(.*)p\.m\.(.*)",
+                    ".*recuerdame a la (.*) y (.*) p\.m\. (.*)", ".*recuerda me a la (.*) y (.*)p\.m\. (.*)", ".*recordarme a la (.*) y (.*)p\.m\. (.*)", ".*recordar me a la (.*) y (.*)p\.m\. (.*)",
+                    ".*recuerdame a la (.*)y(.*)p\.m\.(.*)", ".*recuerda me a la (.*)y(.*)p\.m\.(.*)", ".*recordarme a la (.*)y(.*)p\.m\.(.*)", ".*recordar me a la (.*)y(.*)p\.m\.(.*)",
+
+                    ".*recuerdame a la (.*):(.*) p.m. (.*)", ".*recuerda me a la (.*):(.*) p.m. (.*)", ".*recordarme a la (.*):(.*) p.m. (.*)", ".*recordar me a la (.*):(.*) p.m. (.*)",
+                    ".*recuerdame a la (.*):(.*)p.m.(.*)", ".*recuerda me a la (.*):(.*)p.m.(.*)", ".*recordarme a la (.*):(.*)p.m.(.*)", ".*recordar me a la (.*):(.*)p.m.(.*)",
+                    ".*recuerdame a la (.*) y (.*) p.m. (.*)", ".*recuerda me a la (.*) y (.*)p.m. (.*)", ".*recordarme a la (.*) y (.*)p.m. (.*)", ".*recordar me a la (.*) y (.*)p.m. (.*)",
+                    ".*recuerdame a la (.*)y(.*)p.m.(.*)", ".*recuerda me a la (.*)y(.*)p.m.(.*)", ".*recordarme a la (.*)y(.*)p.m.(.*)", ".*recordar me a la (.*)y(.*)p.m.(.*)",
+
+                    ".*recuerdame a la (.*):(.*) pm (.*)", ".*recuerda me a la (.*):(.*) pm (.*)", ".*recordarme a la (.*):(.*) pm (.*)", ".*recordar me a la (.*):(.*) pm (.*)",
+                    ".*recuerdame a la (.*):(.*)pm(.*)", ".*recuerda me a la (.*):(.*)pm(.*)", ".*recordarme a la (.*):(.*)pm(.*)", ".*recordar me a la (.*):(.*)pm(.*)",
+                    ".*recuerdame a la (.*) y (.*) pm (.*)", ".*recuerda me a la (.*) y (.*) pm (.*)", ".*recordarme a la (.*) y (.*) pm (.*)", ".*recordar me a la (.*) y (.*) pm (.*)",
+                    ".*recuerdame a la (.*)y(.*)pm(.*)", ".*recuerda me a la (.*)y(.*)pm(.*)", ".*recordarme a la (.*)y(.*)pm(.*)", ".*recordar me a la (.*)y(.*)pm(.*)"
+
                     ],
         "templates": ["{}"],
         "func": ReminderSkills.create_reminder_time_action_pm,
-        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "tags": "recordatorio por hora y accion pm",
         "description": "Recordatorio",
-        "context": "",
+        "context": "reminder",
         "next": []
     },
 
+    {
+        "enable": True,
+        "pattern": [
+                    
+                    ".*recuerdame (.*) a las (.*):(.*) p\.m\.", ".*recuerda me (.*) a las (.*):(.*) p\.m\.", ".*recordarme (.*) a las (.*):(.*) p\.m\.", ".*recordar me (.*) a las (.*):(.*) p\.m\.",
+                    ".*recuerdame (.*)a las (.*):(.*)p\.m\.", ".*recuerda me (.*)a las (.*):(.*)p\.m\.", ".*recordarme (.*)a las (.*):(.*)p\.m\.", ".*recordar me (.*)a las (.*):(.*)p\.m\.",
+                    ".*recuerdame (.*) a las (.*) y (.*) p\.m\.", ".*recuerda me (.*) a las (.*) y (.*) p\.m\.", ".*recordarme (.*) a las (.*) y (.*) p\.m\.", ".*recordar me (.*) a las (.*) y (.*) p\.m\.",
+                    ".*recuerdame (.*)a las (.*)y(.*)p\.m\.", ".*recuerda me (.*)a las (.*)y(.*)p\.m\.", ".*recordarme (.*)a las (.*)y(.*)p\.m\.", ".*recordar me (.*)a las (.*)y(.*)p\.m\.",
+
+                    ".*recuerdame (.*) a las (.*):(.*) p.m.", ".*recuerda me (.*) a las (.*):(.*) p.m.", ".*recordarme (.*) a las (.*):(.*) p.m.", ".*recordar me (.*) a las (.*):(.*) p.m.",
+                    ".*recuerdame (.*)a las (.*):(.*)p.m.", ".*recuerda me (.*)a las (.*):(.*)p.m.", ".*recordarme (.*)a las (.*):(.*)p.m.", ".*recordar me (.*)a las (.*):(.*)p.m.",
+                    ".*recuerdame (.*) a las (.*) y (.*) p.m.", ".*recuerda me (.*) a las (.*) y (.*) p.m.", ".*recordarme (.*) a las (.*) y (.*) p.m.", ".*recordar me (.*) a las (.*) y (.*) p.m.",
+                    ".*recuerdame (.*)a las (.*)y(.*)p.m.", ".*recuerda me (.*)a las (.*)y(.*)p.m.", ".*recordarme (.*)a las (.*)y(.*)p.m.", ".*recordar me (.*)a las (.*)y(.*)p.m.",
+
+                    ".*recuerdame (.*) a las (.*):(.*) pm", ".*recuerda me (.*) a las (.*):(.*) pm", ".*recordarme (.*) a las (.*):(.*) pm", ".*recordar me (.*) a las (.*):(.*) pm",
+                    ".*recuerdame (.*)a las (.*):(.*)pm", ".*recuerda me (.*)a las (.*):(.*)pm", ".*recordarme (.*)a las (.*):(.*)pm", ".*recordar me (.*)a las (.*):(.*)pm",
+                    ".*recuerdame (.*) a las (.*) y (.*) pm", ".*recuerda me (.*) a las (.*) y (.*) pm", ".*recordarme (.*) a las (.*) y (.*) pm", ".*recordar me (.*) a las (.*) y (.*) pm",
+                    ".*recuerdame (.*)a las (.*)y(.*)pm", ".*recuerda me (.*)a las (.*)y(.*)pm", ".*recordarme (.*)a las (.*)y(.*)pm", ".*recordar me (.*)a las (.*)y(.*)pm",
 
 
+                   
+                    ".*recuerdame (.*) a la (.*):(.*) p\.m\.", ".*recuerda me (.*) a la (.*):(.*) p\.m\.", ".*recordarme (.*) a la (.*):(.*) p\.m\.", ".*recordar me (.*) a la (.*):(.*) p\.m\.",
+                    ".*recuerdame (.*)a la (.*):(.*)p\.m\.", ".*recuerda me (.*)a la (.*):(.*)p\.m\.", ".*recordarme (.*)a la (.*):(.*)p\.m\.", ".*recordar me (.*)a la (.*):(.*)p\.m\.",
+                    ".*recuerdame (.*) a la (.*) y (.*) p\.m\.", ".*recuerda me (.*) a la (.*) y (.*) p\.m\.", ".*recordarme (.*) a la (.*) y (.*) p\.m\.", ".*recordar me (.*) a la (.*) y (.*) p\.m\.",
+                    ".*recuerdame (.*)a la (.*)y(.*)p\.m\.", ".*recuerda me (.*)a la (.*)y(.*)p\.m\.", ".*recordarme (.*)a la (.*)y(.*)p\.m\.", ".*recordar me (.*)a la (.*)y(.*)p\.m\.",
+
+                    ".*recuerdame (.*) a la (.*):(.*) p.m.", ".*recuerda me (.*) a la (.*):(.*) p.m.", ".*recordarme (.*) a la (.*):(.*) p.m.", ".*recordar me (.*) a la (.*):(.*) p.m.",
+                    ".*recuerdame (.*)a la (.*):(.*)p.m.", ".*recuerda me (.*)a la (.*):(.*)p.m.", ".*recordarme (.*)a la (.*):(.*)p.m.", ".*recordar me (.*)a la (.*):(.*)p.m.",
+                    ".*recuerdame (.*) a la (.*) y (.*) p.m.", ".*recuerda me (.*) a la (.*) y (.*) p.m.", ".*recordarme (.*) a la (.*) y (.*) p.m.", ".*recordar me (.*) a la (.*) y (.*) p.m.",
+                    ".*recuerdame (.*)a la (.*)y(.*)p.m.", ".*recuerda me (.*)a la (.*)y(.*)p.m.", ".*recordarme (.*)a la (.*)y(.*)p.m.", ".*recordar me (.*)a la (.*)y(.*)p.m.",
+
+                    ".*recuerdame (.*) a la (.*):(.*) pm", ".*recuerda me (.*) a la (.*):(.*) pm", ".*recordarme (.*) a la (.*):(.*) pm", ".*recordar me (.*) a la (.*):(.*) pm",
+                    ".*recuerdame (.*)a la (.*):(.*)pm", ".*recuerda me (.*)a la (.*):(.*)pm", ".*recordarme (.*)a la (.*):(.*)pm", ".*recordar me (.*)a la (.*):(.*)pm",
+                    ".*recuerdame (.*) a la (.*) y (.*) pm", ".*recuerda me (.*) a la (.*) y (.*) pm", ".*recordarme (.*) a la (.*) y (.*) pm", ".*recordar me (.*) a la (.*) y (.*) pm",
+                    ".*recuerdame (.*)a la (.*)y(.*)pm", ".*recuerda me (.*)a la (.*)y(.*)pm", ".*recordarme (.*)a la (.*)y(.*)pm", ".*recordar me (.*)a la (.*)y(.*)pm"
+                    ],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_action_time_pm,
+        "tags": "recordatorio por accion y hora pm",
+        "description": "Recordatorio",
+        "context": "reminder",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [
+
+                    ".*recuerdame a las (.*):(.*) a\.m\. (.*)", ".*recuerda me a las (.*):(.*) a\.m\. (.*)", ".*recordarme a las (.*):(.*) a\.m\. (.*)", ".*recordar me a las (.*):(.*) a\.m\. (.*)",
+                    ".*recuerdame a las (.*):(.*)a\.m\.(.*)", ".*recuerda me a las (.*):(.*)a\.m\.(.*)", ".*recordarme a las (.*):(.*)a\.m\.(.*)", ".*recordar me a las (.*):(.*)a\.m\.(.*)",
+                    ".*recuerdame a las (.*) y (.*) a\.m\. (.*)", ".*recuerda me a las (.*) y (.*)a\.m\. (.*)", ".*recordarme a las (.*) y (.*)a\.m\. (.*)", ".*recordar me a las (.*) y (.*)a\.m\. (.*)",
+                    ".*recuerdame a las (.*)y(.*)a\.m\.(.*)", ".*recuerda me a las (.*)y(.*)a\.m\.(.*)", ".*recordarme a las (.*)y(.*)a\.m\.(.*)", ".*recordar me a las (.*)y(.*)a\.m\.(.*)",
+
+                    ".*recuerdame a las (.*):(.*) a.m. (.*)", ".*recuerda me a las (.*):(.*) a.m. (.*)", ".*recordarme a las (.*):(.*) a.m. (.*)", ".*recordar me a las (.*):(.*) a.m. (.*)",
+                    ".*recuerdame a las (.*):(.*)a.m.(.*)", ".*recuerda me a las (.*):(.*)a.m.(.*)", ".*recordarme a las (.*):(.*)a.m.(.*)", ".*recordar me a las (.*):(.*)a.m.(.*)",
+                    ".*recuerdame a las (.*) y (.*) a.m. (.*)", ".*recuerda me a las (.*) y (.*)a.m. (.*)", ".*recordarme a las (.*) y (.*)a.m. (.*)", ".*recordar me a las (.*) y (.*)a.m. (.*)",
+                    ".*recuerdame a las (.*)y(.*)a.m.(.*)", ".*recuerda me a las (.*)y(.*)a.m.(.*)", ".*recordarme a las (.*)y(.*)a.m.(.*)", ".*recordar me a las (.*)y(.*)a.m.(.*)",
+
+                    ".*recuerdame a las (.*):(.*) am (.*)", ".*recuerda me a las (.*):(.*) am (.*)", ".*recordarme a las (.*):(.*) am (.*)", ".*recordar me a las (.*):(.*) am (.*)",
+                    ".*recuerdame a las (.*):(.*)am(.*)", ".*recuerda me a las (.*):(.*)am(.*)", ".*recordarme a las (.*):(.*)am(.*)", ".*recordar me a las (.*):(.*)am(.*)",
+                    ".*recuerdame a las (.*) y (.*) am (.*)", ".*recuerda me a las (.*) y (.*) am (.*)", ".*recordarme a las (.*) y (.*) am (.*)", ".*recordar me a las (.*) y (.*) am (.*)",
+                    ".*recuerdame a las (.*)y(.*)am(.*)", ".*recuerda me a las (.*)y(.*)am(.*)", ".*recordarme a las (.*)y(.*)am(.*)", ".*recordar me a las (.*)y(.*)am(.*)",
+
+
+                    ".*recuerdame a la (.*):(.*) a\.m\. (.*)", ".*recuerda me a la (.*):(.*) a\.m\. (.*)", ".*recordarme a la (.*):(.*) a\.m\. (.*)", ".*recordar me a la (.*):(.*) a\.m\. (.*)",
+                    ".*recuerdame a la (.*):(.*)a\.m\.(.*)", ".*recuerda me a la (.*):(.*)a\.m\.(.*)", ".*recordarme a la (.*):(.*)a\.m\.(.*)", ".*recordar me a la (.*):(.*)a\.m\.(.*)",
+                    ".*recuerdame a la (.*) y (.*) a\.m\. (.*)", ".*recuerda me a la (.*) y (.*)a\.m\. (.*)", ".*recordarme a la (.*) y (.*)a\.m\. (.*)", ".*recordar me a la (.*) y (.*)a\.m\. (.*)",
+                    ".*recuerdame a la (.*)y(.*)a\.m\.(.*)", ".*recuerda me a la (.*)y(.*)a\.m\.(.*)", ".*recordarme a la (.*)y(.*)a\.m\.(.*)", ".*recordar me a la (.*)y(.*)a\.m\.(.*)",
+
+                    ".*recuerdame a la (.*):(.*) a.m. (.*)", ".*recuerda me a la (.*):(.*) a.m. (.*)", ".*recordarme a la (.*):(.*) a.m. (.*)", ".*recordar me a la (.*):(.*) a.m. (.*)",
+                    ".*recuerdame a la (.*):(.*)a.m.(.*)", ".*recuerda me a la (.*):(.*)a.m.(.*)", ".*recordarme a la (.*):(.*)a.m.(.*)", ".*recordar me a la (.*):(.*)a.m.(.*)",
+                    ".*recuerdame a la (.*) y (.*) a.m. (.*)", ".*recuerda me a la (.*) y (.*)a.m. (.*)", ".*recordarme a la (.*) y (.*)a.m. (.*)", ".*recordar me a la (.*) y (.*)a.m. (.*)",
+                    ".*recuerdame a la (.*)y(.*)a.m.(.*)", ".*recuerda me a la (.*)y(.*)a.m.(.*)", ".*recordarme a la (.*)y(.*)a.m.(.*)", ".*recordar me a la (.*)y(.*)a.m.(.*)",
+
+                    ".*recuerdame a la (.*):(.*) am (.*)", ".*recuerda me a la (.*):(.*) am (.*)", ".*recordarme a la (.*):(.*) am (.*)", ".*recordar me a la (.*):(.*) am (.*)",
+                    ".*recuerdame a la (.*):(.*)am(.*)", ".*recuerda me a la (.*):(.*)am(.*)", ".*recordarme a la (.*):(.*)am(.*)", ".*recordar me a la (.*):(.*)am(.*)",
+                    ".*recuerdame a la (.*) y (.*) am (.*)", ".*recuerda me a la (.*) y (.*) am (.*)", ".*recordarme a la (.*) y (.*) am (.*)", ".*recordar me a la (.*) y (.*) am (.*)",
+                    ".*recuerdame a la (.*)y(.*)am(.*)", ".*recuerda me a la (.*)y(.*)am(.*)", ".*recordarme a la (.*)y(.*)am(.*)", ".*recordar me a la (.*)y(.*)am(.*)"
+                    ],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_time_action_am,
+        "tags": "recordatorio por hora y accion am",
+        "description": "Recordatorio",
+        "context": "reminder",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [
+                    
+                    ".*recuerdame (.*) a las (.*):(.*) a\.m\.", ".*recuerda me (.*) a las (.*):(.*) a\.m\.", ".*recordarme (.*) a las (.*):(.*) a\.m\.", ".*recordar me (.*) a las (.*):(.*) a\.m\.",
+                    ".*recuerdame (.*)a las (.*):(.*)a\.m\.", ".*recuerda me (.*)a las (.*):(.*)a\.m\.", ".*recordarme (.*)a las (.*):(.*)a\.m\.", ".*recordar me (.*)a las (.*):(.*)a\.m\.",
+                    ".*recuerdame (.*) a las (.*) y (.*) a\.m\.", ".*recuerda me (.*) a las (.*) y (.*) a\.m\.", ".*recordarme (.*) a las (.*) y (.*) a\.m\.", ".*recordar me (.*) a las (.*) y (.*) a\.m\.",
+                    ".*recuerdame (.*)a las (.*)y(.*)a\.m\.", ".*recuerda me (.*)a las (.*)y(.*)a\.m\.", ".*recordarme (.*)a las (.*)y(.*)a\.m\.", ".*recordar me (.*)a las (.*)y(.*)a\.m\.",
+
+                    ".*recuerdame (.*) a las (.*):(.*) a.m.", ".*recuerda me (.*) a las (.*):(.*) a.m.", ".*recordarme (.*) a las (.*):(.*) a.m.", ".*recordar me (.*) a las (.*):(.*) a.m.",
+                    ".*recuerdame (.*)a las (.*):(.*)a.m.", ".*recuerda me (.*)a las (.*):(.*)a.m.", ".*recordarme (.*)a las (.*):(.*)a.m.", ".*recordar me (.*)a las (.*):(.*)a.m.",
+                    ".*recuerdame (.*) a las (.*) y (.*) a.m.", ".*recuerda me (.*) a las (.*) y (.*) a.m.", ".*recordarme (.*) a las (.*) y (.*) a.m.", ".*recordar me (.*) a las (.*) y (.*) a.m.",
+                    ".*recuerdame (.*)a las (.*)y(.*)a.m.", ".*recuerda me (.*)a las (.*)y(.*)a.m.", ".*recordarme (.*)a las (.*)y(.*)a.m.", ".*recordar me (.*)a las (.*)y(.*)a.m.",
+
+                    ".*recuerdame (.*) a las (.*):(.*) am", ".*recuerda me (.*) a las (.*):(.*) am", ".*recordarme (.*) a las (.*):(.*) am", ".*recordar me (.*) a las (.*):(.*) am",
+                    ".*recuerdame (.*)a las (.*):(.*)am", ".*recuerda me (.*)a las (.*):(.*)am", ".*recordarme (.*)a las (.*):(.*)am", ".*recordar me (.*)a las (.*):(.*)am",
+                    ".*recuerdame (.*) a las (.*) y (.*) am", ".*recuerda me (.*) a las (.*) y (.*) am", ".*recordarme (.*) a las (.*) y (.*) am", ".*recordar me (.*) a las (.*) y (.*) am",
+                    ".*recuerdame (.*)a las (.*)y(.*)am", ".*recuerda me (.*)a las (.*)y(.*)am", ".*recordarme (.*)a las (.*)y(.*)am", ".*recordar me (.*)a las (.*)y(.*)am",
+
+
+                    
+                    ".*recuerdame (.*) a la (.*):(.*) a\.m\.", ".*recuerda me (.*) a la (.*):(.*) a\.m\.", ".*recordarme (.*) a la (.*):(.*) a\.m\.", ".*recordar me (.*) a la (.*):(.*) a\.m\.",
+                    ".*recuerdame (.*)a la (.*):(.*)a\.m\.", ".*recuerda me (.*)a la (.*):(.*)a\.m\.", ".*recordarme (.*)a la (.*):(.*)a\.m\.", ".*recordar me (.*)a la (.*):(.*)a\.m\.",
+                    ".*recuerdame (.*) a la (.*) y (.*) a\.m\.", ".*recuerda me (.*) a la (.*) y (.*) a\.m\.", ".*recordarme (.*) a la (.*) y (.*) a\.m\.", ".*recordar me (.*) a la (.*) y (.*) a\.m\.",
+                    ".*recuerdame (.*)a la (.*)y(.*)a\.m\.", ".*recuerda me (.*)a la (.*)y(.*)a\.m\.", ".*recordarme (.*)a la (.*)y(.*)a\.m\.", ".*recordar me (.*)a la (.*)y(.*)a\.m\.",
+
+                    ".*recuerdame (.*) a la (.*):(.*) a.m.", ".*recuerda me (.*) a la (.*):(.*) a.m.", ".*recordarme (.*) a la (.*):(.*) a.m.", ".*recordar me (.*) a la (.*):(.*) a.m.",
+                    ".*recuerdame (.*)a la (.*):(.*)a.m.", ".*recuerda me (.*)a la (.*):(.*)a.m.", ".*recordarme (.*)a la (.*):(.*)a.m.", ".*recordar me (.*)a la (.*):(.*)a.m.",
+                    ".*recuerdame (.*) a la (.*) y (.*) a.m.", ".*recuerda me (.*) a la (.*) y (.*) a.m.", ".*recordarme (.*) a la (.*) y (.*) a.m.", ".*recordar me (.*) a la (.*) y (.*) a.m.",
+                    ".*recuerdame (.*)a la (.*)y(.*)a.m.", ".*recuerda me (.*)a la (.*)y(.*)a.m.", ".*recordarme (.*)a la (.*)y(.*)a.m.", ".*recordar me (.*)a la (.*)y(.*)a.m.",
+
+                    ".*recuerdame (.*) a la (.*):(.*) am", ".*recuerda me (.*) a la (.*):(.*) am", ".*recordarme (.*) a la (.*):(.*) am", ".*recordar me (.*) a la (.*):(.*) am",
+                    ".*recuerdame (.*)a la (.*):(.*)am", ".*recuerda me (.*)a la (.*):(.*)am", ".*recordarme (.*)a la (.*):(.*)am", ".*recordar me (.*)a la (.*):(.*)am",
+                    ".*recuerdame (.*) a la (.*) y (.*) am", ".*recuerda me (.*) a la (.*) y (.*) am", ".*recordarme (.*) a la (.*) y (.*) am", ".*recordar me (.*) a la (.*) y (.*) am",
+                    ".*recuerdame (.*)a la (.*)y(.*)am", ".*recuerda me (.*)a la (.*)y(.*)am", ".*recordarme (.*)a la (.*)y(.*)am", ".*recordar me (.*)a la (.*)y(.*)am"
+                    ],
+        "templates": ["{}"],
+        "func": ReminderSkills.create_reminder_action_time_am,
+        "tags": "recordatorio por accion y hora am",
+        "description": "Recordatorio",
+        "context": "reminder",
+        "next": []
+    },
 
     {
         "enable": True,
@@ -199,9 +380,9 @@ BASIC_SKILLS = [
                     ".*recuerdame (.*) en (.*) hora", ".*recuerda me (.*) en (.*) mimuto", ".*recordarme (.*) en (.*) hora", ".*recordar me (.*) en (.*) hora"],
         "templates": ["{}"],
         "func": ReminderSkills.create_reminder_action_time_hours,
-        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "tags": "recordatorio accion y tiempo hora",
         "description": "Recordatorio",
-        "context": "",
+        "context": "reminder",
         "next": []
     },
 
@@ -211,60 +392,83 @@ BASIC_SKILLS = [
                     ".*recuerdame en (.*) hora (.*)", ".*recuerda me en (.*) hora (.*)", ".*recordarme en (.*) hora (.*)", ".*recordar me en (.*) hora (.*)"],
         "templates": ["{}"],
         "func": ReminderSkills.create_reminder_time_action_hours,
-        "tags": "crear recordatorio,recordatorio en,recordar esto,recordar lo siguiente",
+        "tags": "recordatorio tiempo y accion hora",
         "description": "Recordatorio",
-        "context": "",
+        "context": "reminder",
         "next": []
     },
+    # agregar recordatorio por accion, fecha y tiempo
+    # alarma
 
     {
         "enable": True,
-        "pattern": [
-            ".*crear alarma de (.*) a (.*) a las (.*)", ".*alarma de (.*) a (.*) a las (.*)", ".*agregar alarma de (.*) a (.*) a las (.*)", ".*establecer alarma de (.*) a (.*) a las (.*)",
-            ".*crear alarma (.*) a (.*) a las (.*)", ".*alarma (.*) a (.*) a las (.*)", ".*agregar alarma (.*) a (.*) a las (.*)", ".*establecer alarma (.*) a (.*) a las (.*)"
-        ],
-        "templates": ["He creado la alarma en {}"],
-        "func": AlarmSkills.set_alarm_interval,
-        "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
-        "description": "Alarma",
-        "context": "",
-        "next": []
-    },
-
-    {
-        "enable": True,
-        "pattern": [".*crear alarma el (.*) a las (\d*):(\d*).*", ".*alarma el (*) a las (\d*):(\d*).*", ".*agregar alarma el(d*) a las (\d*):(\d*).*", ".*establecer alarma el(.*) a las (\d*):(\d*).*"],
-        "templates": ["He creado la alarma en {}"],
-        "func": AlarmSkills.set_alarm,
-        "tags": "crear alarma,alarma en,agregar alarma,establecer alarma",
-        "description": "Alarma",
-        "context": "",
-        "next": []
-    },
-
-
-    {
-        "enable": True,
-        "pattern": [".*deteneter alarma.*", ".*apagar alarma.*", ".*deten la alarma.*", ".*detener todas las alarmas.*", ".*apagar todas las alarmas.*", ".*parar alarma.*"],
-        "templates": ["He apagado las alarmas"],
-        "func": AlarmSkills.stop_all_alarm,
-        "tags": "deteneter alarma,apagar alarma,deten la alarma,detener todas las alarmas,apagar todas las alarmas,parar alarma,deten la alarma,parar todas las alarmas,de tener todas las alarmas,de tener alarmas",
-        "description": "Detener Alarma",
-        "context": "",
-        "next": []
-    },
-
-    {
-        "enable": True,
-        "pattern": [".*lista alarmas.*", ".*listado de alarmas.*", ".*listado de alarma.*", ".*lista de alarmas.*", ".*lista alarmas.*", ".*lista alarma.*", ".*cuales son las alarmas.*", ".*alarmas actuales.*"],
+        "pattern": [".*lista de alarmas.*", ".*listas de alarmas.*", ".*lista de alarma.*", ".*listas de alarma.*",
+                    ".*listado de alarmas.*", ".*listado de alarma.*",
+                    ".*lista do de alarmas.*", ".*lista do de alarma.*",
+                    ".*listar las alarmas.*", ".*listar las alarmas.*",
+                    ".*listame las alarmas.*", ".*listame las alarma.*",
+                    ".*lista me las alarmas.*", ".*lista me las alarma.*",
+                    ".*listarme las alarmas.*", ".*listarme las alarma.*",
+                    ".*listar me las alarmas.*", ".*listar me las alarma.*"],
         "templates": ["{}"],
-        "func": AlarmSkills.list_from_alarms,
-        "tags": "lista alarmas,listado de alarmas,listado de alarma,lista de alarmas,lista alarmas,lista alarma,cuales son las alarmas,alarmas actuales",
-        "description": "Lista Alarma",
-        "context": "",
+        "func": AlarmSkills.list_all,
+        "tags": "listado de alarmas",
+        "description": "Recordatorio",
+        "context": "alarm",
         "next": []
     },
 
+    {
+        "enable": True,
+        "pattern": [".*detener las alarmas.*", ".*detener todas (.*) alarmas.*",
+                    ".*parar las alarmas.*", ".*parar todas (.*) alarmas.*",
+                    ".*eliminar las alarmas.*", ".*eliminar todas (.*) alarmas.*"],
+        "templates": ["{}"],
+        "func": AlarmSkills.stop_all,
+        "tags": "detener o eliminar alarmas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*crear alarma en (.*) minutos", ".*crear alarma en (.*) minuto",
+                    ".*establecer alarma en (.*) minutos", ".*establecer alarma en (.*) minuto",
+                    ".*colocar alarma en (.*) minutos", ".*colocar alarma en (.*) minuto",
+                    ".*agregar alarma en (.*) minutos", ".*agregar alarma en (.*) minuto"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_time_minutes,
+        "tags": "alarma por minutos",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
+    {
+        "enable": True,
+        "pattern": [".*crear alarma en (.*) hora", ".*crear alarma en (.*) hora",
+                    ".*establecer alarma en (.*) hora", ".*establecer alarma en (.*) hora",
+                    ".*colocar alarma en (.*) hora", ".*colocar alarma en (.*) hora",
+                    ".*agregar alarma en (.*) hora", ".*agregar alarma en (.*) hora",
+
+                    ".*crear alarma en (.*) horas", ".*crear alarma en (.*) horas",
+                    ".*establecer alarma en (.*) horas", ".*establecer alarma en (.*) horas",
+                    ".*colocar alarma en (.*) horas", ".*colocar alarma en (.*) horas",
+                    ".*agregar alarma en (.*) horas", ".*agregar alarma en (.*) horas"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_time_hours,
+        "tags": "alarma por horas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
+
+
+    # estado del tiempo
 
     {
         "enable": True,
