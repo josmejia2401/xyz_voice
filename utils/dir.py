@@ -14,3 +14,17 @@ def get_ouput_audio():
         my_file = Path(x_path)
         con += 1
     return str(my_file)
+
+def get_ouput_music():
+    c_path = current_path
+    x_path = os.path.join(str(c_path), 'output', 'music')
+    my_file = Path(x_path)
+    con = 0
+    while not my_file.exists():
+        if con > 3:
+            break
+        c_path = c_path.parent
+        x_path = os.path.join(str(c_path), 'output', 'music')
+        my_file = Path(x_path)
+        con += 1
+    return str(my_file)

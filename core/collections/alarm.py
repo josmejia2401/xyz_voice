@@ -63,7 +63,7 @@ class AlarmSkills(AssistantSkill):
     @classmethod
     def stop_all(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             cls.alarm_pending = []
             cls.scheduler.remove_all_jobs()
@@ -77,13 +77,15 @@ class AlarmSkills(AssistantSkill):
     @classmethod
     def list_all(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             if cls.alarm_pending:
                 cls.response("Las alarmas son:")
                 for alarm in cls.alarm_pending:
-                    action = alarm["action"]
-                    r = "{}".format(action)
+                    day_of_week = alarm["day_of_week"]
+                    hour = alarm["hour"]
+                    minute = alarm["minute"]
+                    r = "semana: {} , hora: {} , minuto: {}".format(day_of_week, hour, minute)
                     cls.response(r)
                 r = template.format("Se listaron todas las alarmas")
                 cls.response(r)
@@ -106,7 +108,7 @@ class AlarmSkills(AssistantSkill):
     @classmethod
     def create_alarm_time_minutes(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             #if isinstance(values, tuple):
             values_x = values[0]
@@ -117,13 +119,14 @@ class AlarmSkills(AssistantSkill):
 
             duration = cls._replace_words_with_numbers(duration)
 
-            if duration:
+            if duration is not None:
                 idx = get_id()
                 scheduler_interval = 'minutes'
                 interval = {scheduler_interval: int(duration)}
                 job = cls.scheduler.add_job(cls._alarm_minutes, 'interval', **interval, id=idx, args=[idx, duration])
 
-                cls.alarm_pending.append({"id": idx, "job": job, "action": None, "duration" : duration})
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": None, "hour": None, "minute": duration})
+
                 if not cls.scheduler.running:
                     cls.scheduler.start()
 
@@ -143,11 +146,10 @@ class AlarmSkills(AssistantSkill):
                 break
         cls.response("SONANDO ALARMA")
 
-
     @classmethod
     def create_alarm_time_hours(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             
             values_x = values[0]
@@ -158,17 +160,288 @@ class AlarmSkills(AssistantSkill):
 
             duration = cls._replace_words_with_numbers(duration)
             
-            if duration:
+            if duration is not None:
                 idx = get_id()
                 scheduler_interval = 'hours'
                 interval = {scheduler_interval: int(duration)}
                 job = cls.scheduler.add_job(cls._alarm_hours, 'interval', **interval, id=idx, args=[idx, duration])
 
-                cls.alarm_pending.append({"id": idx, "job": job, "action": None, "duration": duration})
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": None, "hour": duration, "minute": None})
+
                 if not cls.scheduler.running:
                     cls.scheduler.start()
 
                 r = template.format("He creado una alarma en {0} horas".format(duration))
+                cls.response(r)
+        except Exception as e:
+            print(e)
+            r = template.format("No se pudo crear la alarma")
+            cls.response(r)
+
+
+    @classmethod
+    def _alarm_range_am(cls, idx):
+        cls.scheduler.remove_job(job_id=idx)
+        for p in cls.alarm_pending:
+            if p["id"] == idx:
+                cls.alarm_pending.remove(p)
+                break
+        cls.response("SONANDO ALARMA")
+
+    @classmethod
+    def create_alarm_range_time_week_am(cls, ext=None, template=None, values=None, history=[]):
+        try:
+            if cls.get_activation() == False:
+                return
+            #hora, minuto, rango ini, rango fin
+            values_x = values[0]
+            if isinstance(values_x, list):
+                duration_h = values_x[0]
+                duration_m = values_x[1]
+                range_week_start = values_x[2]
+                range_week_end = values_x[3]
+            else:
+                duration_h = values_x
+                duration_m = values[1]
+                range_week_start = values[2]
+                range_week_end = values[3]
+
+            duration_h = cls._replace_words_with_numbers(duration_h)
+            duration_m = cls._replace_words_with_numbers(duration_m)
+            
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_start:
+                        range_week_start = time_interval['scheduler_interval']
+                        break
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_end:
+                        range_week_end = time_interval['scheduler_interval']
+                        break
+
+            if duration_h is not None and duration_m is not None:
+                idx = get_id()
+
+                m2 = str(duration_h) + ":" + str(duration_m) + " AM"
+                m2 = cls._time_conversion(m2)
+                m2 = m2.split(":")
+                duration_h = m2[0].strip()
+                duration_m = m2[1].strip()
+                day_of_week = range_week_start + "-" + range_week_end
+
+                cron1 = CronTrigger(day_of_week=day_of_week, hour=duration_h, minute=duration_m, timezone='America/Bogota')
+                trigger = OrTrigger([cron1])
+
+                job = cls.scheduler.add_job(cls._alarm_range_am, trigger, id=idx, args=[idx])
+
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": day_of_week, "hour": duration_h, "minute": duration_m})
+
+                if not cls.scheduler.running:
+                    cls.scheduler.start()
+                r = template.format("He creado la alarma {0} {1} {2} am".format(day_of_week, duration_h, duration_m))
+                cls.response(r)
+        except Exception as e:
+            print(e)
+            r = template.format("No se pudo crear la alarma")
+            cls.response(r)
+
+    
+    @classmethod
+    def create_alarm_range_week_time_am(cls, ext=None, template=None, values=None, history=[]):
+        try:
+            if cls.get_activation() == False:
+                return
+            #hora, minuto, rango ini, rango fin
+            values_x = values[0]
+            if isinstance(values_x, list):
+                range_week_start = values_x[0]
+                range_week_end = values_x[1]
+                duration_h = values_x[2]
+                duration_m = values_x[3]
+            elif isinstance(values_x, tuple):
+                range_week_start = values_x[0]
+                range_week_end = values_x[1]
+                duration_h = values_x[2]
+                duration_m = values_x[3]
+            else:
+                range_week_start = values[0]
+                range_week_end = values[1]
+                duration_h = values[2]
+                duration_m = values[3]
+
+            duration_h = cls._replace_words_with_numbers(duration_h)
+            duration_m = cls._replace_words_with_numbers(duration_m)
+            
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_start:
+                        range_week_start = time_interval['scheduler_interval']
+                        break
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_end:
+                        range_week_end = time_interval['scheduler_interval']
+                        break
+
+            if duration_h is not None and duration_m is not None:
+                idx = get_id()
+
+                m2 = str(duration_h) + ":" + str(duration_m) + " AM"
+                m2 = cls._time_conversion(m2)
+                m2 = m2.split(":")
+                duration_h = m2[0].strip()
+                duration_m = m2[1].strip()
+                day_of_week = range_week_start + "-" + range_week_end
+
+                cron1 = CronTrigger(day_of_week=day_of_week, hour=duration_h, minute=duration_m, timezone='America/Bogota')
+                trigger = OrTrigger([cron1])
+
+                job = cls.scheduler.add_job(cls._alarm_range_am, trigger, id=idx, args=[idx])
+
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": day_of_week, "hour": duration_h, "minute": duration_m})
+
+                if not cls.scheduler.running:
+                    cls.scheduler.start()
+                r = template.format("He creado la alarma {0} {1} {2} am".format(day_of_week, duration_h, duration_m))
+                cls.response(r)
+        except Exception as e:
+            print(e)
+            r = template.format("No se pudo crear la alarma")
+            cls.response(r)
+
+
+
+    @classmethod
+    def _alarm_range_pm(cls, idx):
+        cls.scheduler.remove_job(job_id=idx)
+        for p in cls.alarm_pending:
+            if p["id"] == idx:
+                cls.alarm_pending.remove(p)
+                break
+        cls.response("SONANDO ALARMA")
+
+    @classmethod
+    def create_alarm_range_time_week_pm(cls, ext=None, template=None, values=None, history=[]):
+        try:
+            if cls.get_activation() == False:
+                return
+            #hora, minuto, rango ini, rango fin
+            values_x = values[0]
+            if isinstance(values_x, list):
+                duration_h = values_x[0]
+                duration_m = values_x[1]
+                range_week_start = values_x[2]
+                range_week_end = values_x[3]
+            elif isinstance(values_x, tuple):
+                duration_h = values_x[0]
+                duration_m = values_x[1]
+                range_week_start = values_x[2]
+                range_week_end = values_x[3]
+            else:
+                duration_h = values[0]
+                duration_m = values[1]
+                range_week_start = values[2]
+                range_week_end = values[3]
+
+            duration_h = cls._replace_words_with_numbers(duration_h)
+            duration_m = cls._replace_words_with_numbers(duration_m)
+            
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_start:
+                        range_week_start = time_interval['scheduler_interval']
+                        break
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_end:
+                        range_week_end = time_interval['scheduler_interval']
+                        break
+
+            if duration_h is not None and duration_m is not None:
+                idx = get_id()
+
+                m2 = str(duration_h) + ":" + str(duration_m) + " PM"
+                m2 = cls._time_conversion(m2)
+                m2 = m2.split(":")
+                duration_h = m2[0].strip()
+                duration_m = m2[1].strip()
+                day_of_week = range_week_start + "-" + range_week_end
+
+                cron1 = CronTrigger(day_of_week=day_of_week, hour=duration_h, minute=duration_m, timezone='America/Bogota')
+                trigger = OrTrigger([cron1])
+
+                job = cls.scheduler.add_job(cls._alarm_range_pm, trigger, id=idx, args=[idx])
+
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": day_of_week, "hour": duration_h, "minute": duration_m})
+
+                if not cls.scheduler.running:
+                    cls.scheduler.start()
+                r = template.format("He creado la alarma {0} {1} {2} pm".format(day_of_week, duration_h, duration_m))
+                cls.response(r)
+        except Exception as e:
+            print(e)
+            r = template.format("No se pudo crear la alarma")
+            cls.response(r)
+
+    
+    @classmethod
+    def create_alarm_range_week_time_pm(cls, ext=None, template=None, values=None, history=[]):
+        try:
+            if cls.get_activation() == False:
+                return
+            #hora, minuto, rango ini, rango fin
+            values_x = values[0]
+            if isinstance(values_x, list):
+                range_week_start = values_x[0]
+                range_week_end = values_x[1]
+                duration_h = values_x[2]
+                duration_m = values_x[3]
+            elif isinstance(values_x, tuple):
+                range_week_start = values_x[0]
+                range_week_end = values_x[1]
+                duration_h = values_x[2]
+                duration_m = values_x[3]
+            else:
+                range_week_start = values[0]
+                range_week_end = values[1]
+                duration_h = values[2]
+                duration_m = values[3]
+
+            duration_h = cls._replace_words_with_numbers(duration_h)
+            duration_m = cls._replace_words_with_numbers(duration_m)
+            
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_start:
+                        range_week_start = time_interval['scheduler_interval']
+                        break
+            for time_interval in time_intervals.values():
+                for variation in time_interval['variations']:
+                    if variation in range_week_end:
+                        range_week_end = time_interval['scheduler_interval']
+                        break
+
+            if duration_h is not None and duration_m is not None:
+                idx = get_id()
+
+                m2 = str(duration_h) + ":" + str(duration_m) + " PM"
+                m2 = cls._time_conversion(m2)
+                m2 = m2.split(":")
+                duration_h = m2[0].strip()
+                duration_m = m2[1].strip()
+                day_of_week = range_week_start + "-" + range_week_end
+
+                cron1 = CronTrigger(day_of_week=day_of_week, hour=duration_h, minute=duration_m, timezone='America/Bogota')
+                trigger = OrTrigger([cron1])
+
+                job = cls.scheduler.add_job(cls._alarm_range_pm, trigger, id=idx, args=[idx])
+
+                cls.alarm_pending.append({"id": idx, "job": job, "day_of_week": day_of_week, "hour": duration_h, "minute": duration_m})
+
+                if not cls.scheduler.running:
+                    cls.scheduler.start()
+                r = template.format("He creado la alarma {0} {1} {2} pm".format(day_of_week, duration_h, duration_m))
                 cls.response(r)
         except Exception as e:
             print(e)

@@ -7,6 +7,7 @@ from core.collections.internet import InternetSkills
 from core.collections.math import MathSkills
 from core.collections.weather import WeatherSkills
 from core.collections.alarm import AlarmSkills
+from core.collections.music import MusicSkills
 from utils.mapping import math_tags
 
 CONTROL_SKILLS = [
@@ -44,6 +45,7 @@ CONTROL_SKILLS = [
 ]
 
 BASIC_SKILLS = [
+    #hora
     {
         "enable": True,
         "pattern": [".*que hora es.*", ".*que hora.*", ".*hora actual.*"],
@@ -54,7 +56,7 @@ BASIC_SKILLS = [
         "context": "datetime",
         "next": []
     },
-
+    #fecha
     {
         "enable": True,
         "pattern": [".*fecha actual.*", ".*dia es hoy.*"],
@@ -467,12 +469,134 @@ BASIC_SKILLS = [
     },
 
 
+    {
+        "enable": True,
+        "pattern": [".*crear alarma a las (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*establecer alarma a las (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*colocar alarma a las (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*agregar alarma a las (.*):(.*) a\.m\. de (.*) a (.*)",
 
-    # estado del tiempo
+                    ".*crear alarma a la (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*establecer alarma a la (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*colocar alarma a la (.*):(.*) a\.m\. de (.*) a (.*)",
+                    ".*agregar alarma a la (.*):(.*) a\.m\. de (.*) a (.*)",
+
+                    ".*crear alarma a las (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*establecer alarma a las (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*colocar alarma a las (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*agregar alarma a las (.*):(.*) a.*m.* de (.*) a (.*)",
+
+                    ".*crear alarma a la (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*establecer alarma a la (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*colocar alarma a la (.*):(.*) a.*m.* de (.*) a (.*)",
+                    ".*agregar alarma a la (.*):(.*) a.*m.* de (.*) a (.*)"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_range_time_week_am,
+        "tags": "alarma por horas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
 
     {
         "enable": True,
-        "pattern": [".*clima actual.*", ".*datos del clima.*", ".*informacion del clima.*", ".*temperatura actual.*", ".*temperatura de.*", ".*estadisticas del clima.*"],
+        "pattern": [".*crear alarma de (.*) a (.*) a las (.*):(.*) a\.m\.",
+                    ".*establecer alarma de (.*) a (.*) a las (.*):(.*) a\.m\.",
+                    ".*colocar alarma de (.*) a (.*) a las (.*):(.*) a\.m\.",
+                    ".*agregar alarma de (.*) a (.*) a las (.*):(.*) a\.m\.",
+
+                    ".*crear alarma de (.*) a (.*) a la (.*):(.*) a\.m\.",
+                    ".*establecer alarma de (.*) a (.*) a la (.*):(.*) a\.m\.",
+                    ".*colocar alarma de (.*) a (.*) a la (.*):(.*) a\.m\.",
+                    ".*agregar alarma de (.*) a (.*) a la (.*):(.*) a\.m\.",
+
+                    ".*crear alarma de (.*) a (.*) a las (.*):(.*) a.*m.*",
+                    ".*establecer alarma de (.*) a (.*) a las (.*):(.*) a.*m.*",
+                    ".*colocar alarma de (.*) a (.*) a las (.*):(.*) a.*m.*",
+                    ".*agregar alarma de (.*) a (.*) a las (.*):(.*) a.*m.*",
+
+                    ".*crear alarma de (.*) a (.*) a la (.*):(.*) a.*m.*",
+                    ".*establecer alarma de (.*) a (.*) a la (.*):(.*) a.*m.*",
+                    ".*colocar alarma de (.*) a (.*) a la (.*):(.*) a.*m.*",
+                    ".*agregar alarma de (.*) a (.*) a la (.*):(.*) a.*m.*"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_range_week_time_am,
+        "tags": "alarma por horas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
+
+    {
+        "enable": True,
+        "pattern": [".*crear alarma a las (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*establecer alarma a las (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*colocar alarma a las (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*agregar alarma a las (.*):(.*) p\.m\. de (.*) a (.*)",
+
+                    ".*crear alarma a la (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*establecer alarma a la (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*colocar alarma a la (.*):(.*) p\.m\. de (.*) a (.*)",
+                    ".*agregar alarma a la (.*):(.*) p\.m\. de (.*) a (.*)",
+
+                    ".*crear alarma a las (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*establecer alarma a las (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*colocar alarma a las (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*agregar alarma a las (.*):(.*) p.*m.* de (.*) a (.*)",
+
+                    ".*crear alarma a la (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*establecer alarma a la (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*colocar alarma a la (.*):(.*) p.*m.* de (.*) a (.*)",
+                    ".*agregar alarma a la (.*):(.*) p.*m.* de (.*) a (.*)"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_range_time_week_pm,
+        "tags": "alarma por horas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+
+
+    {
+        "enable": True,
+        "pattern": [".*crear alarma de (.*) a (.*) a las (.*):(.*) p\.m\.",
+                    ".*establecer alarma de (.*) a (.*) a las (.*):(.*) p\.m\.",
+                    ".*colocar alarma de (.*) a (.*) a las (.*):(.*) p\.m\.",
+                    ".*agregar alarma de (.*) a (.*) a las (.*):(.*) p\.m\.",
+
+                    ".*crear alarma de (.*) a (.*) a la (.*):(.*) p\.m\.",
+                    ".*establecer alarma de (.*) a (.*) a la (.*):(.*) p\.m\.",
+                    ".*colocar alarma de (.*) a (.*) a la (.*):(.*) p\.m\.",
+                    ".*agregar alarma de (.*) a (.*) a la (.*):(.*) p\.m\.",
+
+                    ".*crear alarma de (.*) a (.*) a las (.*):(.*) p.*m.*",
+                    ".*establecer alarma de (.*) a (.*) a las (.*):(.*) p.*m.*",
+                    ".*colocar alarma de (.*) a (.*) a las (.*):(.*) p.*m.*",
+                    ".*agregar alarma de (.*) a (.*) a las (.*):(.*) p.*m.*",
+
+                    ".*crear alarma de (.*) a (.*) a la (.*):(.*) p.*m.*",
+                    ".*establecer alarma de (.*) a (.*) a la (.*):(.*) p.*m.*",
+                    ".*colocar alarma de (.*) a (.*) a la (.*):(.*) p.*m.*",
+                    ".*agregar alarma de (.*) a (.*) a la (.*):(.*) p.*m.*"
+                ],
+        "templates": ["{}"],
+        "func": AlarmSkills.create_alarm_range_week_time_pm,
+        "tags": "alarma por horas",
+        "description": "Recordatorio",
+        "context": "alarm",
+        "next": []
+    },
+    # estado del tiempo
+    {
+        "enable": True,
+        "pattern": [
+            ".*clima en (.*)", ".*datos del clima en (.*)", ".*informacion del clima en (.*)", ".*temperatura actual en (.*)", ".*temperatura de (.*)", ".*estadisticas del clima.*", ".*estado del clima en (.*)",
+            ".*clima en la ciudad de (.*)", ".*clima de la ciudad de (.*)"],
         "templates": ["{}"],
         "func": WeatherSkills.tell_the_weather,
         "tags": "clima actual,datos del clima,informacion del clima,temperatura actual,temperatura de,estadisticas del clima",
@@ -480,9 +604,57 @@ BASIC_SKILLS = [
         "context": "",
         "next": []
     },
-
-
-
+    {
+        "enable": True,
+        "pattern": [".*clima actual.*", ".*datos del clima.*", ".*informacion del clima.*", ".*temperatura actual.*", ".*temperatura de.*", ".*estadisticas del clima.*", ".*estado del clima.*"],
+        "templates": ["{}"],
+        "func": WeatherSkills.tell_the_weather,
+        "tags": "clima actual,datos del clima,informacion del clima,temperatura actual,temperatura de,estadisticas del clima",
+        "description": "Calculos",
+        "context": "",
+        "next": []
+    },
+    #music
+    {
+        "enable": True,
+        "pattern": [".*pon musica.*", ".*reproducir musica.*", ".*colocar musica.*", ".*pon cancion.*", ".*reproducir cancion.*", ".*colocar cancion.*"],
+        "templates": ["{}"],
+        "func": MusicSkills.play,
+        "tags": "reproducir musica",
+        "description": "Calculos",
+        "context": "music",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*detener musica.*", ".*parar musica.*", ".*detener cancion.*", ".*parar cancion.*"],
+        "templates": ["{}"],
+        "func": MusicSkills.stop,
+        "tags": "reproducir musica",
+        "description": "Calculos",
+        "context": "music",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*siguiente musica.*", ".*siguiente musica.*", ".*siguiente cancion.*", ".*siguiente cancion.*", ".*cambiar cancion.*", ".*cambiar musica.*"],
+        "templates": ["{}"],
+        "func": MusicSkills.next,
+        "tags": "reproducir musica",
+        "description": "Calculos",
+        "context": "music",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*anterior musica.*", ".*anterior musica.*", ".*anterior cancion.*", ".*anterior cancion.*"],
+        "templates": ["{}"],
+        "func": MusicSkills.prev,
+        "tags": "reproducir musica",
+        "description": "Calculos",
+        "context": "music",
+        "next": []
+    },
 ]
 
 """{

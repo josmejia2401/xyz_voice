@@ -8,12 +8,45 @@ class WeatherSkills(AssistantSkill):
     @classmethod
     def tell_the_weather(cls, ext = None, template = None, values = None, history = []):
         try:
+            if cls.get_activation() == False:
+                return
             if WEATHER_API['KEY']:
                 city = cls._get_city()
                 if city:
                     temperature, temperature_min, temperature_max = cls._get_weather_status_and_temperature(city)
                     if temperature and temperature_min and temperature_max:
                         r = template.format("La temperatura actual para bogotá es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (temperature, temperature_min, temperature_max))
+                    else:
+                        r = template.format("Lo siento, en este momento no hay datos del tiempo.")
+                else:
+                    r = template.format("Lo siento, en este momento no hay datos de tu localización.")
+            else:
+                r = template.format("Por favor define la llave de open weather map.")
+            
+            cls.response(r)
+        except Exception as e:
+            r = template.format("En este momento no pude obtener datos del tiempo.")
+            cls.response(r)
+
+    @classmethod
+    def tell_the_weather_city(cls, ext = None, template = None, values = None, history = []):
+        try:
+            if cls.get_activation() == False:
+                return
+            if WEATHER_API['KEY']:
+
+                city = values[0]
+                if isinstance(city, list):
+                    city = city[0]
+                elif isinstance(city, tuple):
+                    city = city[0]
+                else:
+                    city = city
+
+                if city:
+                    temperature, temperature_min, temperature_max = cls._get_weather_status_and_temperature(city)
+                    if temperature and temperature_min and temperature_max:
+                        r = template.format("La temperatura actual para %s es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (city, temperature, temperature_min, temperature_max))
                     else:
                         r = template.format("Lo siento, en este momento no hay datos del tiempo.")
                 else:

@@ -23,7 +23,7 @@ class UtilSkills(AssistantSkill):
 
     @classmethod
     def speech_interruption(cls, ext = None, template = None, values = None, history = []):
-        if not cls.get_activation():
+        if cls.get_activation() == False:
             return
         cls.set_stop_speaking(True)
         
@@ -31,7 +31,7 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def current_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             volume = get_master_volume()
             if volume:
@@ -47,7 +47,7 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def increase_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             step = 5
             volume = get_master_volume()
@@ -75,7 +75,7 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def reduce_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             step = 5
             volume = get_master_volume()
@@ -102,7 +102,7 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def mute_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             volume = get_master_volume()
             if volume == 0:
@@ -122,7 +122,7 @@ class UtilSkills(AssistantSkill):
     @classmethod
     def max_master_volume(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             volume = get_master_volume()
             if volume == 100:

@@ -63,8 +63,8 @@ class SkillAnalyzer:
         text = re.sub(r'(.)\1+', r'\1\1', text)
         # tokenize
         print(text)
-        tokens = word_tokenize(text)
-        print(tokens)
+        #tokens = word_tokenize(text)
+        #print("tokens", tokens)
         # clean tokens
         #6 ['crear', 'alarma', 'el', 'lunes', 'a', 'las', '8:15']
         #7 ['crear', 'alarma', 'lunes', '8:15']
@@ -76,14 +76,12 @@ class SkillAnalyzer:
         #tagged = pos_tag(clean_tokens)
         #tokens = self.get_continuous_chunks(text)
         # stem
-        """try:
-            stems = self.stem_tokens(tokens, self.stemmer)
-        except Exception as e:
-            print(e)
-            print(text)
-            stems = ['']
-        return stems"""
-        return tokens
+        #try:
+        #    stems = self.stem_tokens(tokens, self.stemmer)
+        #except Exception as e:
+        #    stems = ['']
+        #return stems
+        return text.split(" ")
     def get_continuous_chunks(self, text):
         chunked = ne_chunk(pos_tag(word_tokenize(text)))
         # clean tokens

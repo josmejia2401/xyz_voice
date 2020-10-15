@@ -35,6 +35,7 @@ class Kernel:
             return ""
 
     def _processElement(self, ext):
+        print(ext)
         ext = " ".join(str(e).strip() for e in ext)
         print("ooooooooo",ext)
         response = ""

@@ -53,7 +53,7 @@ class STTEngine(ConcreteSubject):
         try:
             with cls.microphone as source:
                 cls.recognizer.adjust_for_ambient_noise(source, duration=1)
-                audio = cls.recognizer.listen(source, timeout=4)
+                audio = cls.recognizer.listen(source, timeout=3)
         except sr.WaitTimeoutError:
             pass
         try:

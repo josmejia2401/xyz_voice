@@ -64,7 +64,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def stop_all(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             cls.alarm_pending = []
             cls.scheduler.remove_all_jobs()
@@ -78,7 +78,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def list_all(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             if cls.alarm_pending:
                 cls.response("Los recordatorios son:")
@@ -107,7 +107,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_action_time_minutes(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -136,7 +136,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_time_action_minutes(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -176,7 +176,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_action_time_hours(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -205,7 +205,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_time_action_hours(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -244,7 +244,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_action_time_pm(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -284,7 +284,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_time_action_pm(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -334,7 +334,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_action_time_am(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]
@@ -373,7 +373,7 @@ class ReminderSkills(AssistantSkill):
     @classmethod
     def create_reminder_time_action_am(cls, ext=None, template=None, values=None, history=[]):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             values_x = values[0]

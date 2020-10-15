@@ -23,7 +23,7 @@ class DatetimeSkills(AssistantSkill):
     @classmethod
     def tell_the_time(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             now = datetime.now()
             hour, minute = now.hour, now.minute
@@ -38,7 +38,7 @@ class DatetimeSkills(AssistantSkill):
     @classmethod
     def tell_the_date(cls, ext = None, template = None, values = None, history = []):
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
             currentDate = datetime.now()
             strTime = currentDate.strftime("%A %d de %B de %Y")

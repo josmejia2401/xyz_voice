@@ -14,7 +14,7 @@ class InternetSkills(AssistantSkill):
 
     @classmethod
     def internet_availability(cls, ext = None, template = None, values = None, history = []):
-        if not cls.get_activation():
+        if cls.get_activation() == False:
             return
         if cls._check_internet_connection():
             r = template.format("Hay conexión a internet")

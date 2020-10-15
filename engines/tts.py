@@ -136,6 +136,8 @@ class TTSEngine(object):
     stop_speaking = False
     dir_path = get_ouput_audio()
     p = None
+    p_song = None
+    next_song = False
     
     @staticmethod
     def _build_audio(message, slow=False):
@@ -160,6 +162,7 @@ class TTSEngine(object):
                 TTSEngine.stop_audio()
                 break
             time.sleep(0.5)
+        TTSEngine.stop_audio()
 
     @staticmethod
     def stop_audio():
@@ -177,11 +180,34 @@ class TTSEngine(object):
             f = TTSEngine._build_audio(message, slow)
             TTSEngine._play_audio(f, asyncx)
 
+
+    @staticmethod
+    def _play_song(filename, asyncx = False):
+        TTSEngine.p_song = Popen(args=['mpg321', '--stereo' ,'-q', filename], stdout=PIPE)
+        #p.wait()
+        if asyncx == False:
+            TTSEngine.wait_song()
+
+    @staticmethod
+    def wait_song():
+        while TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None:
+            if TTSEngine.stop_speaking == True:
+                TTSEngine.stop_song()
+                break
+            time.sleep(0.5)
+        TTSEngine.stop_song()
+
+    @staticmethod
+    def stop_song():
+        TTSEngine.stop_speaking = False
+        if TTSEngine.p_song and (TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None):
+            TTSEngine.p_song.terminate()
+
     @staticmethod
     def play_sound(filename=None, asyncx = False):
         print(filename)
         if filename:
-            if TTSEngine.p and (TTSEngine.p.poll() is None or TTSEngine.p.returncode is None):
-                TTSEngine.wait_audio()
-                TTSEngine.p.terminate()
-            TTSEngine._play_audio(filename, asyncx)
+            if TTSEngine.p_song and (TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None):
+                #TTSEngine.wait_song()
+                TTSEngine.stop_song()
+            TTSEngine._play_song(filename, asyncx)

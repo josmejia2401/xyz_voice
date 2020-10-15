@@ -12,15 +12,18 @@ class AssistantSkill:
 
     @classmethod
     def set_activation(cls, activation = True):
-        cls.activation = activation
+        AssistantSkill.activation = activation
 
     @classmethod
     def get_activation(cls):
-        return cls.activation
+        return AssistantSkill.activation
 
     @classmethod
     def set_stop_speaking(cls, stop_speaking = True):
         TTSEngine.stop_speaking = stop_speaking
+        if stop_speaking == True:
+            TTSEngine.stop_audio()
+            TTSEngine.stop_song()
 
     @classmethod
     def get_stop_speaking(cls):
@@ -35,6 +38,17 @@ class AssistantSkill:
             - TTS Engine: The response is in voice and text
         """
         TTSEngine.play_text(text)
+
+    @classmethod
+    def play_sound(cls, filename, asyncx = False):
+        """
+        The mode of the response depends on the output engine:
+            - TTT Engine: The response is only in text
+            - TTS Engine: The response is in voice and text
+        """
+        TTSEngine.play_sound(filename, asyncx)
+
+        
 
     @classmethod
     def user_input(cls):

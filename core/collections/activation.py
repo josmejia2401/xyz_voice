@@ -20,7 +20,7 @@ class ActivationSkills(AssistantSkill):
     @classmethod
     def assistant_greeting(cls, ext = None, template = None, values = None, history = []) -> None:
         try:
-            if not cls.get_activation():
+            if cls.get_activation() == False:
                 return
 
             r = ''
