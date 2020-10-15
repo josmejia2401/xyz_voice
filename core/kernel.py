@@ -4,9 +4,6 @@ import random
 from core.registry import get_skills
 from core.analyzer import SkillAnalyzer
 
-import locale
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-
 
 class Kernel:
     

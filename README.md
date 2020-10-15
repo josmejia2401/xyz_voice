@@ -1,5 +1,13 @@
 Asistente inteligente.
 
+pasos raspberry pi 4:
+> sudo apt-get -y install swig
+> sudo apt-get -y install libpulse-dev
+> sudo apt-get -y install libasound2-dev
+> sudo apt-get -y install portaudio19-dev
+> sudo apt-get -y install mpg321
+> pip3 install -r requirements.txt
+
 pasos para Ubuntu:
 # 1. Instalación de librerías y dependencias
 > sudo apt-get install libpulse-dev

@@ -2,7 +2,8 @@ from engines.tts import TTSEngine
 from engines.stt import STTEngine
 
 import locale
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+locale.setlocale(locale.LC_TIME, 'es_CO.utf8')
 
 class AssistantSkill:
     """
