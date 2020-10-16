@@ -1,6 +1,33 @@
 Asistente inteligente.
+# características
+- crear alarma
+- crear recordatorio
+- activar asitente
+- deactivar asistente
+- fecha actual
+- hora actual
+- subir volumen
+- bajar volumen
+- volumen al máximo
+- silenciar volumen
+- volumen actual
+- conexión a internet
+- noticias del día
+- estado del clima
+- estado del clima por ciudad
+# próximas características
+- fecha y hora por localización
+- geolocalización
+- estado de partidos de fútbol
+- traductor
+- definición de palabras
+- busquedas en la web
+- reproducción en youtube
+- lugares cercanos (restaurantes cercanos, pizaas cercas, etc)
+- integración con IoT (sensor de movimientos, reconocimiento facial, dispositivos celulares, casas inteligentes)
+- help: https://github.com/googlemaps/google-maps-services-python/blob/master/googlemaps/places.py, https://pypi.org/project/gmaps/, https://stackoverflow.com/questions/56644521/how-to-search-for-places-nearby-google-api-python
 
-pasos raspberry pi 4:
+# pasos raspberry pi 4:
 > sudo apt-get -y install swig
 > sudo apt-get -y install libpulse-dev
 > sudo apt-get -y install libasound2-dev
