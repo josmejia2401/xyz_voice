@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from datetime import datetime, date
 from core.skill import AssistantSkill
 

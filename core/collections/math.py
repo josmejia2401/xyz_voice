@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from utils.text_number import to_number
 from core.skill import AssistantSkill
 from utils.mapping import math_symbols_mapping

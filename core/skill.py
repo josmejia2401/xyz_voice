@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from engines.tts import TTSEngine
 from engines.stt import STTEngine
 

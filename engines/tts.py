@@ -157,7 +157,7 @@ class TTSEngine(object):
 
     @staticmethod
     def wait_audio():
-        while TTSEngine.p.poll() != 0 or TTSEngine.p.returncode != 0:
+        while TTSEngine.p.poll() is None or TTSEngine.p.returncode  is None:
             if TTSEngine.stop_speaking == True:
                 TTSEngine.stop_audio()
                 break
@@ -175,7 +175,7 @@ class TTSEngine(object):
         print(message)
         if message:
             if TTSEngine.p and (TTSEngine.p.poll() is None or TTSEngine.p.returncode is None):
-                TTSEngine.wait_audio()
+                #TTSEngine.wait_audio()
                 TTSEngine.p.terminate()
             f = TTSEngine._build_audio(message, slow)
             TTSEngine._play_audio(f, asyncx)

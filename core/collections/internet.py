@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from core.skill import AssistantSkill
 import urllib.request as urllib2
 

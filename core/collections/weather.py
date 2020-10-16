@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import requests
 from utils.settings import WEATHER_API
 from core.skill import AssistantSkill

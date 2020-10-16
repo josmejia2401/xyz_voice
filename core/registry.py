@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from core.collections.activation import ActivationSkills
 from core.collections.general import UtilSkills
 from core.collections.datetime import DatetimeSkills
@@ -8,6 +9,7 @@ from core.collections.math import MathSkills
 from core.collections.weather import WeatherSkills
 from core.collections.alarm import AlarmSkills
 from core.collections.music import MusicSkills
+from core.collections.newspaper import NewsPaperSkills
 from utils.mapping import math_tags
 
 CONTROL_SKILLS = [
@@ -653,6 +655,50 @@ BASIC_SKILLS = [
         "tags": "reproducir musica",
         "description": "Calculos",
         "context": "music",
+        "next": []
+    },
+    #NewsPaperSkills
+    {
+        "enable": True,
+        "pattern": [".*noticias actuales.*", ".*noticias de hoy.*", ".*noticias del dia.*",
+                    ".*titulares actuales.*", ".*titulares de hoy.*", ".*titulares del dia.*"],
+        "templates": ["{}"],
+        "func": NewsPaperSkills.get_news,
+        "tags": "noticias de hoy",
+        "description": "",
+        "context": "news",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*detener noticias.*", ".*parar noticias.*",".*detener las noticias.*", ".*parar las noticias.*", 
+                    ".*detener titulares.*", ".*parar titulares.*",".*detener los titulares.*", ".*parar los titulares.*"],
+        "templates": ["{}"],
+        "func": NewsPaperSkills.stop,
+        "tags": "detener noticias",
+        "description": "",
+        "context": "news",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*siguiente noticia.*", ".*siguiente noticias.*",".*cambiar noticias.*", ".*cambiar las noticias.*", 
+                    ".*siguiente titular.*", ".*siguiente titulares.*",".*cambiar titular.*", ".*cambiar las titulares.*"],
+        "templates": ["{}"],
+        "func": NewsPaperSkills.next,
+        "tags": "siguiente noticia",
+        "description": "",
+        "context": "news",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*anterior noticia.*", ".*anterior noticia.*", ".*anterior titular.*", ".*anterior titular.*"],
+        "templates": ["{}"],
+        "func": NewsPaperSkills.prev,
+        "tags": "anterior titular",
+        "description": "",
+        "context": "news",
         "next": []
     },
 ]
