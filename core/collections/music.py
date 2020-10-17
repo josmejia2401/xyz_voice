@@ -24,7 +24,8 @@ class MusicThread(threading.Thread):
             cont = 0
             while cont < len(MusicSkills.txtfiles):
                 time.sleep(0.8)
-                if MusicSkills.STOP == True:
+                if MusicSkills.get_stop_speaking() == True:
+                    MusicSkills.set_stop_speaking(False)
                     break
                 elif MusicSkills.PREV == True:
                     MusicSkills.PREV = False
@@ -32,7 +33,7 @@ class MusicThread(threading.Thread):
                         cont = cont - 1
                     else:
                         cont = 0
-                        
+                MusicSkills.set_stop_speaking(False)
                 f = MusicSkills.txtfiles[cont]
                 x = os.path.join(MusicSkills.DIR_MUSIC, f)
                 MusicSkills.play_sound(x, False)
@@ -46,7 +47,6 @@ class MusicSkills(AssistantSkill):
 
     DIR_MUSIC = get_ouput_music()
     txtfiles = []
-    STOP = False
     PREV = False
     THREAD_M = None
 
@@ -69,7 +69,6 @@ class MusicSkills(AssistantSkill):
         try:
             if cls.get_activation() == False:
                 return
-            MusicSkills.STOP = False
             MusicSkills.PREV = False
             cls._reload_list_music()
             cls._get_list_music()
@@ -81,26 +80,13 @@ class MusicSkills(AssistantSkill):
             cls.response(r)
 
     @classmethod
-    def stop(cls, ext = None, template = None, values = None, history = []) -> None:
-        try:
-            if cls.get_activation() == False:
-                return
-            MusicSkills.STOP = True
-            MusicSkills.PREV = False
-            cls.set_stop_speaking(True)
-        except Exception as e:
-            print(e)
-            r = template.format("No se pudo procesar el comando")
-            cls.response(r)
-
-    @classmethod
     def next(cls, ext = None, template = None, values = None, history = []) -> None:
         try:
             if cls.get_activation() == False:
                 return
-            MusicSkills.STOP = False
             MusicSkills.PREV = False
             cls.set_stop_speaking(True)
+            cls.set_stop_speaking(False)
         except Exception as e:
             print(e)
             r = template.format("No se pudo procesar el comando")
@@ -112,10 +98,9 @@ class MusicSkills(AssistantSkill):
         try:
             if cls.get_activation() == False:
                 return
-            MusicSkills.STOP = False
             MusicSkills.PREV = True
             cls.set_stop_speaking(True)
-            
+            cls.set_stop_speaking(False)
         except Exception as e:
             print(e)
             r = template.format("No se pudo procesar el comando")

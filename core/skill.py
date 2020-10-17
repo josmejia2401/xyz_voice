@@ -22,7 +22,7 @@ class AssistantSkill:
 
     @classmethod
     def set_stop_speaking(cls, stop_speaking = True):
-        TTSEngine.stop_speaking = stop_speaking
+        TTSEngine.set_stop_speaking(stop_speaking)
         if stop_speaking == True:
             TTSEngine.stop_audio()
             TTSEngine.stop_song()

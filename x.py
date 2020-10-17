@@ -1,10 +1,15 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+#Scraping wikipedia page according to your command line input
+import sys
 import requests
+import bs4
+res = requests.get('https://es.wikipedia.org/wiki/colombia')
 
-r1 = requests.get('http://api.ipstack.com/check?access_key=5aec9b31b13f035849b504b3eb632ec0&format=1')
-if r1.status_code == 200:
-    result = r1.json()
-    country_name = result['country_name']
-    region_name = result['region_name']
-    city = result['city']
-    print(result)
+res.raise_for_status()
+#Just to raise the status code
+wiki = bs4.BeautifulSoup(res.text,"lxml")
+elems = wiki.select('p')
+for i in range(len(elems)):
+    if elems[i].getText().strip():
+        print(elems[i].getText().strip())
+        break

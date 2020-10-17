@@ -11,6 +11,8 @@ from core.collections.alarm import AlarmSkills
 from core.collections.music import MusicSkills
 from core.collections.newspaper import NewsPaperSkills
 from core.collections.geolocation import GeoLocationSkills
+from core.collections.wiki import WikiSkills
+
 from utils.mapping import math_tags
 
 CONTROL_SKILLS = [
@@ -44,7 +46,7 @@ CONTROL_SKILLS = [
         "description": "Poner el sistema en pausa",
         "context": "",
         "next": []
-    }
+    },
 ]
 
 BASIC_SKILLS = [
@@ -73,7 +75,8 @@ BASIC_SKILLS = [
     #volumen
     {
         "enable": True,
-        "pattern": [".*detener ahora.*", ".*detener cancion.*", ".*detener audio.*", ".*detener sonido.*", ".*de tener ahora.*", ".*de tener cancion.*", ".*de tener audio.*", ".*de tener sonido.*", ".*parar ahora.*", ".*parar cancion.*", ".*parar audio.*", ".*parar sonido.*"],
+        "pattern": [".*detener ahora.*", ".*detener cancion.*", ".*detener audio.*", ".*detener sonido.*", ".*de tener ahora.*", ".*de tener cancion.*", ".*de tener audio.*", ".*de tener sonido.*", ".*parar ahora.*", ".*parar cancion.*", ".*parar audio.*", ".*parar sonido.*",
+                    ".*detener musica.*", ".*de tener musica.*", ".*parar musica.*"],
         "templates": ["se detiene la reproduccion actual {}", "se detiene el sonido {}"],
         "func": UtilSkills.speech_interruption,
         "tags": "detener ahora",
@@ -630,16 +633,6 @@ BASIC_SKILLS = [
     },
     {
         "enable": True,
-        "pattern": [".*detener musica.*", ".*parar musica.*", ".*detener cancion.*", ".*parar cancion.*"],
-        "templates": ["{}"],
-        "func": MusicSkills.stop,
-        "tags": "reproducir musica",
-        "description": "Calculos",
-        "context": "music",
-        "next": []
-    },
-    {
-        "enable": True,
         "pattern": [".*siguiente musica.*", ".*siguiente musica.*", ".*siguiente cancion.*", ".*siguiente cancion.*", ".*cambiar cancion.*", ".*cambiar musica.*"],
         "templates": ["{}"],
         "func": MusicSkills.next,
@@ -666,17 +659,6 @@ BASIC_SKILLS = [
         "templates": ["{}"],
         "func": NewsPaperSkills.get_news,
         "tags": "noticias de hoy",
-        "description": "",
-        "context": "news",
-        "next": []
-    },
-    {
-        "enable": True,
-        "pattern": [".*detener noticias.*", ".*parar noticias.*",".*detener las noticias.*", ".*parar las noticias.*", 
-                    ".*detener titulares.*", ".*parar titulares.*",".*detener los titulares.*", ".*parar los titulares.*"],
-        "templates": ["{}"],
-        "func": NewsPaperSkills.stop,
-        "tags": "detener noticias",
         "description": "",
         "context": "news",
         "next": []
@@ -714,6 +696,19 @@ BASIC_SKILLS = [
         "tags": "ubicación actual",
         "description": "",
         "context": "geo",
+        "next": []
+    },
+    #wiki
+
+    {
+        "enable": True,
+        "pattern": [".*que es (.*)", ".*que significa (.*)", ".*significado de (.*)", ".*definicion de (.*)", ".*buscar en wikipedia que es (.*)",
+                    ".*buscar en wikipedia el significado de (.*)" , ".*buscar en wikipedia (.*)"],
+        "templates": ["{}"],
+        "func": WikiSkills.play,
+        "tags": "significado de palabras",
+        "description": "",
+        "context": "wiki",
         "next": []
     },
 ]

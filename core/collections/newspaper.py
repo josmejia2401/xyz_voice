@@ -16,7 +16,8 @@ class NewsThread(threading.Thread):
             cont = 0
             while cont < len(NewsPaperSkills.txtfiles):
                 time.sleep(0.8)
-                if NewsPaperSkills.STOP == True:
+                if NewsPaperSkills.get_stop_speaking() == True:
+                    NewsPaperSkills.set_stop_speaking(False)
                     break
                 elif NewsPaperSkills.PREV == True:
                     NewsPaperSkills.PREV = False
@@ -24,6 +25,7 @@ class NewsThread(threading.Thread):
                         cont = cont - 1
                     else:
                         cont = 0
+                NewsPaperSkills.set_stop_speaking(False)
                 x = NewsPaperSkills.txtfiles[cont]
                 NewsPaperSkills.response(x)
                 if NewsPaperSkills.PREV == False:
@@ -34,7 +36,6 @@ class NewsThread(threading.Thread):
 
 class NewsPaperSkills(AssistantSkill):
     txtfiles = []
-    STOP = False
     PREV = False
     THREAD_M = None
 
@@ -44,7 +45,6 @@ class NewsPaperSkills(AssistantSkill):
             if cls.get_activation() == False:
                 return
             
-            NewsPaperSkills.STOP = False
             NewsPaperSkills.PREV = False
             NewsPaperSkills.txtfiles = []
             NewsPaperSkills.txtfiles.append("Del Espectador:")
@@ -62,26 +62,13 @@ class NewsPaperSkills(AssistantSkill):
             cls.response(r)
 
     @classmethod
-    def stop(cls, ext = None, template = None, values = None, history = []) -> None:
-        try:
-            if cls.get_activation() == False:
-                return
-            NewsPaperSkills.STOP = True
-            NewsPaperSkills.PREV = False
-            cls.set_stop_speaking(True)
-        except Exception as e:
-            print(e)
-            r = template.format("No se pudo procesar el comando")
-            cls.response(r)
-
-    @classmethod
     def next(cls, ext = None, template = None, values = None, history = []) -> None:
         try:
             if cls.get_activation() == False:
                 return
-            NewsPaperSkills.STOP = False
             NewsPaperSkills.PREV = False
             cls.set_stop_speaking(True)
+            cls.set_stop_speaking(False)
         except Exception as e:
             print(e)
             r = template.format("No se pudo procesar el comando")
@@ -93,10 +80,9 @@ class NewsPaperSkills(AssistantSkill):
         try:
             if cls.get_activation() == False:
                 return
-            NewsPaperSkills.STOP = False
             NewsPaperSkills.PREV = True
             cls.set_stop_speaking(True)
-            
+            cls.set_stop_speaking(False)
         except Exception as e:
             print(e)
             r = template.format("No se pudo procesar el comando")

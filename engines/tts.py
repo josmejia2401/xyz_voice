@@ -166,14 +166,15 @@ class TTSEngine(object):
 
     @staticmethod
     def stop_audio():
-        TTSEngine.stop_speaking = False
         if TTSEngine.p and (TTSEngine.p.poll() is None or TTSEngine.p.returncode is None):
             TTSEngine.p.terminate()
+        time.sleep(0.8)
 
     @staticmethod
     def play_text(message=None, slow=False, asyncx = False):
         print(message)
         if message:
+            TTSEngine.set_stop_speaking(False)
             if TTSEngine.p and (TTSEngine.p.poll() is None or TTSEngine.p.returncode is None):
                 #TTSEngine.wait_audio()
                 TTSEngine.p.terminate()
@@ -189,6 +190,10 @@ class TTSEngine(object):
             TTSEngine.wait_song()
 
     @staticmethod
+    def set_stop_speaking(stop_speaking=False):
+        TTSEngine.stop_speaking = stop_speaking
+
+    @staticmethod
     def wait_song():
         while TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None:
             if TTSEngine.stop_speaking == True:
@@ -199,14 +204,15 @@ class TTSEngine(object):
 
     @staticmethod
     def stop_song():
-        TTSEngine.stop_speaking = False
         if TTSEngine.p_song and (TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None):
             TTSEngine.p_song.terminate()
+        time.sleep(0.8)
 
     @staticmethod
     def play_sound(filename=None, asyncx = False):
         print(filename)
         if filename:
+            TTSEngine.set_stop_speaking(False)
             if TTSEngine.p_song and (TTSEngine.p_song.poll() is None or TTSEngine.p_song.returncode is None):
                 #TTSEngine.wait_song()
                 TTSEngine.stop_song()

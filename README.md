@@ -17,11 +17,11 @@ Asistente inteligente.
 - estado del clima por ciudad
 - reproducir música
 - geolocalización actual
+- busquedas y definición de palabras en wikipedia
 # próximas características
 - fecha y hora por localización
 - estado de partidos de fútbol
 - traductor
-- definición de palabras
 - busquedas en la web
 - reproducción en youtube
 - lugares cercanos (restaurantes cercanos, pizaas cercas, etc)
