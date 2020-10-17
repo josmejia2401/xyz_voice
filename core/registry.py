@@ -10,6 +10,7 @@ from core.collections.weather import WeatherSkills
 from core.collections.alarm import AlarmSkills
 from core.collections.music import MusicSkills
 from core.collections.newspaper import NewsPaperSkills
+from core.collections.geolocation import GeoLocationSkills
 from utils.mapping import math_tags
 
 CONTROL_SKILLS = [
@@ -699,6 +700,20 @@ BASIC_SKILLS = [
         "tags": "anterior titular",
         "description": "",
         "context": "news",
+        "next": []
+    },
+
+    #ubicacion actual
+    {
+        "enable": True,
+        "pattern": [".*ubicacion actual.*", ".*ubicacion ahora.*", ".*ubicacion en este momento.*", ".*mi ubicacion.*",
+                    ".*localizacion actual.*", ".*localizacion ahora.*", ".*localizacion en este momento.*", ".*mi localizacion.*",
+                    ".*encuentro ubicado.*"],
+        "templates": ["{}"],
+        "func": GeoLocationSkills.get_location,
+        "tags": "ubicación actual",
+        "description": "",
+        "context": "geo",
         "next": []
     },
 ]

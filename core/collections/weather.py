@@ -2,7 +2,7 @@
 import requests
 from utils.settings import WEATHER_API
 from core.skill import AssistantSkill
-
+from core.collections.geolocation import GeoLocationSkills
 
 class WeatherSkills(AssistantSkill):
     
@@ -16,7 +16,7 @@ class WeatherSkills(AssistantSkill):
                 if city:
                     temperature, temperature_min, temperature_max = cls._get_weather_status_and_temperature(city)
                     if temperature and temperature_min and temperature_max:
-                        r = template.format("La temperatura actual para bogotá es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (temperature, temperature_min, temperature_max))
+                        r = template.format("La temperatura actual para %s es %0.1f centigrados, temperatura mínima de %0.1f centigrados y temperatura máxima de %0.1f centigrados" % (city, temperature, temperature_min, temperature_max))
                     else:
                         r = template.format("Lo siento, en este momento no hay datos del tiempo.")
                 else:
@@ -116,5 +116,4 @@ class WeatherSkills(AssistantSkill):
 
     @classmethod
     def _get_city(cls):
-        city = "bogota"
-        return city
+        return GeoLocationSkills._get_location()

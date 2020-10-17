@@ -13,11 +13,12 @@ Asistente inteligente.
 - volumen actual
 - conexión a internet
 - noticias del día
-- estado del clima
+- estado del clima por localización
 - estado del clima por ciudad
+- reproducir música
+- geolocalización actual
 # próximas características
 - fecha y hora por localización
-- geolocalización
 - estado de partidos de fútbol
 - traductor
 - definición de palabras
@@ -98,7 +99,5 @@ pasos para Mac:
 # 3. Ejecutar
 > python3 voicex.py
 
-# Otros
-> d504c812d3974c7628d4475c4eb74ff500000000000000000
-> 00000000000000000
-> r
+# Otros - hash - e - all
+> ed504c812d3974c7628d4475c4eb74ff5ipe5aec9b31b13f035849b504b3eb632ec0
