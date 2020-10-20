@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import time
 from datetime import datetime
 from core.skill import AssistantSkill
 from utils.dir import get_ouput_music
@@ -23,7 +22,6 @@ class MusicThread(threading.Thread):
         try:
             cont = 0
             while cont < len(MusicSkills.txtfiles):
-                time.sleep(0.8)
                 if MusicSkills.get_stop_speaking() == True:
                     MusicSkills.set_stop_speaking(False)
                     break

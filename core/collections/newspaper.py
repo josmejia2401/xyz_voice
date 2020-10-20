@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 from core.skill import AssistantSkill
 import threading
-import time
 
 
 class NewsThread(threading.Thread):
@@ -15,7 +14,6 @@ class NewsThread(threading.Thread):
         try:
             cont = 0
             while cont < len(NewsPaperSkills.txtfiles):
-                time.sleep(0.8)
                 if NewsPaperSkills.get_stop_speaking() == True:
                     NewsPaperSkills.set_stop_speaking(False)
                     break

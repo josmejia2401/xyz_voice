@@ -1,15 +1,121 @@
-#!/usr/bin/python3
-#Scraping wikipedia page according to your command line input
-import sys
+import urllib
 import requests
-import bs4
-res = requests.get('https://es.wikipedia.org/wiki/colombia')
+from bs4 import BeautifulSoup
+import pandas as pd
 
-res.raise_for_status()
-#Just to raise the status code
-wiki = bs4.BeautifulSoup(res.text,"lxml")
-elems = wiki.select('p')
-for i in range(len(elems)):
-    if elems[i].getText().strip():
-        print(elems[i].getText().strip())
-        break
+# desktop user-agent
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+# mobile user-agent
+MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+
+query = "colombia vs francia"
+query = query.replace(' ', '+')
+URL = f"https://www.google.com/search?q={query}"
+
+headers = {"user-agent": USER_AGENT}
+resp = requests.get(URL, headers=headers)
+
+def get_weather_states(soup):
+    for g in soup.find_all('div', class_='g'):
+        item = {}
+        wob_loc = g.find_all(class_='wob_loc')
+        if wob_loc:
+            r = wob_loc[0].text
+            item['place'] = r
+        
+        wob_dcp = g.find_all(class_='wob_dcp')
+        if wob_dcp:
+            r = wob_dcp[0].text
+            item['weather'] = r
+
+        TVtOme = g.find_all('div', class_='vk_bk TylWce')
+        if TVtOme:
+            r = TVtOme[0].find_all('span', 'wob_t TVtOme')
+            item['temperature'] = r[0].text
+
+        TVtOme = g.find_all('div', class_='vk_bk wob-unit')
+        if TVtOme:
+            r = TVtOme[0].find_all('span', 'wob_t')
+            item['degrees'] = r[0].text
+        
+        TVtOme = g.find('span', id='wob_pp')
+        if TVtOme:
+            item['probabilities'] = TVtOme.text
+        
+        TVtOme = g.find('span', id='wob_hm')
+        if TVtOme:
+            item['humidity'] = TVtOme.text
+
+        TVtOme = g.find('span', id='wob_ws', class_='wob_t')
+        if TVtOme:
+            item['wind'] = TVtOme.text
+
+        return item
+    
+    return None
+
+def get_definition(soup):
+    for g in soup.find_all('div', class_='g'):
+        item = {}
+        lW8rQd = g.find_all('div', class_='lW8rQd')
+        if lW8rQd:
+            r = lW8rQd[0].text
+            item['gender'] = r
+        
+        eQJLDd = g.find_all('ol', class_='eQJLDd')
+        if eQJLDd:
+            li = eQJLDd[0].find_all('li')
+            li = li[0].find_all('div', class_='QIclbb XpoqFe')
+            span = li[0].find_all('span')
+            item['definition'] = span[0].text
+
+        return item
+    
+    return None
+
+def get_football(soup):
+    for g in soup.find_all('div', class_='g'):
+        item = {}
+        lW8rQd = g.find_all('div', class_='imso_mh__first-tn-ed imso_mh__tnal-cont imso-tnol')
+        if lW8rQd:
+            r = lW8rQd[0].find_all('div', class_='ellipsisize liveresults-sports-immersive__team-name-width kno-fb-ctx')
+            item['local'] = r[0].text
+        
+        lW8rQd = g.find_all('div', class_='imso_mh__l-tm-sc imso_mh__scr-it imso-light-font')
+        if lW8rQd:
+            item['local_r'] = lW8rQd[0].text
+
+        lW8rQd = g.find_all('div', class_='imso_mh__second-tn-ed imso_mh__tnal-cont imso-tnol')
+        if lW8rQd:
+            r = lW8rQd[0].find_all('div', class_='ellipsisize liveresults-sports-immersive__team-name-width kno-fb-ctx')
+            item['visitor'] = r[0].text
+        
+        lW8rQd = g.find_all('div', class_='imso_mh__r-tm-sc imso_mh__scr-it imso-light-font')
+        if lW8rQd:
+            item['local_v'] = lW8rQd[0].text
+
+        return item
+    return None
+
+if resp.status_code == 200:
+    soup = BeautifulSoup(resp.content, "html.parser")
+    results = []
+    if "temperatura" in query:
+        results.append(get_weather_states(soup))
+    elif "que+es" in query:
+        results.append(get_definition(soup))
+    elif "vs" in query:
+        results.append(get_football(soup))
+    else:
+        for g in soup.find_all('div', class_='rc'):
+            anchors = g.find_all('a')
+            if anchors:
+                link = anchors[0]['href']
+                title = g.find('h3').text
+                item = {
+                    "title": title,
+                    "link": link
+                }
+                results.append(item)
+df = pd.DataFrame(data=results)#, columns=['title', 'link'])
+print(df.to_string())

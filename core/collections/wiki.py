@@ -14,7 +14,6 @@ class WikiThread(threading.Thread):
         try:
             cont = 0
             while cont < len(WikiSkills.txtfiles):
-                print("WikiSkills.get_stop_speaking()", WikiSkills.get_stop_speaking())
                 if WikiSkills.get_stop_speaking() == True:
                     WikiSkills.set_stop_speaking(False)
                     break
@@ -23,7 +22,8 @@ class WikiThread(threading.Thread):
                     if cont > 0:
                         cont = cont - 1
                     else:
-                        cont = 0       
+                        cont = 0
+                NewsPaperSkills.set_stop_speaking(False)
                 x = WikiSkills.txtfiles[cont]
                 WikiSkills.response(x)
                 if WikiSkills.PREV == False:
