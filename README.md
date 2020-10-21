@@ -17,12 +17,12 @@ Asistente inteligente.
 - estado del clima por ciudad
 - reproducir música
 - geolocalización actual
-- busquedas y definición de palabras en wikipedia
+- busquedas y definición de palabras en wikipedia y google
+- estado de partidos de fútbol
+- busquedas en la web
 # próximas características
 - fecha y hora por localización
-- estado de partidos de fútbol
 - traductor
-- busquedas en la web
 - reproducción en youtube
 - lugares cercanos (restaurantes cercanos, pizaas cercas, etc)
 - integración con IoT (sensor de movimientos, reconocimiento facial, dispositivos celulares, casas inteligentes)

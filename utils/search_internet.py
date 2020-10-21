@@ -44,7 +44,6 @@ class SearchInternet:
 
         query = query.replace(' ', '+')
         URL = f"https://translate.google.com/#view=home&op=translate&sl={de}&tl={a}&text={query}"
-        print(URL)
         headers = {"user-agent": SearchInternet.USER_AGENT}
         resp = requests.get(URL, headers=headers)
         if resp.status_code == 200:
@@ -163,16 +162,10 @@ class SearchInternet:
     @staticmethod
     def get_translate(soup):
         item = {}
-        print(soup.find_all('div', class_='homepage-content-wrap'))
-        for g in soup.find_all('span', class_='translation'):
-            print(g)
-            if g:
-                r = g[0].text
+        for g in soup.find_all('div', class_='tlid-result result-dict-wrapper'):
+            lW8rQd = g.find_all('span', class_='tlid-translation translation')
+            if lW8rQd:
+                r = lW8rQd[0].text
                 item['translate'] = r
             break
         return item
-
-
-if __name__ == "__main__":
-    sout = SearchInternet.search_translate("español", "ingles", "amor")
-    print(SearchInternet.get_translate(sout))

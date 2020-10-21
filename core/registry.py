@@ -12,6 +12,7 @@ from core.collections.music import MusicSkills
 from core.collections.newspaper import NewsPaperSkills
 from core.collections.geolocation import GeoLocationSkills
 from core.collections.wiki import WikiSkills
+from core.collections.search_internet import SearchInternetSkills
 
 from utils.mapping import math_tags
 
@@ -698,8 +699,50 @@ BASIC_SKILLS = [
         "context": "geo",
         "next": []
     },
-    #wiki
+    #SearchInternetSkills
+    {
+        "enable": True,
+        "pattern": [".*clima en (.*)", ".*datos del clima en (.*)", ".*informacion del clima en (.*)", ".*temperatura actual en (.*)", ".*temperatura de (.*)", ".*estadisticas del clima.*", ".*estado del clima en (.*)",
+            ".*clima en la ciudad de (.*)", ".*clima de la ciudad de (.*)"],
+        "templates": ["{}"],
+        "func": SearchInternetSkills.actual_temperature,
+        "tags": "temperatura actual",
+        "description": "",
+        "context": "search",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*google que es (.*)", ".*google.*significa (.*)", ".*google.*significado de (.*)", ".*google.*definicion de (.*)"],
+        "templates": ["{}"],
+        "func": SearchInternetSkills.definition_word,
+        "tags": "search definición",
+        "description": "",
+        "context": "search",
+        "next": []
+    },
+    {
+        "enable": True,
+        "pattern": [".*google.*partido (.*)"],
+        "templates": ["{}"],
+        "func": SearchInternetSkills.football_status,
+        "tags": "fútbol",
+        "description": "",
+        "context": "search",
+        "next": []
+    },
 
+    {
+        "enable": True,
+        "pattern": [".*traducir (.*) de (.*) a (.*)"],
+        "templates": ["{}"],
+        "func": SearchInternetSkills.translate,
+        "tags": "fútbol",
+        "description": "",
+        "context": "search",
+        "next": []
+    },
+    #wiki
     {
         "enable": True,
         "pattern": [".*que es (.*)", ".*que significa (.*)", ".*significado de (.*)", ".*definicion de (.*)", ".*buscar en wikipedia que es (.*)",
